@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "RewardsConfig";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.tbl_theme_master> theme = (List<m2ostnext.Models.tbl_theme_master>)ViewData["theme"];
+}
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>Rewards Configuration</span>
+            </div>
+
+            <div class="panel-body">
+               
+                @using (Html.BeginForm("RewardsConfigAction", "UniversityAdmin", FormMethod.Post, new { id = "form-add-kpi" }))
+                {
+                    <div class="form-horizontal">
+                      
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Select Theme</label></div>
+                            <div class="col-md-4">
+                                <select id="theme" name="theme" onchange="getBadges()" class="form-control">
+                                    <option value="0">select</option>
+                                    @foreach (var item in theme)
+                                    {
+                                        <option value="@item.id_theme">@item.name</option>
+                                    }
+                                  
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="padding:3%">
+                            <table class="table" style="height:80px;width: 100%;">
+                                <thead>
+                                    <tr style="background-color:#367fa9;color:white">
+                                        <th>Badge Name</th>
+                                        <th>Reward </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="prog-table" id="badgeBind">
+                                   
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="form-group" id="btnsubmit" style="display:none">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4"><button type="submit" class="btn btn-default">Configure</button> </div>
+                            <div class="col-md-4"> </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getBadges()
+    {
+
+        var themVal = $("#theme").val();
+        if (themVal > 0) {
+              $.ajax({
+                type: "GET",
+                url: '@Url.Action("CheckRewardConfig", "UniversityAdmin")',
+                data: { "id": themVal },
+                success: function (data) {
+                    if (data == "N") {
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("getBadgeWithRewards", "UniversityAdmin")',
+                            data: { "id": themVal },
+                            success: function (data) {
+                                //console.log(data);
+
+                                $("#badgeBind").html("");
+
+
+                                $("#badgeBind").append(data);
+                                $("#btnsubmit").show();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        $("#btnsubmit").hide();
+                        $("#badgeBind").html("");
+                        $("#badgeBind").append('<div class="row"> <div class="col-md-12"> <div class="color-box space"> <div class="shadow"> <div class="info-tab tip-icon" title="Useful Tips">&nbsp;</div> <div class="tip-box"> <p>Selected theme badges are already configured. Preview is available in Rewards Configuration Dashboard page.</p> </div> </div> </div> </div> </div>');
+                    }
+                }
+            });
+           
+
+        }
+        else
+        { $("#badgeBind").html(""); $("#btnsubmit").hide(); }
+
+        
+
+    }
+
+</script>
+

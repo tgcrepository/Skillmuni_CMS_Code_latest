@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "Job_url_create";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List <m2ostnext.Models.tbl_joburl_master> tblJurl = (List<m2ostnext.Models.tbl_joburl_master>)ViewData["tblJurl"];
+    int z = 1;
+}
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>Job URl Dashboard</span>
+            </div>
+            <div class="panel-body">
+                <button class="btn btn-primary" style="float:right;margin-bottom: 1%;background: #a6c !important;box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);padding: 0.54rem 2.14rem;font-size: 1.1rem;" data-toggle="modal" data-target="#exampleModal" data-whatever="mdo">Add Job URl</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("Job_url_Add", "UniversityKPI", FormMethod.Post, new { id = "form-add-kpi" }))
+                            {
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Create Special Metric</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="recipien-name" class="col-form-label">Job URL Value:</label>
+                                        <input type="text" class="form-control" name="JobUrlVal">
+                                    </div>                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="form-horizontal">
+                    <div id="div-kpi-data-grid" class="relegatGrid" style="margin-bottom: 1%;">
+                        <table class="table" style="height:80px;width: 100%;">
+                            <thead>
+                                <tr style="background-color:#367fa9;color:white">                                    
+                                    <th>Job URl</th>
+                                    <th>Action</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="prog-table" id="specMetricTbl">
+                                @foreach (var item in tblJurl)
+                                {
+                                <tr>
+                                    @if (item.status == "D")
+                                    {
+                                        <td id="metDesc-@z">@item.url</td>
+                                        <td><input type="hidden" id="idMetric-@z" value="@item.id_joburl" /><a class="btn btn-primary" onclick="editMet_modal(@z)" data-toggle="modal" data-target="#editModal" data-whatever="mdo"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</a> <a class="btn btn-primary" onclick="delMet_modal(@z)" data-toggle="modal" data-target="#delModal" data-whatever="mdo"><i class="fa fa-trash" aria-hidden="true"></i>Delete</a></td>
+                                        <td><a href="@Url.Action("activate_job_url","UniversityKPI",new { id_job = item.id_joburl})" class="btn btn-primary"><i class="fa fa-trash" aria-hidden="true"></i>Activate</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td id="metDesc-@z">@item.url</td>
+                                         <td></td>
+                                        <td><a href="@Url.Action("activate_job_url","UniversityKPI",new { id_job = item.id_joburl})" class="btn btn-primary" disabled><i class="fa fa-trash" aria-hidden="true"></i>Activate</a><i class="fa fa-check" aria-hidden="true" style="color:forestgreen"></i></td>
+                                    }
+                                </tr>
+                                    z++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @* Edit modal another one for the edit*@
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("Job_Url_Update", "UniversityKPI", FormMethod.Post, new { id = "form-add-kpi" }))
+                            {
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Update Special Metric</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">                                    
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Description:</label>
+                                        <textarea class="form-control" id="editDescName" name="JoburlName"></textarea>
+                                    </div>
+                                    <input type="hidden" id="editMetID" name="editIdJob" value="" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">cancel</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                @*end of edit modal*@
+                @* Delete modal another one for the edit*@
+                <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("del_job_url", "UniversityKPI", FormMethod.Post, new { id = "form-add-kpi" }))
+                            {
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Update Special Metric</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Job URL Value:</label>
+                                        <span id="delMetDesc"></span>
+                                    </div>
+                                    <input type="hidden" id="delMetID" name="idJoburl" value="" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function editMet_modal(e) {
+        var name = $("#metName-" + e).html();
+        var desc = $("#metDesc-" + e).html();
+        var id_metric = $("#idMetric-" + e).val();
+        $('#editMetName').val(name);
+        $('#editDescName').val(desc);
+        $('#editMetID').val(id_metric);
+    }
+
+    function delMet_modal(e) {
+        var name = $("#metName-" + e).html();
+        var desc = $("#metDesc-" + e).html();
+        var id_metric = $("#idMetric-" + e).val();
+        $('#delMetName').text(name);
+        $('#delMetDesc').text(desc);
+        $('#delMetID').val(id_metric);
+    }
+</script>
+

@@ -1,0 +1,484 @@
+﻿@{
+    ViewBag.Title = "contentCreationRichText";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+<link href="~/Content/RichText/dist/summernote.css" rel="stylesheet" />
+<script src="~/Content/RichText/dist/summernote.js"></script>
+<script src="~/Content/jquery.serializeToJSON.js"></script>
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" href="~/Content/dropify.min.css" />
+<script type="text/javascript" src="~/Content/dropify.js"></script>
+<script>
+    $(document).ready(function () {
+        // Basic
+        $('.dropify').dropify();
+
+        // Translated
+        $('.dropify-fr').dropify({
+            messages: {
+                default: 'Glissez-déposez un fichier ici ou cliquez',
+                replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+                remove: 'Supprimer',
+                error: 'Désolé, le fichier trop volumineux'
+            }
+        });
+
+        // Used events
+        var drEvent = $('#input-file-events').dropify();
+
+        drEvent.on('dropify.beforeClear', function (event, element) {
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+
+        drEvent.on('dropify.afterClear', function (event, element) {
+            alert('File deleted');
+        });
+
+        drEvent.on('dropify.errors', function (event, element) {
+            console.log('Has Errors');
+        });
+
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function (e) {
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        })
+    });
+</script>
+<script>
+
+    $(document).ready(function () {        
+        $("#form-add-brief").validationEngine();
+        $('.summernote').summernote();
+
+        $("#datetimepicker2").datetimepicker({
+            minDate: 0,
+            dateFormat: "dd-mm-yy",
+            minDate: new Date(),
+            onSelect: function (selected) {
+                var date = $(this).datetimepicker('getDate');
+            }
+        });
+    });
+
+    function setQuestionOption(ids) {
+        if (ids == 1) {
+            $("#div-question-counter").show();
+            $("#div-question-linked").show();
+        } else {
+            $("#div-question-counter").hide();
+            $("#div-question-linked").hide();
+        }
+    }
+
+    function formSubmit() {
+        var valid = $("#form-add-brief").validationEngine('validate');
+
+        if (valid) {
+            var form_data = $("#form-add-brief").serializeArray();
+            var rtcode = $('.summernote').summernote('code');
+
+            form_data.push({ name: "rtcode", value: rtcode });
+            /**/
+            /**/
+            var url = '@Url.Action("finishDratfBrief", "Brief")';
+    /**/
+    /**/
+
+    var obj = $("#form-add-brief").serializeToJSON();
+    var jsonForm = JSON.stringify(obj);
+
+    /**/
+    /**/
+    //  $.post(url, form_data, function (data, sts) { location.href = '@Url.Action("briefDraft", "Brief")'; });
+    /**/
+    /**/
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { jdata: jsonForm, rtcode: rtcode },
+        success: function (msg) {
+            /**/
+            /**/
+            location.href = '@Url.Action("briefDraft", "Brief")';//redirection
+    /**/
+    /**/
+}
+});
+
+}
+}
+
+function searchQuestion() {
+var id = $("#search-category").val();
+var sid = $("#search-sub-category").val();
+/**/
+/**/
+var url = '@Url.Action("getQuestionList", "Brief")';
+    /**/
+    /**/
+    var pattern = $("#search-metadata").val().trim();
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { sid: id, sbid: sid, metadata: pattern },
+
+        success: function (data) {
+            $("#display_table").empty().append(data);
+            $("#brief-table").dataTable({ "bSort": false, "pageLength": 10 });
+
+        }
+    });
+}
+
+function addQuestionToBrief(ids) {
+
+    var flag = true;
+    $("input[name='hidden-qtn-list']").each(function () {
+        var value = $(this).val();
+        if (value == ids) {
+            flag = false;
+        }
+    });
+    if (flag) {
+        var idc = $("#row-count-hidden").val();
+        var count = $("#question-count").val();
+        if (count >= idc) {
+            $("#plus-qtn-brief-" + ids).hide();
+            $("#plus-ok-" + ids).show();
+            var row = $("#row-td-" + ids).text();
+
+            if (idc == 1) {
+                $("#div-qtn-row").empty();
+                $("#row-count-hidden").val(2);
+            } else {
+                idc++;
+                $("#row-count-hidden").val(idc);
+            }
+            var option = '<div class="brief-panel brief-note"> <input type="hidden" name="hidden-qtn-list" value="' + ids + '" /><input type="hidden" name="row-qtn-list-' + idc + '" value="' + ids + '" /><p style="padding:6px;">' + row + '</p></div>';
+            $("#div-qtn-row").append(option);
+        } else {
+            $("#div-error-limit").show();
+            setTimeout(function () { $("#div-error-limit").hide(); }, 5000);
+        }
+    } else {
+        $("#div-error-duplicate").show();
+        setTimeout(function () { $("#div-error-duplicate").hide(); }, 5000);
+
+    }
+}
+
+function getSubCategory(val, ids) {
+
+    /**/
+    /**/
+    var url = '@Url.Action("getSubcategoryList", "Brief")';
+    /**/
+    /**/
+    if (val != "0") {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { cid: val },
+
+            success: function (data) {
+                $("#" + ids).empty().append(data);
+
+            }
+        });
+    }
+}
+</script>
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+</style>
+
+@{
+    List<tbl_brief_category>
+    category = (List<tbl_brief_category>
+        )ViewData["category"];
+    List<tbl_brief_subcategory>
+        subcategory = (List<tbl_brief_subcategory>
+            )ViewData["subcategory"];
+}
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">create new brief </div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <label class="control-label">category</label>
+                                            <select id="select-category" name="select-category" class="form-control selectpicker" data-live-search="true" onchange="getSubCategory(this.value,'select-sub-category')">
+                                                @foreach (var pro in category)
+                                                {
+                                                    <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">sub-category</label>
+                                            <select id="select-sub-category" name="select-sub-category" class="form-control">
+                                                @foreach (var pro in subcategory)
+                                                {
+                                                    <option data-tokens="@pro.brief_subcategory" value="@pro.id_brief_subcategory">@pro.brief_subcategory</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label pull-right">Expiry Date</label>
+                                            <div class='input-group date pull-right'>
+                                                <input type='text' class="form-control validate[required]" id='datetimepicker2' name="brief-expiry" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">brief title</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <input type="text" class="form-control validate[required]" value="" placeholder="brief Title" id="brief-title" name="brief-title" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label class="control-label">select type</label>
+                                                    <select id="select-1" name="select-theme-1" class="form-control">
+                                                        <option value="1">Text</option>
+                                                        <option value="2">File</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div id="div-type-1-text" style="display:none;">
+                                                <textarea class="summernote form-control validate[required]" name="brief-rt-data-t1"></textarea>
+                                            </div>
+                                            <div id="div-type-1-file">
+                                                <div class="example">
+                                                    <div class="dropify-wrapper">
+                                                        <div class="dropify-message"><span class="file-icon"></span> <p>Drag and drop a file here or click</p><p class="dropify-error">Ooops, something wrong appended.</p></div>
+                                                        <div class="dropify-loader"></div>
+                                                        <div class="dropify-errors-container"><ul></ul></div>
+                                                        <input type="file" id="input-file-now" data-plugin="dropify" data-default-file="">
+                                                        <button type="button" class="dropify-clear">Remove</button>
+                                                        <div class="dropify-preview">
+                                                            <span class="dropify-render"></span>
+                                                            <div class="dropify-infos">
+                                                                <div class="dropify-infos-inner">
+                                                                    <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner"></span></p><p class="dropify-infos-message">Drag and drop or click to replace</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label class="control-label">select type</label>
+                                                    <select id="select-1" name="select-theme-2" class="form-control">
+                                                        <option value="1">Text</option>
+                                                        <option value="2">File</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            <div id="div-type-2-text">
+                                                <textarea class="summernote form-control validate[required]" name="brief-rt-data-t2"></textarea>
+                                            </div>
+                                            <div id="div-type-2-file" style="display:none;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">metadata</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <input type="text" class="form-control validate[required]" value="" placeholder="add metadata to brief separated by comma " id="brief-metadata" name="brief-metadata" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Overide DND ...?</label>
+                                        <select id="overide-dnd" name="overide-dnd" class="form-control ">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="control-label">Add Question ...?</label>
+                                        <select id="question-option" name="question-option" class="form-control " onchange="setQuestionOption(this.value)">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div id="div-question-counter" style="display:none;">
+                                            <label class="control-label">no of questions in this brief</label>
+                                            <select id="question-count" name="question-count" class="form-control ">
+                                                @for (int i = 5; i < 11; i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label pull-right">Distribution method</label>
+                                        <select id="brief-distribution" name="brief-distribution" class="form-control pull-right">
+                                            <option value="0">Normal Distribution of Briefs</option>
+                                            <option value="1">Progressive Distribution of Briefs</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="row" id="div-question-linked" style="display:none;">
+                        <div class="col-md-12">
+                            <div class="panel panel-default custom-panel">
+                                <div class="panel-heading custom-panel-heading">
+                                    <div class="panel-title">questions associated to brief </div>
+                                </div>
+                                <div class="panel-body custom-panel-body">
+                                    <input type="hidden" id="row-count-hidden" value="1" />
+                                    <div class="row">
+                                        <div class="col-md-12" id="div-qtn-row">
+                                            <div class="form-group" style="text-align:center;">
+                                                <label class="control-label">there are no questions associated to the brief</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="div-error-limit" class="form-group" style="text-align:center;display:none;">
+                                        <label class="control-label" style="color:red;">question limit is reached ,you cannot add more questions</label>
+                                    </div>
+                                    <div id="div-error-duplicate" class="form-group" style="text-align:center;display:none;">
+                                        <label class="control-label" style="color:red;">question is already attached to the brief</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="panel panel-default custom-panel">
+                                <div class="panel-heading custom-panel-heading">
+                                    <div class="panel-title">add question </div>
+                                </div>
+                                <div class="panel-body custom-panel-body">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="col-md-3">
+                                                    <label class="control-label">category</label>
+                                                    <select id="search-category" name="search-category" class="form-control selectpicker" data-live-search="true" onchange="getSubCategory(this.value,'search-sub-category')">
+                                                        @foreach (var pro in category)
+                                                        {
+                                                            <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="control-label">sub-category</label>
+                                                    <select id="search-sub-category" name="search-sub-category" class="form-control ">
+                                                        @foreach (var pro in subcategory)
+                                                        {
+                                                            <option data-tokens="@pro.brief_subcategory" value="@pro.id_brief_subcategory">@pro.brief_subcategory</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="control-label pull-right">metadata</label>
+                                                    <div id="theme-1-header" class="form-group">
+                                                        <input type="text" class="form-control" value="" placeholder="" id="search-metadata" name="search-metadata" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <br />
+                                                    <input id="" type="button" class="btn btn-default btn-info" name="" value="search" onclick="searchQuestion()" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" id="">
+                                        <div class="col-md-12">
+                                            <div id="display_table">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="">
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-8">
+                        </div>
+                        <div class="col-md-1">
+                            <input id="btn_question2" type="button" class="btn btn-default btn-info" name="btn_submit" value="save and send for approval" onclick="formSubmit()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

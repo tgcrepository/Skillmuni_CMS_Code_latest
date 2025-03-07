@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "M2ost_category_mapping";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_brief_master> brief = (List<tbl_brief_master>)ViewData["brief"];
+    List<tbl_category_heading> header = (List<tbl_category_heading>)ViewData["header"];
+    int flag = (int)ViewData["flag"];
+}
+
+<link href="~/Content/RichText/dist/summernote.css" rel="stylesheet" />
+<script src="~/Content/RichText/dist/summernote.js"></script>
+<script src="~/Content/jquery.serializeToJSON.js"></script>
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+@using (Html.BeginForm("M2ost_category_mapping_action", "M2ostCategoryMapping", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel" style="border: 1px solid #eee;border-radius: 3px; box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">M2ost Category Mapping </div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="col-md-12" style="" id="div-brf-t2">
+                        <div class="row">
+                            <div class="col-md-12" style="margin-left: -31px;margin-bottom: 11px;">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Brief</label>
+                                        <select id="select-category" name="select-category" class="form-control selectpicker" onchange="" data-live-search="true">
+                                            <option value="-1">select brief</option>
+                                            @foreach (var pro in brief)
+                                            {
+                                                <option data-tokens="@pro.brief_title" value="@pro.id_brief_master">@pro.brief_title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label">Type</label>
+                                        <input type="hidden" id="row-count-hidden" value="1" />
+                                        <select id="t2-select-order" name="t2-select-order" class="form-control " onchange="changeMediaType('t2', this.value) ">
+                                            <option value="-1">Select Type</option>
+                                            <option value="1">Url</option>
+                                            <option value="2">Category</option>
+                                        </select>
+
+                                    </div>
+                                    <div class="row" id="div-t2-part1" style="display:none;">
+                                        <div class="col-md-8" style="margin-left: 15px;width: 665px;">
+                                            <br />
+                                            <input type="text" class="form-control validate[required]" value="" placeholder="Enter url" id="typeurl" name="typeurl" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" id="div-t2-part2" style="display:none;">
+                                        <label class="control-label">Category Header</label>
+                                        <select id="t3-select-order" name="t3-select-order" class="form-control " onchange="searchQuestion(this.value)">
+                                            @foreach (var item in header)
+                                            {
+                                                <option value="@item.id_category_heading">@item.Heading_title</option>
+                                            }
+                                        </select>
+
+                                    </div>
+                                    <br />
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row" id="div-t2-part3">
+                                <div class="col-md-12">
+                                    <div id="display_table">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="div-qtn-row" style="display:none;">
+                                <div class="form-group" style="text-align:center;">
+                                    <label class="control-label">there are no questions associated to the brief</label>
+                                </div>
+                            </div>
+
+                            <input id="btn_question2" type="submit" class="btn btn-primary" name="btn_submit" value="Save " style="width: 67px;" onclick="return Validate()" />
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- The Modal Start-->
+            <div class="content-name">
+                <div id="myModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <center><i class="fa fa-check-circle-o fa-4x" style="color:forestgreen" aria-hidden="true"></i></center>
+                        <p style="text-align:center;">Mapping Saved Succesffully</p>
+                        <center><span onclick="closeModal()" class="btn btn-primary"> okay </span></center>
+                    </div>
+                </div>
+            </div>
+            <!--The Modal End-->
+        </div>
+    </div>
+
+}
+<script>
+
+    function Validate() {
+        $("#form-add-brief").validationEngine();
+      
+        var ddlFruits = document.getElementById("select-category");
+    
+        if (ddlFruits.value == -1) {
+         
+            alert("Please Select Brief!");
+            return false;
+        }
+        ddlFruits = document.getElementById("t2-select-order");
+      
+        if (ddlFruits.value == -1) {
+           
+            alert("Please Select Type!");
+            return false;
+        }
+        
+        return true;
+    }
+
+    function modalFlag() {
+
+        var f1 = @flag;
+        if (f1 == 1) {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        }
+    }
+
+
+    function changeMediaType(div, ids) {
+        if (ids == 1) {
+            $("#div-" + div + "-part1").show();
+            $("#div-" + div + "-part2").hide();
+            $("#div-" + div + "-part3").hide();
+        }
+
+        if (ids == 2) {
+
+            $("#div-" + div + "-part1").hide();
+            $("#div-" + div + "-part2").show();
+            $("#div-" + div + "-part3").show();
+
+        }
+    }
+
+    function searchQuestion() {
+    flag5 = 0;
+    var bid = document.getElementById("t3-select-order").value;
+    var url = '@Url.Action("getCategoryList", "M2ostCategoryMapping")';
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { cid: bid },
+        success: function (data) {
+            $("#display_table").empty().append(data);
+            $("#brief-table").dataTable({ "bSort": false, "pageLength": 10 });
+
+        }
+    });
+    }
+
+    var flag5 = 0;
+    function addQuestionToBrief(ids) {
+
+
+        if (flag5 == 0) {
+
+            var idc = $("#row-count-hidden").val();
+            
+            $("#plus-qtn-brief-" + ids).hide();
+            $("#plus-ok-" + ids).show();
+            var row = $("#row-td-" + ids).text();
+
+            if (idc == 1) {
+                $("#div-qtn-row").empty();
+                $("#row-count-hidden").val(2);
+            } else {
+                idc++;
+                $("#row-count-hidden").val(idc);
+            }
+            var option = '<div class="brief-panel brief-note"> <input type="hidden" name="hidden-qtn-list" id="hidden-qtn-list" value="' + ids + '" /><input type="hidden" name="row-qtn-list-' + idc + '" value="' + ids + '" /><p style="padding:6px;">' + row + '</p></div>';
+            $("#div-qtn-row").append(option);
+            flag5 = 1;
+
+
+        }
+
+    }
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+    $(document).ready(function () {
+        modalFlag();
+    });
+
+</script>
+<style>
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 2; /* Sit on top */
+        padding-top: 200px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        /*float: right;
+        margin-right: 0%;*/
+        margin-top: 5%;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>

@@ -1,0 +1,76 @@
+﻿@model m2ostnext.Models.tbl_referral_code_points_config
+@{
+    ViewBag.Title = "edit_referral_points";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+<script>
+    $(function () {
+        $("#form_edit_category").validationEngine();
+
+    });
+</script>
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Edit Points</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm("edit_referral_points_action", "referral_points", FormMethod.Post, new { id = "form_add_category", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="ref_type" value="@Model.ref_type" />
+
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label col-md-2 regLabel" style="margin-left: -68px;">Referral Type</label>
+                                    <div class="col-md-10">
+                                        <select id="referral" name="referral" style="width: 388px;margin-left: 22px; height: 32px; " required disabled>
+
+                                            <option value="1" @if (Model.ref_type == 1) { @("selected") }>Referral Points</option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        <label for="FirstName" class="control-label regLabel" style="margin-left: 5px;">Points</label>
+                                    </div>
+                                    <div class="col-md-9">
+
+                                        <input type="number" class="form-control validate[required]" min="1" value="@Model.ref_points" placeholder="Points" id="points" name="points" />
+                                    </div>
+
+                                </div>
+
+                                <input type="submit" value="Update" class="btn btn-default" style="background: #018ccf; color: white; width: 58px; height: 29px;margin-left: 140px;" />
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+                }
+                <hr />
+
+            </div>
+        </div>
+    </div>
+</div>
+

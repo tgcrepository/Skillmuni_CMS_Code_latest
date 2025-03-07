@@ -1,0 +1,241 @@
+﻿@{
+    ViewBag.Title = "sul_event_mapping";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.sul_event_map>
+    map = (List<m2ostnext.Models.sul_event_map>
+        )ViewData["map"];
+        List<m2ostnext.Models.sul_event_map_seminar>
+            seminar = (List<m2ostnext.Models.sul_event_map_seminar>
+                )ViewData["seminar"];
+                List<m2ostnext.Models.sul_event_map_higher>
+                    higher = (List<m2ostnext.Models.sul_event_map_higher>
+                        )ViewData["higher"];
+                        }
+                        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+                        <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+                        <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+                        <link rel="stylesheet" type="text/css" href="~/Content/registerreport/StyleSheet1.css">
+                        <script type="text/javascript" src="~/Content/registerreport/pagination.js"></script>
+
+                        <link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+                        <link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+                        <script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+    <style>
+    .dataTable {
+        table-layout: fixed;
+    }
+    .dataTable td {
+        overflow: hidden !important; /* this is what fixes the expansion */
+        text-overflow: ellipsis !important; /* not supported in all browsers, but I accepted the tradeoff */
+        white-space: nowrap !important;
+    }
+</style>
+                        <script>
+                            $(document).ready(function () {
+                                $("#tbl_seminar_show").dataTable();
+                                $("#tbl_higher_education").dataTable();
+                            });
+                        </script>
+
+
+                        <style>
+                            #manja_wrapper {
+                                overflow: scroll;
+                            }
+
+                            #manja_filter input {
+                                border: 1px solid #ccc;
+                            }
+                        </style>
+                        <script>
+                            function suleventshow() {
+                                $("#seminarshow").show();
+                                //  alert($("#sulevent :selected").val());
+                                //alert($("#sulevent :selected").text());
+                                // call api and pass value
+
+
+                            }
+                            var sem_id = 0;
+                            var high_id = 0;
+                            function publish() {
+                                if (sem_id == 0 && high_id == 0) {
+                                    //            alert("please select any");
+                                    document.getElementById("error_msg1").style.display = "";
+                                }
+                                else {
+                                    var event = $("#sulevent :selected").val();
+                                    //alert("checkbox 1 id" + sem_id);
+                                    var url = '@Url.Action("sul_event_mapping_action", "SulEventMapping")';
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: url,
+                                        data: { events: event, sem_id: sem_id, high_id: high_id },
+                                        success: function (data) {
+
+                                            window.location.reload();
+                                        }
+                                    });
+
+
+                                }
+                            }
+                            function GetSelectedid(id) {
+                                sem_id = id;
+                            }
+                            function GetSelectedhid(id) {
+                                high_id = id;
+                            }
+                        </script>
+
+                        <div class="row clearfix">
+                            <div class="col-md-12 column">
+
+                                <div class="panel panel-default ">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">SUL Event Mapping</h4>
+                                    </div>
+
+                                    <div id="error_msg1" class="alert alert-success" role="alert" style="display:none;">
+                                        Please select any checkbox
+                                    </div>
+
+                                    <div class="panel-body">
+
+
+                                        @using (Html.BeginForm("sul_event_mapping_action", "SulEventMapping", FormMethod.Post, new { id = "form-add-notification", enctype = "multipart/form-data" }))
+                                        {
+                                        @Html.AntiForgeryToken()
+
+                                        <div class="form-horizontal">
+
+                                            <div class="form-group">
+                                                <div class="col-md-3"><label class="control-label">Sul Event</label></div>
+                                                <div class="col-md-5">
+                                                    <select id="sulevent" name="sulevent" class="form-control" onchange="suleventshow()">
+                                                        <option value="">Select</option>
+                                                        @foreach (var itm in map)
+                                                        {
+                                                        <option value="@itm.id_event">@itm.event_title</option>
+
+                                                        }
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        }
+
+                                        <div class="row">
+                                            <div id="seminarshow" style="display:none;">
+                                                <!---Seminar-->
+                                                <div class="col-md-6">
+
+                                                        <table class="table table-striped  table-bordered dataTable sm" id="tbl_seminar_show" style=" width:100%;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        Title
+                                                                    </th>
+                                                                    <th>
+                                                                        Description
+                                                                    </th>
+                                                                    <th>
+                                                                        Action
+                                                                    </th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                @foreach (var item in seminar)
+                                                                {
+
+
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.title
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.objective
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="checkbox" name="seminar" onclick="GetSelectedid(@item.id_seminar)" class="seminar" />
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <!--higher-->
+                                                    <div class="col-md-6">
+                                                        <table class="loading1 table table-striped  table-bordered dataTable sm " id="tbl_higher_education" style="table-layout: fixed;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        Title
+                                                                    </th>
+                                                                    <th style="width:1% !important;">
+                                                                        Description
+                                                                    </th>
+                                                                    <th>
+                                                                        Action
+                                                                    </th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var item in higher)
+                                                                {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.message_to_display
+                                                                    </td>
+                                                                    <td style="width:1% !important;">
+                                                                        @item.redirect_url
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="checkbox" name="higher" onclick="GetSelectedhid(@item.id_higher_education)" />
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                        </div>
+                                        <br /><br />
+
+
+
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <input style=" background: #018ccf;color: white;width: 69px;height: 37px; type="submit" value="Publish" name="btn_submit" class="btn btn-default" onclick="publish()" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+
+                            $("input:checkbox").on('click', function () {
+                                var $box = $(this);
+                                if ($box.is(":checked")) {
+                                    var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                                    $(group).prop("checked", false);
+                                    $box.prop("checked", true);
+                                } else {
+                                    $box.prop("checked", false);
+                                }
+                            });
+                        </script>

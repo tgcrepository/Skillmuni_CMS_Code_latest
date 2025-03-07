@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "CVRequest";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_cv_master> tblcvmaster = (List<tbl_cv_master>)ViewData["tblcvmaster"];
+    List<tbl_video_cv> tblvideocv = (List<tbl_video_cv>)ViewData["tblvideocv"];
+    string videoname = (string)ViewData["videoname"];
+    m2ostnext.Models.UserSession Sessions = (m2ostnext.Models.UserSession)HttpContext.Current.Session["UserSession"];
+    // List<tbl_profile> user = (List<tbl_profile>)ViewData["users"];
+    string VideoCVBase = (string)ViewData["VideoCVBase"];
+    db_m2ostEntities db = new db_m2ostEntities();
+
+}
+
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable();
+    });
+
+    function CVStatusRejected(id_cv) {
+        var url = '@Url.Action("CVStatusRejected", "dashboard")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { id: id_cv },
+            success: function (data) {
+                displayrejectedMessage();
+            }
+        });
+        location.reload();
+    }
+    function displayrejectedMessage() {
+        $("#success-delete").show();
+        setTimeout(function () {
+            $("#success-delete").hide();
+        }, 3000);
+    }
+
+    function CVStatusApproved(id_cv) {
+        var url = '@Url.Action("CVStatusApproved", "dashboard")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { id: id_cv },
+            success: function (data) {
+                displayApprovedMessage();
+            }
+        });
+        location.reload();
+    }
+    function displayApprovedMessage() {
+        $("#success-message").show();
+        setTimeout(function () {
+            $("#success-message").hide();
+        }, 3000);
+    }
+</script>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div id="success-message" class="alert alert-success" role="alert" style="display:none;">
+            <strong>Success : </strong> Video CV has been Approved ...
+        </div>
+        <div id="success-delete" class="alert alert-success" role="alert" style="display:none;">
+            <strong>Success : </strong> Video CV has been Rejected ...
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <h6 class="panel-title">CV Requests</h6>
+            </div>
+            <div class="panel-body">
+                <br />
+                <hr />
+                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>CV Requests</th>
+                            <th>View</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in tblcvmaster)
+                        {
+                            <tr>
+
+                                <td>
+                                    <a id="myModal" data-toggle="modal" data-target="#Modal_@item.id_cv"><i class="glyphicon glyphicon-list"></i> &nbsp;@item.CVRequest</a>
+                                </td>
+                                <td>
+                                    <a class="showbtn" data-toggle="modal" data-target="#Modal_@item.id_cv"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                </td>
+                                <td>
+                                    @*MODAL FOR PENDING STATUS*@
+                                    @if (item.status == "P")
+                                    {
+                                        <p>Pending</p>
+                                    }
+
+                                    @*MODAL FOR APPROVED STATUS*@
+                                    @if (item.status == "A")
+                                    {
+                                        <p>Approved</p>
+                                    }
+
+                                    @*MODAL FOR REJECTED STATUS*@
+                                    @if (item.status == "R")
+                                    {
+                                        <p>Rejected</p>
+
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@foreach (var item in tblcvmaster)
+{
+    if (item.status == "A")
+    {
+        <div id="Modal_@item.id_cv" class="modal fade" role="dialog">
+            <div class="modal-dialog" style="width:80%">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <center><h4 class="modal-title">@item.videoname</h4></center>
+                    </div>
+
+                    <div class="modal-body" style="padding: 4%;width:100%;height:70%;">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe style="width:100%;height:96%;" class="embed-responsive-item" src="@VideoCVBase@item.videoname" allowfullscreen></iframe>
+                        </div>
+
+                        @*<video controls="controls">
+                                <source src="@item.YourVideoPath" type="video/@item.VideoExtension" />
+                            </video>*@
+
+                        <div style="margin-left: 873px;">
+                            <button type="button" id="btnapprove" style="position: absolute;right: 46px;" onclick="CVStatusRejected(@item.id_cv)">Reject</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (item.status == "R")
+    {
+        <div id="Modal_@item.id_cv" class="modal fade" role="dialog">
+            <div class="modal-dialog" style="width:80%">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <center><h4 class="modal-title">@item.videoname</h4></center>
+                    </div>
+                    <div class="modal-body" style="padding: 4%;width:100%;height:70%;">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe style="width:100%;height:96%;" class="embed-responsive-item" src="@VideoCVBase@item.videoname" allowfullscreen></iframe>
+                        </div>
+                        <div style="margin-left: 873px;">
+                            <button type="button" id="btnapprove" style="position: absolute;right: 42px;" onclick="CVStatusApproved(@item.id_cv)">Approve</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="Modal_@item.id_cv" class="modal fade" role="dialog">
+            <div class="modal-dialog" style="width:80%">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <center><h4 class="modal-title">@item.videoname</h4></center>
+                    </div>
+                    <div class="modal-body" style="padding: 4%;width:100%;height:70%;">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe style="width:100%;height:96%;" class="embed-responsive-item" src="@VideoCVBase@item.videoname" allowfullscreen></iframe>
+                        </div>
+                        <div style="margin-left: 873px;">
+                            <button type="button" id="btnapprove" onclick="CVStatusApproved(@item.id_cv)">Approve</button>
+                            <button type="button" id="btnapprove" onclick="CVStatusRejected(@item.id_cv)">Reject</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@*Video Pause functionality*@
+<script>
+    $("#Modal").on('hidden.bs.modal', function (e) {
+        $("#Modal iframe").attr("src", $("#Modal iframe").attr("src"));
+    })
+</script>

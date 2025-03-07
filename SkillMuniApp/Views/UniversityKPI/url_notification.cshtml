@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "url_notification";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>URL Notification</span>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("insert_Url_Notification", "UniversityKPI", FormMethod.Post, new { id = "form-add-kpi" }))
+                {
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">Notification Title</label>
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control validate[required]" type="text" name="notTitle" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">Notification Message</label>
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control validate[required]" type="text" name="notMsg" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">Notification URL(External URL)</label>
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control validate[required]" type="text" name="notUrl" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2">
+
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" type="submit">Publish</button>
+                        </div>
+                    </div>
+
+                </div>
+                }
+            </div>
+        </div>
+    </div>

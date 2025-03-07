@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "add_email";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_feedback_role> role = (List<tbl_feedback_role>)ViewData["role"];
+    //m2ostnext.Models.Email_feedback_role role1 = (m2ostnext.Models.Email_feedback_role)ViewData["role1"];
+    //List<Email_feedback_role> feed = (List<Email_feedback_role>)ViewData["feed"];
+    // m2ostnext.Models.Email_feedback_role feed = (m2ostnext.Models.Email_feedback_role)ViewData["feed"];
+    int j = 0;
+
+}
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(function () {
+        $("#form_add_category").validationEngine();
+    });
+
+
+    function add_category() {
+        var cid = $("#rolename").val();
+        var cText = $("#rolename option:selected").text();
+        if (cText.length > 20) cText = cText.substring(0, 20) + '..';
+
+        cText = cText + " ";
+        var i = $("#hid-category").val();
+        i++;
+        $("#hid-category").val(i);
+        var item = '<div class="data-tab col-md-2" id="div-dyn-category-' + cid + '" name="div-dyn-category-' + cid + '" style="background-color: #23c6c8;"><span class="tag label label-info"><span>' + cText + '</span><input type="hidden" value="' + cid + '" id="add-con-category-' + i + '" name="add-con-category-' + i + '" /><a class="pull-right" onclick="delete_content_category(' + cid + ')"><i class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a></span></div>';
+        $("#div_category").append(item);
+        $("#hid-category").val(i);
+    }
+    function delete_content_category(i) {
+        $("#div-dyn-category-" + i + "").remove();
+    }
+
+</script>
+
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Create Email Feedback User</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm("add_email_feedback_action", "EmailFeedback", FormMethod.Post, new { id = "form_add_category", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @*<input type="hidden" value="" name="rolename" id="rolename" />*@
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel" style="margin-left: -129px;"> Role </label>
+                                <div class="col-md-10">
+                                    <select id="rolename" name="rolename" style="width: 388px; margin-left: 82px; height: 32px; " required>
+
+                                       
+                                        @foreach (var item in (List<tbl_feedback_role>)ViewData["role"])
+                                        {
+                                            <option value="@item.id_role">@item.role_name</option>
+
+                                        }
+
+                                    </select>
+                                    <input class="btn btn-default btn-primary" type="button" id="btn_categort" style="background: #018ccf" value="Add Role" onclick="add_category()" />
+
+                                </div>
+                               
+                            </div>
+                             @*<div class="col-md-3">*@
+                                    @*<input class="btn btn-default btn-primary" type="button" id="btn_categort" value="Add Role" onclick="add_category()" />*@
+                                @*</div>*@
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-10">
+                                <div class="form-group" id="div_category">
+                                    @if (role != null)
+                                    {
+                                        foreach (tbl_feedback_role item in role)
+                                        {
+                                            j++;
+                                            //<div class="data-tab col-md-2 form-control" id="div-dyn-category-@item.id_role" style="background-color: #23c6c8;"><span class="tag label label-info"><span>@item.role_name</span><input type="hidden" value="@item.id_role" id="add-con-category-@j" name="add-con-category-@j" /><a class="pull-right" onclick="delete_content_category('@item.id_role')"><i class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a></span></div>
+
+                                        }
+                                    }
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" value="0" id="hid-category" name="hid-category" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel" style="margin-left: -107px;">Email ID</label>
+                                <div class="col-md-9">
+                                    <input type="email"  class="form-control validate[required]" value="" style="margin-left: 59px; width: 390px;" placeholder="Email Id" id="emailid" name="emailid" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label for="FirstName" class="control-label regLabel">Employee Name</label>
+                                </div>
+                                <div class="col-md-9">
+
+                                    <input type="text" class="form-control validate[required]" placeholder="Employee Name" id="employeename" name="employeename" />
+                                </div>
+
+                            </div>
+                            <center>
+                                <input type="submit" value="Submit" class="btn btn-default" style="background: #018ccf; color: white; width: 58px; height: 29px;" />
+                                
+                                <a href="Index" class="btn btn-default" style="background: #018ccf; color: white; width: 58px; height: 29px;margin-left: 133px;">Cancel</a>
+                            </center>
+                            
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label for="FirstName" class="control-label regLabel">Employee ID</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control validate[required]" placeholder="Employee ID" id="employeeid" name="employeeid" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                 
+                    
+                </div>
+                }
+                <hr />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

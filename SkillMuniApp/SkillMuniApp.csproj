@@ -1,0 +1,2021 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B13AB672-A3F1-4736-88FD-45D595C6027B}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>m2ostnext</RootNamespace>
+    <AssemblyName>m2ostnext</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.3.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.26.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.26.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4, Version=1.3.8.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Compression.LZ4.1.3.8\lib\net462\K4os.Compression.LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4.Streams, Version=1.3.8.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Compression.LZ4.Streams.1.3.8\lib\net462\K4os.Compression.LZ4.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Hash.xxHash, Version=1.0.8.0, Culture=neutral, PublicKeyToken=32cd54395057cec3, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Hash.xxHash.1.0.8\lib\net462\K4os.Hash.xxHash.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1001\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Vidit\Personal\Carl Ambrose\SkillMuni Converted Code\AkanshaCMS.Web\Dependent Dlls\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=9.2.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.9.2.0\lib\net48\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.EntityFramework, Version=8.0.32.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.EntityFramework.8.0.32\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MySqlConnector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySqlConnector.2.2.5\lib\net461\MySqlConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration.ConfigurationManager, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.8.0.0\lib\net462\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.8.0.1\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Pipelines, Version=5.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.5.0.2\lib\net461\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="ZstdSharp, Version=0.8.0.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZstdSharp.Port.0.8.0\lib\net462\ZstdSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationSignInManager.cs" />
+    <Compile Include="ApplicationUserManager.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BundleConfig.cs" />
+    <Compile Include="city.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\AdministratorController.cs" />
+    <Compile Include="Controllers\ApproverFilterAttribute.cs" />
+    <Compile Include="Controllers\AssessmentController.cs" />
+    <Compile Include="Controllers\BriefController.cs" />
+    <Compile Include="Controllers\careerController.cs" />
+    <Compile Include="Controllers\CEJobRoleController.cs" />
+    <Compile Include="Controllers\cmsrolesController.cs" />
+    <Compile Include="Controllers\cms_categoryController.cs" />
+    <Compile Include="Controllers\collegelistController.cs" />
+    <Compile Include="Controllers\contentDashboardController.cs" />
+    <Compile Include="Controllers\ContentReportController.cs" />
+    <Compile Include="Controllers\ContentViewController.cs" />
+    <Compile Include="Controllers\content_answerController.cs" />
+    <Compile Include="Controllers\content_levelController.cs" />
+    <Compile Include="Controllers\content_metadataController.cs" />
+    <Compile Include="Controllers\content_typeController.cs" />
+    <Compile Include="Controllers\csst_categoryController.cs" />
+    <Compile Include="Controllers\csst_roleController.cs" />
+    <Compile Include="Controllers\dashboardController.cs" />
+    <Compile Include="Controllers\EmailFeedbackController.cs" />
+    <Compile Include="Controllers\evController.cs" />
+    <Compile Include="Controllers\EventReportController.cs" />
+    <Compile Include="Controllers\FeedbackdashboardController.cs" />
+    <Compile Include="Controllers\GamificationController.cs" />
+    <Compile Include="Controllers\HigherEducationController.cs" />
+    <Compile Include="Controllers\HigherEducationReportController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\industryController.cs" />
+    <Compile Include="Controllers\industryjobController.cs" />
+    <Compile Include="Controllers\InformationController.cs" />
+    <Compile Include="Controllers\KPIController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\M2ostCategoryMappingController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\organizationController.cs" />
+    <Compile Include="Controllers\referral_pointsController.cs" />
+    <Compile Include="Controllers\RegisteredUserListController.cs" />
+    <Compile Include="Controllers\ReportFeedbackController.cs" />
+    <Compile Include="Controllers\ReportingController.cs" />
+    <Compile Include="Controllers\RoadMapController.cs" />
+    <Compile Include="Controllers\RoleAccessController.cs" />
+    <Compile Include="Controllers\SchedulingController.cs" />
+    <Compile Include="Controllers\ScoringController.cs" />
+    <Compile Include="Controllers\SeminarDashboardController.cs" />
+    <Compile Include="Controllers\SeminarReportController.cs" />
+    <Compile Include="Controllers\SulEventMappingController.cs" />
+    <Compile Include="Controllers\SULFestController.cs" />
+    <Compile Include="Controllers\tbl_business_typeController.cs" />
+    <Compile Include="Controllers\UniversityAdminController.cs" />
+    <Compile Include="Controllers\UniversityKPIController.cs" />
+    <Compile Include="Controllers\UploadUtilityController.cs" />
+    <Compile Include="Controllers\UserFilterAttribute.cs" />
+    <Compile Include="country.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dashboard_brief_percentage.cs" />
+    <Compile Include="downtime_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailService.cs" />
+    <Compile Include="error_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="getOrgDashboard_Result.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="getPopupInfo_Result.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="job_cms_users.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="job_organization.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="m2ostService.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>m2ostService.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="m2ostService.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="m2ostService.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>m2ostService.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="masti_teacher_galleryfolder.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="masti_teacher_photo_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\academic_map.cs" />
+    <Compile Include="Models\addCMS_CategoryModel.cs" />
+    <Compile Include="Models\AESAlgorithm.cs" />
+    <Compile Include="Models\AndroidGCMPushNotification.cs" />
+    <Compile Include="Models\answerSteps.cs" />
+    <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\ApprovalContent.cs" />
+    <Compile Include="Models\AppUser.cs" />
+    <Compile Include="Models\Assessment.cs" />
+    <Compile Include="Models\AssessmentQuestion.cs" />
+    <Compile Include="Models\AssessmentSheet.cs" />
+    <Compile Include="Models\assess_title.cs" />
+    <Compile Include="Models\associated_answer_content.cs" />
+    <Compile Include="Models\badge_reward_dashboard.cs" />
+    <Compile Include="Models\BriefCollection.cs" />
+    <Compile Include="Models\BriefDataCube.cs" />
+    <Compile Include="Models\BriefLogic.cs" />
+    <Compile Include="Models\BriefModel.cs" />
+    <Compile Include="Models\BriefResultSummery.cs" />
+    <Compile Include="Models\BriefReturnResponse.cs" />
+    <Compile Include="Models\BriefUser.cs" />
+    <Compile Include="Models\BriefUserInput.cs" />
+    <Compile Include="Models\briefView.cs" />
+    <Compile Include="Models\BuisinessLogic.cs" />
+    <Compile Include="Models\CEJobRoleTGC.cs" />
+    <Compile Include="Models\ce_career_evaluation_master.cs" />
+    <Compile Include="Models\CMSRole.cs" />
+    <Compile Include="Models\CMSUser.cs" />
+    <Compile Include="Models\collegeListmodel.cs" />
+    <Compile Include="Models\ColorConfig.cs" />
+    <Compile Include="Models\ContentAssociation.cs" />
+    <Compile Include="Models\contentDashboardModel.cs" />
+    <Compile Include="Models\ContentLike.cs" />
+    <Compile Include="Models\ContentLocationGenderWise.cs" />
+    <Compile Include="Models\ContentLocationWise.cs" />
+    <Compile Include="Models\ContentOwner.cs" />
+    <Compile Include="Models\ContentReport.cs" />
+    <Compile Include="Models\ContentReportModel.cs" />
+    <Compile Include="Models\ContentReportModel1.cs" />
+    <Compile Include="Models\ContentRichText.cs" />
+    <Compile Include="Models\dashboard_index_tile_report.cs" />
+    <Compile Include="Models\Email_feedback_cms.cs" />
+    <Compile Include="Models\Email_feedback_user.cs" />
+    <Compile Include="Models\Email_template_cms.cs" />
+    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\EventBatch.cs" />
+    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Models\FeddbackAssosiation.cs" />
+    <Compile Include="Models\feedbackmodel.cs" />
+    <Compile Include="Models\FeedbackReport.cs" />
+    <Compile Include="Models\feedback_preview.cs" />
+    <Compile Include="Models\feeds.cs" />
+    <Compile Include="Models\formDbContext.cs" />
+    <Compile Include="Models\GameElement.cs" />
+    <Compile Include="Models\GameElements.cs" />
+    <Compile Include="Models\GameGroup.cs" />
+    <Compile Include="Models\GameGroupSummary.cs" />
+    <Compile Include="Models\GameMaster.cs" />
+    <Compile Include="Models\GameProgramSummary.cs" />
+    <Compile Include="Models\GameReport.cs" />
+    <Compile Include="Models\GameUserSummary.cs" />
+    <Compile Include="Models\game_path_components.cs" />
+    <Compile Include="Models\GamificationModel.cs" />
+    <Compile Include="Models\GroupUsers.cs" />
+    <Compile Include="Models\Higher.cs" />
+    <Compile Include="Models\HigherEducationModel.cs" />
+    <Compile Include="Models\HigherModel.cs" />
+    <Compile Include="Models\higher_education_dashboard.cs" />
+    <Compile Include="Models\HtmltoText.cs" />
+    <Compile Include="Models\IndustryCompanyTGC.cs" />
+    <Compile Include="Models\IndustryRole.cs" />
+    <Compile Include="Models\jobOrganization.cs" />
+    <Compile Include="Models\journey_tile.cs" />
+    <Compile Include="Models\KPILogic.cs" />
+    <Compile Include="Models\KPIModel.cs" />
+    <Compile Include="Models\KPIModels.cs" />
+    <Compile Include="Models\KPIScoring.cs" />
+    <Compile Include="Models\KPIUpload.cs" />
+    <Compile Include="Models\lazy_response.cs" />
+    <Compile Include="Models\locationbyuser.cs" />
+    <Compile Include="Models\location_user_piechart.cs" />
+    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\m2ostDBContext.cs" />
+    <Compile Include="Models\m2ostDBContextNew.cs" />
+    <Compile Include="Models\m2ost_category_mapping_dashboard.cs" />
+    <Compile Include="Models\menu.cs" />
+    <Compile Include="Models\MonthData.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\NotificationUserList.cs" />
+    <Compile Include="Models\ProgramPercentile.cs" />
+    <Compile Include="Models\ProgramReport.cs" />
+    <Compile Include="Models\ProgramScoringClass.cs" />
+    <Compile Include="Models\ProgramScoringData.cs" />
+    <Compile Include="Models\ProgramScoringModel.cs" />
+    <Compile Include="Models\programs_title.cs" />
+    <Compile Include="Models\QuestionList.cs" />
+    <Compile Include="Models\Registerreport.cs" />
+    <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\reward_preview.cs" />
+    <Compile Include="Models\RoadmapLogic.cs" />
+    <Compile Include="Models\RoleBasedAccess.cs" />
+    <Compile Include="Models\scorelist.cs" />
+    <Compile Include="Models\scoring_matrix.cs" />
+    <Compile Include="Models\seminar.cs" />
+    <Compile Include="Models\seminar_dashboard.cs" />
+    <Compile Include="Models\State.cs" />
+    <Compile Include="Models\studentappliedjob.cs" />
+    <Compile Include="Models\studentreport.cs" />
+    <Compile Include="Models\SULFestBusinessLogic.cs" />
+    <Compile Include="Models\sul_event_map.cs" />
+    <Compile Include="Models\sul_event_map_higher.cs" />
+    <Compile Include="Models\sul_event_map_seminar.cs" />
+    <Compile Include="Models\tbl_academy_level_brief_restriction_count.cs" />
+    <Compile Include="Models\tbl_badge_won_message_output.cs" />
+    <Compile Include="Models\tbl_brief_tile_level_brief_restriction_count.cs" />
+    <Compile Include="Models\tbl_corporate_form.cs" />
+    <Compile Include="Models\tbl_crrency_points.cs" />
+    <Compile Include="Models\tbl_league_message_output.cs" />
+    <Compile Include="Models\tbl_m2ost_mapping.cs" />
+    <Compile Include="Models\Tempmodel.cs" />
+    <Compile Include="Models\temp_content.cs" />
+    <Compile Include="Models\TestBrief.cs" />
+    <Compile Include="Models\theme_map.cs" />
+    <Compile Include="Models\theme_preview.cs" />
+    <Compile Include="Models\ticker.cs" />
+    <Compile Include="Models\UniversityAdminLogic.cs" />
+    <Compile Include="Models\UniversityAdminModels.cs" />
+    <Compile Include="Models\UserAssignmentList.cs" />
+    <Compile Include="Models\usercount.cs" />
+    <Compile Include="Models\usersdetails.cs" />
+    <Compile Include="Models\UserSession.cs" />
+    <Compile Include="Models\UserUploadClass.cs" />
+    <Compile Include="Models\Utility.cs" />
+    <Compile Include="Models\WelcomeGif.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteConfig.cs" />
+    <Compile Include="sc_game_element_weightage.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sc_program_assessment_scoring.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sc_program_content_summary.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sc_program_kpi_score.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sc_program_kpi_weightage.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sc_program_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sc_report_game_process_path.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sc_report_game_process_score.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SmsService.cs" />
+    <Compile Include="special_metric_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Startup.cs" />
+    <Compile Include="state.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_academic_tiles.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_academic_tile_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_academy_brief_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_academy_level_brief_restriction.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_action.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_annual_revenue_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_api_authenticate.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_answer.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_audit.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_categoty_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_general.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_header.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_index.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_push.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_question.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_scoring_key.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_sheet.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_theme.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessment_user_assignment.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assessmnt_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assignment_role_assessment.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assignment_role_content.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_assignment_role_program.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_authcode.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_badge_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_badge_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_badge_reward_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_badge_won_message.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_banner.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_banner_ad_config.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_banner_body.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_banner_config_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_batch.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_answer.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_answer_ce.cs" />
+    <Compile Include="tbl_brief_audit.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_b2c_index.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_b2c_right_audit.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_b2c_score_audit.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_category.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_category_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_category_tile.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_enquiry.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_feedback_media.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_index.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_log_audit.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_m2ost_category_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_master_body.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_master_template.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_metadata.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_progdist_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_question.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_question_ce.cs" />
+    <Compile Include="tbl_brief_question_complexity.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_question_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_question_metadata.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_read_status.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_status.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_subcategory.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_tile_academic_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_tile_category_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_tile_level_brief_restriction.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_user_assignment.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_user_feedback_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_brief_version_control.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_buisiness_stages_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_business_type.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_category.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_category_associantion.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_category_default.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_category_heading.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_category_heading_default.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_category_order.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_category_tiles.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_category_tiles_default.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_certificate_assignment.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_certificate_configure.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_certificate_configure_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_career_evaluation_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_category_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_company_details.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_audit.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_completion_report.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_index.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_jobindustry.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_jobindustry_tgc_setup.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_jobindustry_user_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_jobrole.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_jobrole_user_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_job_organization_setup.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_progdist_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_role_answerkey_setup.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evaluation_tile.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evalution_answer_key.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evalution_answer_key_setup.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_evalution_psychometric_setup.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_industry.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_industry_role.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_organization_ce_setup.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ce_organization_ce_setup_industry.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_childinformation.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cms_roles.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cms_role_action.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cms_role_action_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cms_users.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_college_list.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_color_config.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_color_config_flag.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_answer.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_answer_default.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_answer_steps.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_banner.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_counters.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_default.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_footer.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_header.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_header_footer.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_level.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_link.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_metadata.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_notification_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_organization_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_organization_mapping_default.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_program_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_right_association.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_role_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_type.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_type_link.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_content_user_assisgnment.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_couponsredeemed.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_csst_role.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_currency_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_currency_points.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cv_additional_info.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cv_education.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cv_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cv_personel_info.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_cv_project.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_degree_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_device_type.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_email_feedback_user.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_email_template.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_email_template_body.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_employee_strength_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_enquiry_reason.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_entrepreneurship_files.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_entrepreneurship_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_event_organisation_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_event_sponsor_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_event_type_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_event_type_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_excel.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_facilitator_users.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_feedback_bank.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_feedback_bank_link.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_feedback_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_feedback_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_feedback_media.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_feedback_role.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_foundation_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_academic_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_creation.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_group.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_group_association.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_group_participatant.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_metric_kpi_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_path.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_phase.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_process_path.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_solo.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_game_user_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_graduation_year.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_industry.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_joburl_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_assessment_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_category.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_category_header.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_email_template_body.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_interview_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_interview_result_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_interview_rounds_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_location_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_offline_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_online_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_publish_calender_report.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_reject_feedback_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_round_histroy.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_telephonic_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_user_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_job_zoom_meeting_id.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_kpi_grid.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_kpi_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_kpi_program_scoring.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_landing_page.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_leagues_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_league_message.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_mail_verification.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_menu.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_menu_default.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_menu_type.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_mini_quali_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_min_qualification_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_mutthimeinsitare_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_mutthi_mein_sitare_milestone.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_mutthi_mein_sitare_skill.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_mutthi_skill_development_detail.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_mutthi_skill_milestone_detail.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_news_ticker.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_non_disclousure_clause_content.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_non_disclousure_clause_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_notification.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_notification_config.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_notification_pre_config.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_notification_reminder.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_offline_expiry.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_organisation_banner.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_organisation_banner_links.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_organisation_status.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_organization.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_org_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_popup_info.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_popup_info_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_profile.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_promocode_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_referral_code_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_referral_code_points_config.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_referral_code_user_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_relegtion_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_reminder_notification_config.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_reminder_notification_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_report_content.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_report_login_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_restriction_user_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_rewards_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_rewards_redeem_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_role.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_role_user_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_rs_type_qna.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_saksham_assessment_detail.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_saksham_assessment_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_saksham_assessment_milestone_detail.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_saksham_assessment_skill_detail.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_scheduled_event.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_scheduled_event_subscription_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_signup_config.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_skill_development.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_skill_milestone.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_social_entrepreneurship.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_social_entrepreneurship_product_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_social_entrepreneurship_product_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_social_platform_active_directory.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_social_platform_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_special_metric_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sso_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_stream_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_subscriber_attendance.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_subscriptions.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sub_event_type_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sub_event_type_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_event_college_list.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_fest_event_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_fest_event_registration.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_fest_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_fest_otp.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_fest_otp_expiry_config.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_higher_education_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_higher_education_timeslot.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_higher_education_user_registration.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_seminar_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_seminar_timeslot.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_seminar_timeslot_new.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_seminar_user_registration.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_sul_slot_seminar.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_survey.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_survey_bank.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_survey_bank_link.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_survey_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_task.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_temp_user_upload.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_themes.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_theme_leagues.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_theme_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_theme_metric.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_theme_organisation_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_third_party_app_right_swipe_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_third_party_right_swipe_m2ost.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_university_kpi_grid.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_university_kpi_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_university_special_points_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_university_special_point_grid.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_url_notification_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_applied_job.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_badge_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_currency_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_device_link.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_enquiry_data.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_event_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_extra_curricular_certificates.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_game_assignment.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_game_score_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_game_special_metric_score_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_gcm_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_job_preferences.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_job_preferences_category.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_job_preferences_job_type.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_job_preferences_location.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_job_preferences_skill.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_league_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_login_log.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_log_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_programs.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_ref_mapping.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_zone.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_user_zone_master.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_version_control.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_version_control_ios.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_video_cv.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_web_version_control.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_welcome_gif.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="userscore.cs">
+      <DependentUpon>m2ostService.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Global.asax" />
+    <Content Include="m2ostService.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>m2ostService.edmx</DependentUpon>
+      <LastGenOutput>m2ostService.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="m2ostService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>m2ostService.edmx</DependentUpon>
+      <LastGenOutput>m2ostService.cs</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="m2ostService.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>m2ostService.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="m2ostService.edmx.diagram">
+      <DependentUpon>m2ostService.edmx</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Administrator\add_app_user.cshtml" />
+    <Content Include="Views\Administrator\add_cms_role.cshtml" />
+    <Content Include="Views\Administrator\app_user_display.cshtml" />
+    <Content Include="Views\Administrator\App_user_status.cshtml" />
+    <Content Include="Views\Administrator\assessment_association.cshtml" />
+    <Content Include="Views\Administrator\cms_display.cshtml" />
+    <Content Include="Views\Administrator\cms_user_create.cshtml" />
+    <Content Include="Views\Administrator\cms_user_edit.cshtml" />
+    <Content Include="Views\Administrator\content_association.cshtml" />
+    <Content Include="Views\Administrator\content_right_association.cshtml" />
+    <Content Include="Views\Administrator\createOrganization.cshtml" />
+    <Content Include="Views\Administrator\data_association.cshtml" />
+    <Content Include="Views\Administrator\data_display_association.cshtml" />
+    <Content Include="Views\Administrator\DisplayOrganization.cshtml" />
+    <Content Include="Views\Administrator\display_cms_role.cshtml" />
+    <Content Include="Views\Administrator\editOrganization.cshtml" />
+    <Content Include="Views\Administrator\edit_app_user.cshtml" />
+    <Content Include="Views\Administrator\edit_cms_role.cshtml" />
+    <Content Include="Views\Administrator\Index.cshtml" />
+    <Content Include="Views\Assessment\AssessmentDetails.cshtml" />
+    <Content Include="Views\Assessment\assessmentQuestions.cshtml" />
+    <Content Include="Views\Assessment\AssessmentSheets.cshtml" />
+    <Content Include="Views\Assessment\AssessmentToContent.cshtml" />
+    <Content Include="Views\Assessment\CategoryToAssessment.cshtml" />
+    <Content Include="Views\Assessment\ContentToAssessment.cshtml" />
+    <Content Include="Views\Assessment\createAssessment.cshtml" />
+    <Content Include="Views\Assessment\createAssessmentSheets.cshtml" />
+    <Content Include="Views\Assessment\editAssessment.cshtml" />
+    <Content Include="Views\Assessment\edit_assessment_question.cshtml" />
+    <Content Include="Views\Assessment\Index.cshtml" />
+    <Content Include="Views\Assessment\LoadAssessment.cshtml" />
+    <Content Include="Views\Assessment\viewAssessment.cshtml" />
+    <Content Include="Views\Brief\approvalDashboard.cshtml" />
+    <Content Include="Views\Brief\approveBrief.cshtml" />
+    <Content Include="Views\Brief\BriefContentDetail.cshtml" />
+    <Content Include="Views\Brief\BriefDetail.cshtml" />
+    <Content Include="Views\Brief\briefDraft.cshtml" />
+    <Content Include="Views\Brief\briefDraftContent.cshtml" />
+    <Content Include="Views\Brief\BriefEvaluation.cshtml" />
+    <Content Include="Views\Brief\briefTesting.cshtml" />
+    <Content Include="Views\Brief\briefThemeDraft.cshtml" />
+    <Content Include="Views\Brief\cleanBrief.cshtml" />
+    <Content Include="Views\Brief\cleanBriefContent.cshtml" />
+    <Content Include="Views\Brief\createTile.cshtml" />
+    <Content Include="Views\Brief\create_job_category.cshtml" />
+    <Content Include="Views\Brief\dashboard.cshtml" />
+    <Content Include="Views\Brief\dashboardContent.cshtml" />
+    <Content Include="Views\Brief\editCategoryTile.cshtml" />
+    <Content Include="Views\Brief\EditQuestion.cshtml" />
+    <Content Include="Views\Brief\EditQuestionContent.cshtml" />
+    <Content Include="Views\Brief\edit_job_category.cshtml" />
+    <Content Include="Views\Brief\finishQuestionContentAction.cshtml" />
+    <Content Include="Views\Brief\Index.cshtml" />
+    <Content Include="Views\Brief\jobcategoryTile_dashboard.cshtml" />
+    <Content Include="Views\Brief\loadBrief.cshtml" />
+    <Content Include="Views\Brief\modifyBrief.cshtml" />
+    <Content Include="Views\Brief\modifyBriefCont.cshtml" />
+    <Content Include="Views\Brief\partialBriefSummery.cshtml" />
+    <Content Include="Views\Brief\partialUserAssignment.cshtml" />
+    <Content Include="Views\Brief\question.cshtml" />
+    <Content Include="Views\Brief\questionDashboard.cshtml" />
+    <Content Include="Views\Brief\questionDashboardContent.cshtml" />
+    <Content Include="Views\Brief\question_episode_mapping.cshtml" />
+    <Content Include="Views\Brief\setCategoryTileMapping.cshtml" />
+    <Content Include="Views\Brief\Tiles.cshtml" />
+    <Content Include="Views\Brief\userAssignment.cshtml" />
+    <Content Include="Views\Brief\viewBrief.cshtml" />
+    <Content Include="Views\career\career_evaluation.cshtml" />
+    <Content Include="Views\career\career_evaluation_dashboard.cshtml" />
+    <Content Include="Views\career\career_evaluation_preview.cshtml" />
+    <Content Include="Views\career\edit_career_evaluation.cshtml" />
+    <Content Include="Views\career\PsychoMetricQuestion.cshtml" />
+    <Content Include="Views\CEJobRole\add_job_role.cshtml" />
+    <Content Include="Views\CEJobRole\delete_job_role.cshtml" />
+    <Content Include="Views\CEJobRole\edit_job_role.cshtml" />
+    <Content Include="Views\CEJobRole\Index.cshtml" />
+    <Content Include="Views\CEJobRole\jobRoleDetail.cshtml" />
+    <Content Include="Views\cms_category\add_category.cshtml" />
+    <Content Include="Views\cms_category\delete_category.cshtml" />
+    <Content Include="Views\cms_category\display_category.cshtml" />
+    <Content Include="Views\cms_category\edit_category.cshtml" />
+    <Content Include="Views\collegelist\CollegeDasboard.cshtml" />
+    <Content Include="Views\collegelist\referral_code_dashboard.cshtml" />
+    <Content Include="Views\contentDashboard\AssociatedContent.cshtml" />
+    <Content Include="Views\contentDashboard\associateFeedback.cshtml" />
+    <Content Include="Views\contentDashboard\changeAnswerFooter.cshtml" />
+    <Content Include="Views\contentDashboard\changeAnswerHeader.cshtml" />
+    <Content Include="Views\contentDashboard\ContentApproval.cshtml" />
+    <Content Include="Views\contentDashboard\contentCreation.cshtml" />
+    <Content Include="Views\contentDashboard\contentCreationPPS.cshtml" />
+    <Content Include="Views\contentDashboard\contentCreationRichText.cshtml" />
+    <Content Include="Views\contentDashboard\contentCreationRichTextTrial.cshtml" />
+    <Content Include="Views\contentDashboard\contentCreationTrial.cshtml" />
+    <Content Include="Views\contentDashboard\ContentError.cshtml" />
+    <Content Include="Views\contentDashboard\ContenToUserList.cshtml" />
+    <Content Include="Views\contentDashboard\displayFeedback.cshtml" />
+    <Content Include="Views\contentDashboard\displayOrganisation.cshtml" />
+    <Content Include="Views\contentDashboard\editContent.cshtml" />
+    <Content Include="Views\contentDashboard\editOrganization.cshtml" />
+    <Content Include="Views\contentDashboard\feedbackCreation.cshtml" />
+    <Content Include="Views\contentDashboard\Index.cshtml" />
+    <Content Include="Views\contentDashboard\LoadContent.cshtml" />
+    <Content Include="Views\contentDashboard\ProgramAssignment.cshtml" />
+    <Content Include="Views\contentDashboard\ProgramUserList.cshtml" />
+    <Content Include="Views\contentDashboard\rich_text_edit.cshtml" />
+    <Content Include="Views\contentDashboard\UserBasedAssessmentAssignment.cshtml" />
+    <Content Include="Views\contentDashboard\UserBasedAssessmentToUserList.cshtml" />
+    <Content Include="Views\contentDashboard\UserBasedContentAssignment.cshtml" />
+    <Content Include="Views\ContentReport\ContentGraphReportIndex.cshtml" />
+    <Content Include="Views\ContentReport\ContentOptionReport.cshtml" />
+    <Content Include="Views\ContentReport\ContentReportDetails.cshtml" />
+    <Content Include="Views\ContentReport\ContentReportIndex.cshtml" />
+    <Content Include="Views\ContentReport\ContentReportOptionDetails.cshtml" />
+    <Content Include="Views\ContentReport\ContentReport_Counter.cshtml" />
+    <Content Include="Views\ContentReport\ContentTopUSersGMIndex.cshtml" />
+    <Content Include="Views\ContentReport\ContentTopUSersIndex.cshtml" />
+    <Content Include="Views\ContentReport\Index.cshtml" />
+    <Content Include="Views\ContentView\theme1.cshtml" />
+    <Content Include="Views\ContentView\theme10.cshtml" />
+    <Content Include="Views\ContentView\theme11.cshtml" />
+    <Content Include="Views\ContentView\theme12.cshtml" />
+    <Content Include="Views\ContentView\theme13.cshtml" />
+    <Content Include="Views\ContentView\theme14.cshtml" />
+    <Content Include="Views\ContentView\theme15.cshtml" />
+    <Content Include="Views\ContentView\theme16.cshtml" />
+    <Content Include="Views\ContentView\theme17.cshtml" />
+    <Content Include="Views\ContentView\theme2.cshtml" />
+    <Content Include="Views\ContentView\theme3.cshtml" />
+    <Content Include="Views\ContentView\theme4.cshtml" />
+    <Content Include="Views\ContentView\theme5.cshtml" />
+    <Content Include="Views\ContentView\theme6.cshtml" />
+    <Content Include="Views\ContentView\theme7.cshtml" />
+    <Content Include="Views\ContentView\theme8.cshtml" />
+    <Content Include="Views\ContentView\theme9.cshtml" />
+    <Content Include="Views\ContentView\themestep10.cshtml" />
+    <Content Include="Views\ContentView\themestep11.cshtml" />
+    <Content Include="Views\ContentView\themestep12.cshtml" />
+    <Content Include="Views\ContentView\themestep13.cshtml" />
+    <Content Include="Views\ContentView\themestep14.cshtml" />
+    <Content Include="Views\ContentView\themestep15.cshtml" />
+    <Content Include="Views\ContentView\themestep16.cshtml" />
+    <Content Include="Views\ContentView\themestep17.cshtml" />
+    <Content Include="Views\ContentView\themestep18.cshtml" />
+    <Content Include="Views\ContentView\themestep19.cshtml" />
+    <Content Include="Views\ContentView\themestep20.cshtml" />
+    <Content Include="Views\ContentView\themestep21.cshtml" />
+    <Content Include="Views\ContentView\themestep22.cshtml" />
+    <Content Include="Views\ContentView\themestep23.cshtml" />
+    <Content Include="Views\ContentView\themestep24.cshtml" />
+    <Content Include="Views\ContentView\themestep25.cshtml" />
+    <Content Include="Views\ContentView\themestep26.cshtml" />
+    <Content Include="Views\ContentView\themestep27.cshtml" />
+    <Content Include="Views\ContentView\themestep8.cshtml" />
+    <Content Include="Views\ContentView\themestep9.cshtml" />
+    <Content Include="Views\content_answer\Create.cshtml" />
+    <Content Include="Views\content_answer\Delete.cshtml" />
+    <Content Include="Views\content_answer\Details.cshtml" />
+    <Content Include="Views\content_answer\Edit.cshtml" />
+    <Content Include="Views\content_answer\Index.cshtml" />
+    <Content Include="Views\content_level\Create.cshtml" />
+    <Content Include="Views\content_level\Delete.cshtml" />
+    <Content Include="Views\content_level\Details.cshtml" />
+    <Content Include="Views\content_level\Edit.cshtml" />
+    <Content Include="Views\content_level\Index.cshtml" />
+    <Content Include="Views\content_metadata\Create.cshtml" />
+    <Content Include="Views\content_metadata\Delete.cshtml" />
+    <Content Include="Views\content_metadata\Details.cshtml" />
+    <Content Include="Views\content_metadata\Edit.cshtml" />
+    <Content Include="Views\content_metadata\Index.cshtml" />
+    <Content Include="Views\content_org_association\Create.cshtml" />
+    <Content Include="Views\content_org_association\Delete.cshtml" />
+    <Content Include="Views\content_org_association\Details.cshtml" />
+    <Content Include="Views\content_org_association\Edit.cshtml" />
+    <Content Include="Views\content_org_association\Index.cshtml" />
+    <Content Include="Views\content_type\Create.cshtml" />
+    <Content Include="Views\content_type\Delete.cshtml" />
+    <Content Include="Views\content_type\Details.cshtml" />
+    <Content Include="Views\content_type\Edit.cshtml" />
+    <Content Include="Views\content_type\Index.cshtml" />
+    <Content Include="Views\csst_category\add_category.cshtml" />
+    <Content Include="Views\csst_category\add_category_headers.cshtml" />
+    <Content Include="Views\csst_category\add_category_tiles.cshtml" />
+    <Content Include="Views\csst_category\delete_category.cshtml" />
+    <Content Include="Views\csst_category\display_category.cshtml" />
+    <Content Include="Views\csst_category\display_category_heading.cshtml" />
+    <Content Include="Views\csst_category\display_category_tiles.cshtml" />
+    <Content Include="Views\csst_category\edit_category.cshtml" />
+    <Content Include="Views\csst_category\edit_category_heading.cshtml" />
+    <Content Include="Views\csst_category\edit_category_tiles.cshtml" />
+    <Content Include="Views\csst_category\SortCategory.cshtml" />
+    <Content Include="Views\csst_category\SortCategoryHeading.cshtml" />
+    <Content Include="Views\csst_category\SortCategoryTiles.cshtml" />
+    <Content Include="Views\csst_role\Index.cshtml" />
+    <Content Include="Views\dashboard\AddContentLink.cshtml" />
+    <Content Include="Views\dashboard\AddNonDisclosureContent.cshtml" />
+    <Content Include="Views\dashboard\add_banner.cshtml" />
+    <Content Include="Views\dashboard\add_content_links.cshtml" />
+    <Content Include="Views\dashboard\add_content_step.cshtml" />
+    <Content Include="Views\dashboard\add_content_tips.cshtml" />
+    <Content Include="Views\dashboard\ad_banner_dashboard.cshtml" />
+    <Content Include="Views\dashboard\Ad_banner_form.cshtml" />
+    <Content Include="Views\dashboard\ApprovalDashboard.cshtml" />
+    <Content Include="Views\dashboard\AssociatedContent.cshtml" />
+    <Content Include="Views\dashboard\BannerContentList.cshtml" />
+    <Content Include="Views\dashboard\contentApproval.cshtml" />
+    <Content Include="Views\dashboard\ContentBanner.cshtml" />
+    <Content Include="Views\dashboard\content_links.cshtml" />
+    <Content Include="Views\dashboard\content_steps_link.cshtml" />
+    <Content Include="Views\dashboard\CVRequest.cshtml" />
+    <Content Include="Views\dashboard\DisplayContentLink.cshtml" />
+    <Content Include="Views\dashboard\display_approval_content.cshtml" />
+    <Content Include="Views\dashboard\display_banner.cshtml" />
+    <Content Include="Views\dashboard\display_content.cshtml" />
+    <Content Include="Views\dashboard\display_content_answer.cshtml" />
+    <Content Include="Views\dashboard\display_content_metadata.cshtml" />
+    <Content Include="Views\dashboard\display_user_list.cshtml" />
+    <Content Include="Views\dashboard\EditNonDisclosureContent.cshtml" />
+    <Content Include="Views\dashboard\edit_answer_step.cshtml" />
+    <Content Include="Views\dashboard\edit_banner.cshtml" />
+    <Content Include="Views\dashboard\edit_content.cshtml" />
+    <Content Include="Views\dashboard\edit_content_answer.cshtml" />
+    <Content Include="Views\dashboard\edit_content_metadata.cshtml" />
+    <Content Include="Views\dashboard\edit_page_ad_banner.cshtml" />
+    <Content Include="Views\dashboard\index.cshtml" />
+    <Content Include="Views\dashboard\NonDisclosureContent.cshtml" />
+    <Content Include="Views\dashboard\PendingDashboard.cshtml" />
+    <Content Include="Views\dashboard\setRoleAccess.cshtml" />
+    <Content Include="Views\dashboard\ticker_action.cshtml" />
+    <Content Include="Views\dashboard\userRoleMapping.cshtml" />
+    <Content Include="Views\dynAssociation\add_dynassociation.cshtml" />
+    <Content Include="Views\EmailFeedback\add_email_feedback.cshtml" />
+    <Content Include="Views\EmailFeedback\add_email_template.cshtml" />
+    <Content Include="Views\EmailFeedback\editEmailFeedback.cshtml" />
+    <Content Include="Views\EmailFeedback\edit_Email_Feedback_Template.cshtml" />
+    <Content Include="Views\EmailFeedback\email_template.cshtml" />
+    <Content Include="Views\EmailFeedback\Index.cshtml" />
+    <Content Include="Views\EventReport\ReportEvent.cshtml" />
+    <Content Include="Views\ev\eventApproval.cshtml" />
+    <Content Include="Views\ev\Message.cshtml" />
+    <Content Include="Views\Feedbackdashboard\Feedbacklistview.cshtml" />
+    <Content Include="Views\Gamification\add_game_group.cshtml" />
+    <Content Include="Views\Gamification\add_group.cshtml" />
+    <Content Include="Views\Gamification\configure_game.cshtml" />
+    <Content Include="Views\Gamification\Configure_group.cshtml" />
+    <Content Include="Views\Gamification\dashboard.cshtml" />
+    <Content Include="Views\Gamification\game_associations.cshtml" />
+    <Content Include="Views\Gamification\game_dashboard.cshtml" />
+    <Content Include="Views\Gamification\game_summary.cshtml" />
+    <Content Include="Views\Gamification\GroupGameAssignment.cshtml" />
+    <Content Include="Views\Gamification\group_dashboard.cshtml" />
+    <Content Include="Views\Gamification\m2ost_add_game.cshtml" />
+    <Content Include="Views\Gamification\m2ost_game_elements.cshtml" />
+    <Content Include="Views\Gamification\m2ost_game_publish.cshtml" />
+    <Content Include="Views\Gamification\SoloGameAssignment.cshtml" />
+    <Content Include="Views\HigherEducationReport\ReportHigherEducation.cshtml" />
+    <Content Include="Views\HigherEducation\add_higher_education.cshtml" />
+    <Content Include="Views\HigherEducation\edit_higher_education.cshtml" />
+    <Content Include="Views\HigherEducation\higher_education_dashboard.cshtml" />
+    <Content Include="Views\HigherEducation\Index.cshtml" />
+    <Content Include="Views\HigherEducation\ReportHigherEducation.cshtml" />
+    <Content Include="Views\Home\Logout.cshtml" />
+    <Content Include="Views\industryjob\add_industry_job.cshtml" />
+    <Content Include="Views\industryjob\delete_industry_job.cshtml" />
+    <Content Include="Views\industryjob\edit_industry_job.cshtml" />
+    <Content Include="Views\industryjob\Index.cshtml" />
+    <Content Include="Views\industryjob\industryDetail.cshtml" />
+    <Content Include="Views\industry\Create.cshtml" />
+    <Content Include="Views\industry\Delete.cshtml" />
+    <Content Include="Views\industry\Details.cshtml" />
+    <Content Include="Views\industry\Edit.cshtml" />
+    <Content Include="Views\industry\Index.cshtml" />
+    <Content Include="Views\Information\Forbidden.cshtml" />
+    <Content Include="Views\KPI\AddKPI.cshtml" />
+    <Content Include="Views\KPI\Index.cshtml" />
+    <Content Include="Views\KPI\KPI.cshtml" />
+    <Content Include="Views\KPI\KPIDataUpload.cshtml" />
+    <Content Include="Views\KPI\KPIGrid.cshtml" />
+    <Content Include="Views\KPI\ProgramScoring.cshtml" />
+    <Content Include="Views\KPI\ScoringDashboard.cshtml" />
+    <Content Include="Views\Login\ChangePassword.cshtml" />
+    <Content Include="Views\M2ostCategoryMapping\M2ost_category_mapping.cshtml" />
+    <Content Include="Views\M2ostCategoryMapping\M2ost_category_mapping_dashbord.cshtml" />
+    <Content Include="Views\M2ostCategoryMapping\M2ost_category_mapping_edit.cshtml" />
+    <Content Include="Views\Notification\createNotification.cshtml" />
+    <Content Include="Views\Notification\editNotification.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
+    <Content Include="Views\Notification\LoadNotification.cshtml" />
+    <Content Include="Views\Notification\NotificationAttachment.cshtml" />
+    <Content Include="Views\OrganizationControl\AddOrganization.cshtml" />
+    <Content Include="Views\OrganizationControl\DisplayOrganization.cshtml" />
+    <Content Include="Views\organization\Create.cshtml" />
+    <Content Include="Views\organization\Delete.cshtml" />
+    <Content Include="Views\organization\Details.cshtml" />
+    <Content Include="Views\organization\Edit.cshtml" />
+    <Content Include="Views\organization\Index.cshtml" />
+    <Content Include="Views\referral_points\edit_referral_points.cshtml" />
+    <Content Include="Views\referral_points\Index.cshtml" />
+    <Content Include="Views\RegisteredUserList\Registerdlistview.cshtml" />
+    <Content Include="Views\RegisteredUserList\ScoreLog.cshtml" />
+    <Content Include="Views\RegisteredUserList\Studentjoblistview.cshtml" />
+    <Content Include="Views\RegisteredUserList\Studentlistview.cshtml" />
+    <Content Include="Views\Registration\DisplayVendorApprovedDetails.cshtml" />
+    <Content Include="Views\Registration\DisplayVendorDetails.cshtml" />
+    <Content Include="Views\Registration\EditVendorDetails.cshtml" />
+    <Content Include="Views\Registration\Index.cshtml" />
+    <Content Include="Views\Registration\ListVendorDetails.cshtml" />
+    <Content Include="Views\ReportFeedback\Reportfeed.cshtml" />
+    <Content Include="Views\Reporting\ContentAccess.cshtml" />
+    <Content Include="Views\Reporting\DesignationReport.cshtml" />
+    <Content Include="Views\Reporting\GenderReport.cshtml" />
+    <Content Include="Views\Reporting\Likes.cshtml" />
+    <Content Include="Views\Reporting\LocationReport.cshtml" />
+    <Content Include="Views\RoadMap\CreateGameTile.cshtml" />
+    <Content Include="Views\RoadMap\EditGameTile.cshtml" />
+    <Content Include="Views\RoadMap\GameTilesDashboard.cshtml" />
+    <Content Include="Views\RoadMap\JourneyTileMapping.cshtml" />
+    <Content Include="Views\Scheduling\ApprovalDashboard.cshtml" />
+    <Content Include="Views\Scheduling\ApprovalIndex.cshtml" />
+    <Content Include="Views\Scheduling\createEvent.cshtml" />
+    <Content Include="Views\Scheduling\editEvent.cshtml" />
+    <Content Include="Views\Scheduling\EventAssignment.cshtml" />
+    <Content Include="Views\Scheduling\Index.cshtml" />
+    <Content Include="Views\Scheduling\LoadEvent.cshtml" />
+    <Content Include="Views\Scoring\Index.cshtml" />
+    <Content Include="Views\Scoring\ProgramResult.cshtml" />
+    <Content Include="Views\Scoring\ProgramResultDownload.cshtml" />
+    <Content Include="Views\SeminarDashboard\add_seminar.cshtml" />
+    <Content Include="Views\SeminarDashboard\edit_seminar.cshtml" />
+    <Content Include="Views\SeminarDashboard\Index.cshtml" />
+    <Content Include="Views\SeminarDashboard\ReportSeminar.cshtml" />
+    <Content Include="Views\SeminarDashboard\seminar_dashboard.cshtml" />
+    <Content Include="Views\SeminarReport\ReportSeminar.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_approval_layout.cshtml" />
+    <Content Include="Views\Shared\_clean_layout.cshtml" />
+    <Content Include="Views\Shared\_cms_approve.cshtml" />
+    <Content Include="Views\Shared\_cms_Layout.cshtml" />
+    <Content Include="Views\Shared\_cms_layout_home.cshtml" />
+    <Content Include="Views\Shared\_cms_layout_new.cshtml" />
+    <Content Include="Views\Shared\_fancy_layout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\subscriptions\Create.cshtml" />
+    <Content Include="Views\subscriptions\Delete.cshtml" />
+    <Content Include="Views\subscriptions\Details.cshtml" />
+    <Content Include="Views\subscriptions\Edit.cshtml" />
+    <Content Include="Views\subscriptions\Index.cshtml" />
+    <Content Include="Views\SulEventMapping\sul_event_mapping.cshtml" />
+    <Content Include="Views\SULFest\CreateEventLayout.cshtml" />
+    <Content Include="Views\SULFest\EditEventLayout.cshtml" />
+    <Content Include="Views\SULFest\EventsDashboard.cshtml" />
+    <Content Include="Views\tbl_business_type\Create.cshtml" />
+    <Content Include="Views\tbl_business_type\Delete.cshtml" />
+    <Content Include="Views\tbl_business_type\Details.cshtml" />
+    <Content Include="Views\tbl_business_type\Edit.cshtml" />
+    <Content Include="Views\tbl_business_type\Index.cshtml" />
+    <Content Include="Views\UniversityAdmin\AddGameAttribute.cshtml" />
+    <Content Include="Views\UniversityAdmin\AddTheme.cshtml" />
+    <Content Include="Views\UniversityAdmin\DisplayFeedback.cshtml" />
+    <Content Include="Views\UniversityAdmin\editGame.cshtml" />
+    <Content Include="Views\UniversityAdmin\EditGameAttribute.cshtml" />
+    <Content Include="Views\UniversityAdmin\editGameAttributeAction.cshtml" />
+    <Content Include="Views\UniversityAdmin\EditTheme.cshtml" />
+    <Content Include="Views\UniversityAdmin\GameDashboard.cshtml" />
+    <Content Include="Views\UniversityAdmin\GameMapping.cshtml" />
+    <Content Include="Views\UniversityAdmin\MappingThemes.cshtml" />
+    <Content Include="Views\UniversityAdmin\RewardsConfig.cshtml" />
+    <Content Include="Views\UniversityAdmin\RewardsConfigDashboard.cshtml" />
+    <Content Include="Views\UniversityAdmin\RewardsDashboard.cshtml" />
+    <Content Include="Views\UniversityAdmin\signup_config.cshtml" />
+    <Content Include="Views\UniversityAdmin\ThemeApprovalDashboard.cshtml" />
+    <Content Include="Views\UniversityAdmin\ThemeDashboard.cshtml" />
+    <Content Include="Views\UniversityKPI\academic_level_dashboard.cshtml" />
+    <Content Include="Views\UniversityKPI\Academic_level_restriction.cshtml" />
+    <Content Include="Views\UniversityKPI\AddKPI.cshtml" />
+    <Content Include="Views\UniversityKPI\badge_won_messgage.cshtml" />
+    <Content Include="Views\UniversityKPI\brief_level_dashboard.cshtml" />
+    <Content Include="Views\UniversityKPI\content_notification.cshtml" />
+    <Content Include="Views\UniversityKPI\EditKPI.cshtml" />
+    <Content Include="Views\UniversityKPI\Game_creation.cshtml" />
+    <Content Include="Views\UniversityKPI\Job_url_create.cshtml" />
+    <Content Include="Views\UniversityKPI\Kpi_dashboard.cshtml" />
+    <Content Include="Views\UniversityKPI\League_Configuration.cshtml" />
+    <Content Include="Views\UniversityKPI\level_up_message.cshtml" />
+    <Content Include="Views\UniversityKPI\Metric_Config.cshtml" />
+    <Content Include="Views\UniversityKPI\Special_Points.cshtml" />
+    <Content Include="Views\UniversityKPI\Special_points_dashboard.cshtml" />
+    <Content Include="Views\UniversityKPI\Special_Points_edit.cshtml" />
+    <Content Include="Views\UniversityKPI\University_KPIGrid.cshtml" />
+    <Content Include="Views\UniversityKPI\url_notification.cshtml" />
+    <Content Include="Views\UploadUtility\AppUserUpload.cshtml" />
+    <Content Include="Views\UploadUtility\UserUploadDisplay.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>51573</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:51573/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

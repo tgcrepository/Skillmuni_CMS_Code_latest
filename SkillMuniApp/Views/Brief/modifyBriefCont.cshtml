@@ -1,0 +1,1290 @@
+﻿
+@{
+    ViewBag.Title = "modifyBriefCont";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "contentCreationRichText";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+@{
+    List<tbl_brief_category> ListCategory = (List<tbl_brief_category>)ViewData["ListCategory"];
+    List<tbl_brief_subcategory> ListSubcategory = (List<tbl_brief_subcategory>)ViewData["ListSubcategory"];
+    tbl_brief_master brief = (tbl_brief_master)ViewData["briefmaster"];
+    tbl_brief_category category = (tbl_brief_category)ViewData["category"];
+    tbl_brief_subcategory subcategory = (tbl_brief_subcategory)ViewData["subcategory"];
+    List<tbl_brief_question> questions = (List<tbl_brief_question>)ViewData["questions"];
+    List<tbl_brief_metadata> metadata = (List<tbl_brief_metadata>)ViewData["metadata"];
+    bool flag = (bool)ViewData["accessFlag"];
+    tbl_brief_master_template bTemplate = (tbl_brief_master_template)ViewData["bTemplate"];
+    List<tbl_brief_master_body> mBody = (List<tbl_brief_master_body>)ViewData["mBody"];
+    var request = HttpContext.Current.Request;
+    var baseUrl = request.Url.Scheme + "://" + request.Url.Authority + "/" + request.ApplicationPath;
+    int sequVal = (int)ViewData["sequanceVal"];
+
+    int flagUrl = Convert.ToInt32(brief.brief_attachment_flag);
+}
+<link href="~/Content/RichText/dist/summernote.css" rel="stylesheet" />
+<script src="~/Content/RichText/dist/summernote.js"></script>
+<script src="~/Content/jquery.serializeToJSON.js"></script>
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+
+
+        $(document).ready(function () {
+            $("#form-add-brief").validationEngine();
+            $('.summernote').summernote();
+              @if (brief.brief_type == 2) { @("getCategoryList(2);")}
+            $("#datetimepicker2").datetimepicker({
+                minDate: 0,
+                dateFormat: "dd-mm-yy",
+                minDate: new Date(),
+                onSelect: function (selected) {
+                    var date = $(this).datetimepicker('getDate');
+                }
+            });
+        });
+
+
+    function getCategoryList(ids) {
+        if (ids == 2) {
+            var bid = $("#id_brief_master").val();
+            var url = '@Url.Action("getCategoryDistributionEditList", "Brief")';
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { cid: ids ,bid:bid},
+        success: function (data) {
+            $("#div-dist-category").empty().append(data);
+        }
+    });
+}
+else {
+    $("#div-dist-category").empty();
+}
+}
+
+function setQuestionOption(ids) {
+if (ids == 1) {
+    $("#div-question-counter").show();
+    $("#div-question-linked").show();
+} else {
+    $("#div-question-counter").hide();
+    $("#div-question-linked").hide();
+}
+}
+
+    function formSubmitRTCheck() {
+        var flag = $("input[type='radio'][name='template-card']:checked").val();
+        var rtcode = $('#brief-rt-data-t' + flag).summernote('code');
+        var chcat = '';
+
+        $("input[name='brf-category[]']").each(function () {
+            chcat = chcat + ',' + $(this).val();
+        });
+        $("#brf-cat-val").empty().val(chcat);
+
+        if (rtcode) {
+
+            $('#brf-rt-code').val(rtcode);
+            //$("#brf-rt-code").val($('<div />').text(rtcode).html());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+function formSubmit() {
+var valid = true;// $("#form-add-brief").validationEngine('validate');
+
+if (valid) {
+    var form_data = $("#form-add-brief").serializeArray();
+    var rtcode = $('.summernote').summernote('code');
+
+    form_data.push({ name: "rtcode", value: rtcode });
+    var chcat = '';
+
+    $("input[name='brf-category[]']").each(function () {
+        chcat = chcat + ',' + $(this).val();
+    });
+    $("#brf-cat-val").empty().val(chcat);
+    var url = '@Url.Action("finishDratfBrief", "Brief")';
+    var obj = $("#form-add-brief").serializeToJSON();
+    var jsonForm = JSON.stringify(obj);
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { jdata: jsonForm, rtcode: rtcode },
+        success: function (msg) {
+            location.href = '@Url.Action("briefDraft", "Brief")';
+}
+});
+
+}
+}
+
+function searchQuestion1() {
+var id = $("#search-category").val();
+var sid = $("#search-sub-category").val();
+var url = '@Url.Action("getQuestionList", "Brief")';
+    var pattern = $("#search-metadata").val().trim();
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { sid: id, sbid: sid, metadata: pattern },
+
+        success: function (data) {
+            $("#display_table").empty().append(data);
+            $("#brief-table").dataTable({ "bSort": false, "pageLength": 10 });
+
+        }
+    });
+    }
+
+    function searchQuestion() {
+        var bid = $("#id_brief_master").val();
+        var id = $("#search-category").val();
+var sid = $("#search-sub-category").val();
+var url = '@Url.Action("getEditQuestionList", "Brief")';
+    var pattern = $("#search-metadata").val().trim();
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { bid:bid,sid: id, sbid: sid, metadata: pattern },
+
+        success: function (data) {
+            $("#display_table").empty().append(data);
+            $("#brief-table").dataTable({ "bSort": false, "pageLength": 10 });
+
+        }
+    });
+}
+
+function addQuestionToBrief(ids) {
+
+    var flag = true;
+    $("input[name='hidden-qtn-list']").each(function () {
+        var value = $(this).val();
+        if (value == ids) {
+            flag = false;
+        }
+    });
+    if (flag) {
+        var idc = $("#row-count-hidden").val();
+        var count = $("#question-count").val();
+        if (count >= idc) {
+            $("#plus-qtn-brief-" + ids).hide();
+            $("#plus-ok-" + ids).show();
+            var row = $("#row-td-" + ids).text();
+
+            if (idc == 1) {
+                $("#div-qtn-row").empty();
+                $("#row-count-hidden").val(2);
+            } else {
+                idc++;
+                $("#row-count-hidden").val(idc);
+            }
+            var option = '<div class="brief-panel brief-note"> <input type="hidden" name="hidden-qtn-list" value="' + ids + '" /><input type="hidden" name="row-qtn-list-' + idc + '" value="' + ids + '" /><p style="padding:6px;">' + row + '</p></div>';
+            $("#div-qtn-row").append(option);
+        } else {
+            $("#div-error-limit").show();
+            setTimeout(function () { $("#div-error-limit").hide(); }, 5000);
+        }
+    } else {
+        $("#div-error-duplicate").show();
+        setTimeout(function () { $("#div-error-duplicate").hide(); }, 5000);
+
+    }
+}
+
+function getSubCategory(val, ids) {
+    var url = '@Url.Action("getSubcategoryList", "Brief")';
+    if (val != "0") {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { cid: val },
+
+            success: function (data) {
+                $("#" + ids).empty().append(data);
+            }
+        });
+    }
+    }
+
+    function removeQuestionFromList(ids, qtn) {
+        var list = $("#rem-brf-cat-val").val();
+        $("#div-brief-qtn-" + ids).hide();
+        list = list + "," + qtn;
+        $("#rem-brf-cat-val").val(list);
+    }
+</script>
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+</style>
+
+<style>
+    .cc-selector input {
+        margin: 0;
+        padding: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .t1 {
+        background-image: url(/Content/Theme/tt1.jpg);
+    }
+
+    .t2 {
+        background-image: url(/Content/Theme/tt2.jpg);
+    }
+
+    .t3 {
+        background-image: url(/Content/Theme/tt3.jpg);
+    }
+
+    .t4 {
+        background-image: url(/Content/Theme/tt4.jpg);
+    }
+
+    .cc-selector input:active + .drinkcard-cc {
+        opacity: .9;
+    }
+
+    .cc-selector input:checked + .drinkcard-cc {
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+    }
+
+    .drinkcard-cc {
+        cursor: pointer;
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 100px;
+        height: 70px;
+        -webkit-transition: all 100ms ease-in;
+        -moz-transition: all 100ms ease-in;
+        transition: all 100ms ease-in;
+        -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+        -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+        filter: brightness(1) grayscale(1) opacity(.7);
+    }
+
+        .drinkcard-cc:hover {
+            -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+        }
+</style>
+
+<script>
+
+    $(function () {
+        $('input[type=radio][name=template-card]').change(function () {
+            var ids = $(this).val();
+            for (i = 1; i <= 4; i++) {
+                if (i == ids) {
+                    $("#div-brf-t" + i).show(500);
+                } else {
+                    $("#div-brf-t" + i).hide(500);
+                }
+            }
+
+        });
+    });
+    function select_file(btn, imgf, ban) {
+
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+            $("#" + ban + "").addClass("validate[required,custom[url]]");
+        } else {
+            $("#" + ban + "").removeClass("validate[required,custom[url]]");
+        }
+
+        $("#" + imgf + "").val(filename);
+    }
+</script>
+<script>
+    const uploads = []
+    $(function () {
+        $('.flcheck').on('change', function () {
+            var ids = this.id;
+            var file = this.files[0];
+            const filereader = new FileReader();
+            const blob = file.slice(0, 4);
+            filereader.readAsArrayBuffer(blob);
+            filereader.onloadend = function (evt) {
+                if (evt.target.readyState === FileReader.DONE) {
+                    const uint = new Uint8Array(evt.target.result);
+                    let bytes = [];
+                    uint.forEach((byte) => {
+                        bytes.push(byte.toString(16));
+                    })
+                    const hex = bytes.join('').toUpperCase();
+                    var flag = getMimetype(hex);
+                    if (flag) {
+                        select_file(ids, ids + '-image')
+                        return true;
+                    } else {
+                        $('#' + ids).val('');
+                        $('#' + ids + '-image').val('');
+                        $('#' + ids + '-error').show();
+                        setTimeout(function () { $('#' + ids + '-error').hide(); }, 5000);
+                        return false;
+                    }
+                }
+            }
+
+        });
+    });
+
+    const getMimetype = (signature) => {
+        switch (signature) {
+            case '89504E47':
+            case '47494638':
+            case 'FFD8FFDB':
+            case 'FFD8FFE0':
+            case '3026B275':
+            case '0001C':
+            case '00018':
+            case '52494646':
+            case '1A45DFA3':
+            case '00020':
+            case '464C561':
+            case '25504446':
+            case '504B34':
+            case 'D0CF11E0':
+                return true
+            case '504B0304':
+                return false
+            default:
+                return false
+        }
+    }
+
+    function changeMediaType(div, ids) {
+        if (ids == 1) {
+            $("#div-" + div + "-part1").show();
+            $("#div-" + div + "-part2").hide();
+        }
+        if (ids == 2) {
+            $("#div-" + div + "-part2").show();
+            $("#div-" + div + "-part1").hide();
+        }
+    }
+</script>
+
+@using (Html.BeginForm("finishModifyBriefCont", "Brief", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data", onsubmit = "formSubmitRTCheck()" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">create new brief</div>
+                </div>
+                @{
+                    string remcat = "";
+                }
+                <input type="hidden" name="brf-cat-val" id="brf-cat-val" />
+                <input type="hidden" name="rem-brf-cat-val" id="rem-brf-cat-val" />
+                <input type="hidden" name="brf-rt-code" id="brf-rt-code" />
+                <input type="hidden" name="id_brief_master" id="id_brief_master" value="@brief.id_brief_master" />
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-4" style="margin-left: -15px;">
+                                            <label class="control-label">category</label>
+                                            <select id="select-category" name="select-category" class="form-control selectpicker" data-live-search="true" onchange="getSubCategory(this.value,'select-sub-category')">
+                                                @foreach (var pro in ListCategory)
+                                                {
+                                                    if (category.id_brief_category == pro.id_brief_category)
+                                                    {
+                                                        <option selected data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">sub-category</label>
+                                            <select id="select-sub-category" name="select-sub-category" class="form-control">
+                                                @foreach (var pro in ListSubcategory)
+                                                {
+                                                    if (subcategory.id_brief_subcategory == pro.id_brief_subcategory)
+                                                    {
+                                                        <option selected data-tokens="@pro.brief_subcategory" value="@pro.id_brief_subcategory">@pro.brief_subcategory</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option data-tokens="@pro.brief_subcategory" value="@pro.id_brief_subcategory">@pro.brief_subcategory</option>
+                                                    }
+
+                                                }
+                                            </select>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                            <label class="control-label pull-right">Expiry Date</label>
+                                            <div class='input-group date pull-right'>
+                                                <input type='text' class="form-control validate[required]" id='datetimepicker2' name="brief-expiry" value="@brief.scheduled_timestamp.Value.ToString("yyyy-MM-dd HH:mm")" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">brief title</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <input type="text" class="form-control validate[required]" value="@brief.brief_title" placeholder="brief Title" id="brief-title" name="brief-title" />
+                                            <div class="tooltip1"> <i class="fa fa-info-circle" aria-hidden="true"></i> <span class="tooltiptext1" style="margin-left: -51px;">Brief Title must not exceed more than 5 to 7 words</span> </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @foreach (tbl_brief_master_body row in  mBody)
+                                {
+                                    if (row.resource_type == 1)
+                                    {
+                                        <div class="row" style="">
+                                            <div class="col-md-12" id="div-brf-t1">
+                                                <label class="control-label pull-right" style="color:#ff0000;font-weight:600;"></label><br />
+                                                <label class="control-label">brief content</label>
+                                                <div class="form-group">
+                                                    <textarea name="brief-rt-data-t3" class="" id="" style="width:100%">@Html.Raw(WebUtility.HtmlDecode(row.resouce_data))</textarea>
+                                                    <div class="tooltip1"> <i class="fa fa-info-circle" aria-hidden="true"></i> <span class="tooltiptext1" style="margin-left: -51px;">Brief Content must not exceed 70 words</span> </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+                                    if (row.resource_type == 2)
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="control-label">Brief Media</label>
+                                                <div id="div-dist-category">
+
+                                                    <div class="col-md-6">
+                                                        <input type="radio" id="t2-select-order" name="t2-select-order" style="margin-left: 238px;" @if (row.media_type == 2) { @("selected")  } else { @("disabled") } value="2" onclick="logoneed(1)">URL
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="radio" id="t2-select-order" name="t2-select-order" style="margin-left: 161px;" @if (row.media_type == 1) { @("selected")  } else { @("disabled") } value="1" onclick="logoneed(0)" checked="checked">Media<div class="tooltip1"> <i class="fa fa-info-circle" aria-hidden="true" style="margin-left: 260px;"></i> <span class="tooltiptext2">You can upload:<br />1. Image files with .png, .jpeg extension and the file size limit is 450kb.<br />2. Video files with .mp4 extension and the file size limit is 20mb. The length of the video should be max 10 minutes.</span> </div><br>
+                                                    </div><br />
+
+                                                </div><br />
+                                            </div>
+
+                                        </div>
+
+                                        if (row.media_type == 2)
+                                        {
+                                            <div class="row" id="">
+                                                <div class="col-md-8" style="padding-right:1px;">
+                                                </div>
+                                                <div class="col-md-4" style="padding-right:1px;">
+                                                    <a target="_blank" class="btn btn-primary float-right" href="@(row.resouce_data)">click to see media -→</a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="evnt1" style="display:none;">
+                                                <div class="col-md-6" style="padding-right:1px;">
+                                                    <div class="form-group">
+                                                        <div class="row" id="append_url">
+                                                            <div class="col-md-12" style="padding-right:1px;">
+                                                                <input type="text" style="text-align:center;" class="form-control " value="@row.resouce_data" placeholder="enter media URL " name="t2-btn-url" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        if (row.media_type == 1)
+                                        {
+                                            <div class="row" id="">
+                                                <div class="col-md-8" style="padding-right:1px;">
+                                                </div>
+                                                <div class="col-md-4" style="padding-right:1px;">
+                                                    <a target="_blank" class="btn btn-primary float-right" href="@(baseUrl + row.brief_destination + row.resouce_data)">click to see media -→</a>
+                                                </div>
+                                            </div>
+                                            <div class="row" id="evnt2">
+                                                <div class="col-md-12" style="">
+                                                    <div class="col-md-6" style="margin-left: 503px;  width: 438px;">
+                                                        <input type="text" class="form-control " style="text-align:center;" readonly value="" placeholder="choose media file" id="t2-btn-image" name="t2-btn-image" />
+                                                        <div id="t2-btn-error" style="color:#a90000;font-weight:600;display:none;">file is not allowed for upload .file type is restricted.</div><br />
+                                                    </div>
+                                                    <div class="col-md-2" style="width: unset;">
+                                                        <div class="fileUpload btn btn-primary">
+                                                            <span>Browse </span>
+                                                            <input id="t2-btn" name="t2-btn" class="upload flcheck" allow="" type="file" /><!-- onchange="select_file('t-btn', 't-ans-image')"-->
+                                                        </div>
+                                                    </div>
+
+                                                    @*<div class="col-md-8" style="margin-left: 503px;  width: 438px;">
+                                                            <input type="text" class="form-control " style="text-align:center;" readonly value="" placeholder="Upload video file" id="t3-btn-image" name="t3-btn-image" />
+                                                            <div id="t2-btn-error" style="color:#a90000;font-weight:600;display:none;">file is not allowed for upload .file type is restricted.</div><br />
+                                                        </div>
+                                                        <div class="col-md-2" style="width: unset;">
+                                                            <div class="fileUpload btn btn-primary">
+                                                                <span>Browse </span>
+                                                                <input id="t2-btn" name="t2-btn" class="upload flcheck" allow="" type="file" /><!-- onchange="select_file('t-btn', 't-ans-image')"-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-8" style="margin-left: 503px;  width: 438px;">
+                                                            <input type="text" class="form-control " style="text-align:center;" readonly value="" placeholder="Upload image file" id="t4-btn-image" name="t4-btn-image" />
+                                                            <div id="t2-btn-error" style="color:#a90000;font-weight:600;display:none;">file is not allowed for upload .file type is restricted.</div><br />
+                                                        </div>
+                                                        <div class="col-md-2" style="width: unset;">
+                                                            <div class="fileUpload btn btn-primary">
+                                                                <span>Browse </span>
+                                                                <input id="t2-btn" name="t2-btn" class="upload flcheck" allow="" type="file" /><!-- onchange="select_file('t-btn', 't-ans-image')"-->
+                                                            </div>
+                                                        </div>*@
+                                                </div>
+
+                                            </div>
+                                        }
+
+
+
+
+
+                                    }
+                                }
+                            </div>
+
+
+
+                            <br />
+                            @{
+                                string mtdata = "";
+                                foreach (tbl_brief_metadata pro in metadata)
+                                {
+                                    if (metadata.Count == 1)
+                                    {
+                                        mtdata = pro.brief_metadata;
+                                    }
+                                    else
+                                    {
+                                        mtdata = mtdata + "," + pro.brief_metadata;
+                                    }
+                                }
+
+                            }
+
+                            <div class="col-md-12">
+                                <label class="control-label">metadata</label>
+                                <div id="theme-1-header" class="form-group">
+                                    <input type="text" class="form-control validate[required]" value="@mtdata" placeholder="add metadata to brief separated by comma " id="brief-metadata" name="brief-metadata" />
+
+                                </div>
+                            </div>
+
+
+
+                            <!-- content type in  -->
+                            @*<div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12" style="text-align: center;vertical-align: middle;">
+                                            <h2 style="color:#006ef7;font-weight:600;">select brief template</h2>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                            @*<div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-3">
+                                            <div class="cc-selector">
+                                                <input id="t1" type="radio" name="template-card" value="1" @if (bTemplate.brief_template == "1") { @("checked")  } else { @("disabled") } />
+                                                <label class="drinkcard-cc t1" for="t1"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="cc-selector">
+                                                <input id="t2" type="radio" name="template-card" value="2" @if (bTemplate.brief_template == "2") { @("checked")  } else { @("disabled") } />
+                                                <label class="drinkcard-cc t2" for="t2"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="cc-selector">
+                                                <input id="t3" type="radio" name="template-card" value="3" @if (bTemplate.brief_template == "3") { @("checked")  } else { @("disabled") } />
+                                                <label class="drinkcard-cc t3" for="t3"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="cc-selector">
+                                                <input id="t4" type="radio" name="template-card" value="4" @if (bTemplate.brief_template == "4") { @("checked")  } else { @("disabled") } />
+                                                <label class="drinkcard-cc t4" for="t4"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                            <!-- content type out  -->
+                            @*@{
+                                    string template = bTemplate.brief_template;
+                                }*@
+
+                            @*<div class="row" style="border:2px solid #1abc9c;padding:10px;margin:2px;">
+                                @if (template == "1")
+                                {
+                                    foreach (tbl_brief_master_body row in mBody)
+                                    {
+                                        <div class="col-md-12" id="div-brf-t1">
+                                            <label class="control-label pull-right" style="color:#ff0000;font-weight:600;">Type : brief content only</label><br />
+                                            <label class="control-label">brief content</label>
+                                            <div class="form-group">
+                                                <textarea class="summernote form-control validate[required]" name="brief-rt-data-t1" id="brief-rt-data-t1">@Html.Raw(WebUtility.HtmlDecode(row.resouce_data))</textarea>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                @if (template == "2")
+                                {
+                                    foreach (tbl_brief_master_body row in mBody)
+                                    {
+                                        <div class="col-md-12" id="div-brf-t2">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-right" style="color:#ff0000;font-weight:600;">Type : brief media only</label><br />
+                                                        <label for="FirstName" class="control-label">brief media </label>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label class="control-label">select media type</label>
+                                                                <select id="t2-select-order" name="t2-select-order" class="form-control " onchange="changeMediaType('t2', this.value)">
+                                                                    <option @if (row.media_type == 1) { @("selected")  } else { @("disabled") } value="1">media</option>
+                                                                    <option @if (row.media_type == 2) { @("selected")  } else { @("disabled") } value="2">url</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        @if (row.media_type == 1)
+                                                        {
+                                                            <div class="row" id="">
+                                                                <div class="col-md-8" style="padding-right:1px;">
+                                                                </div>
+                                                                <div class="col-md-4" style="padding-right:1px;">
+                                                                    <a target="_blank" class="btn btn-primary float-right" href="@(baseUrl+row.brief_destination+row.resouce_data)">click to see media -→</a>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row" id="div-t2-part1">
+                                                                <div class="col-md-8" style="padding-right:1px;">
+                                                                    <input type="text" class="form-control " readonly value="" placeholder="Choose media file" id="t2-btn-image" name="t2-btn-image" />
+                                                                    <div id="t2-btn-error" style="color:#a90000;font-weight:600;display:none;">file is not allowed for upload .file type is restricted.</div>
+                                                                </div>
+                                                                <div class="col-md-2" style="padding-left:1px;">
+                                                                    <div class="fileUpload btn btn-primary">
+                                                                        <span>Browse </span>
+                                                                        <input id="t2-btn" name="t2-btn" class="upload flcheck" allow="" type="file" /><!-- onchange="select_file('t-btn', 't-ans-image')"-->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+
+                                                        @if (row.media_type == 2)
+                                                        {
+
+                                                            <div class="row" id="">
+                                                                <div class="col-md-8" style="padding-right:1px;">
+                                                                </div>
+                                                                <div class="col-md-4" style="padding-right:1px;">
+                                                                    <a target="_blank" class="btn btn-primary float-right" href="@(row.resouce_data)">click to see media -→</a>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row" id="div-t2-part2">
+                                                                <div class="col-md-8" style="padding-right:1px;">
+                                                                    <div class="form-group">
+                                                                        <label for="FirstName" class="control-label">media url</label>
+                                                                        <div class="row" id="append_url">
+                                                                            <div class="col-md-8" style="padding-right:1px;">
+                                                                                <input type="text" class="form-control " value="@row.resouce_data" placeholder="enter media URL " name="t2-btn-url" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                @if (template == "3")
+                                {
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="control-label">select data order</label>
+                                            <select id="t3-data-order" name="t3-data-order" class="form-control ">
+                                                <option @if (bTemplate.resource_order == "LR") { @("selected")  } else { @("disabled") } value="1">brief on left / media on right</option>
+                                                <option @if (bTemplate.resource_order == "RL") { @("selected")  } else { @("disabled") } value="2">media on left / brief on right</option>
+                                            </select>
+                                        </div>
+                                        @foreach (tbl_brief_master_body row in mBody)
+                                        {
+                                            if (row.resource_type == 1)
+                                            {
+                                                <div class="col-md-12" id="div-brf-t3">
+                                                    <label class="control-label pull-right" style="color:#ff0000;font-weight:600;">Type : brief content & media</label><br />
+                                                    <label class="control-label">brief content</label>
+                                                    <div class="form-group">
+                                                        @*<textarea class="summernote form-control validate[required]" name="brief-rt-data-t3" id="brief-rt-data-t3">@Html.Raw(WebUtility.HtmlDecode(row.resouce_data))</textarea>*@
+                            @*<textarea class="" name="brief-rt-data-t3" >@Html.Raw(WebUtility.HtmlDecode(row.resouce_data))</textarea>
+                                        </div>
+                                    </div>
+                                }*@
+                            @*if (row.resource_type == 2)
+                                {*@
+                            @*<div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="FirstName" class="control-label">brief media </label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="control-label">select media type</label>
+                                                <select id="t3-select-order" name="t3-select-order" class="form-control " onchange="changeMediaType('t3', this.value)">
+                                                    <option @if (row.media_type == 1) { @("selected")  } else { @("disabled") } value="1">media</option>
+                                                    <option @if (row.media_type == 2) { @("selected")  } else { @("disabled") } value="2">url</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        @if (row.media_type == 1)
+                                        {
+                                            <div class="row" id="">
+                                                <div class="col-md-8" style="padding-right:1px;">
+                                                </div>
+                                                <div class="col-md-4" style="padding-right:1px;">
+                                                    <a target="_blank" class="btn btn-primary float-right" href="@(baseUrl+row.brief_destination+row.resouce_data)">click to see media -→</a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="div-t3-part1">
+                                                <div class="col-md-8" style="padding-right:1px;">
+                                                    <input type="text" class="form-control " readonly value="@row.resouce_data" placeholder="Choose media file" id="t3-btn-image" name="t3-btn-image" />
+                                                    <div id="t3-btn-error" style="color:#a90000;font-weight:600;display:none;">file is not allowed for upload .file type is restricted.</div>
+                                                </div>
+                                                <div class="col-md-2" style="padding-left:1px;">
+                                                    <div class="fileUpload btn btn-primary">
+                                                        <span>Browse </span>
+                                                        <input id="t3-btn" name="t3-btn" class="upload flcheck" allow="" type="file" /> onchange="select_file('t-btn', 't-ans-image')"
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (row.media_type == 2)
+                                        {
+
+                                            <div class="row" id="">
+                                                <div class="col-md-8" style="padding-right:1px;">
+                                                </div>
+                                                <div class="col-md-4" style="padding-right:1px;">
+                                                    <a target="_blank" class="btn btn-primary float-right" href="@(row.resouce_data)">click to see media -→</a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="div-t3-part3">
+                                                <div class="col-md-8" style="padding-right:1px;">
+                                                    <div class="form-group">
+                                                        <label for="FirstName" class="control-label">media url</label>
+                                                        <div class="row" id="append_url">
+                                                            <div class="col-md-8" style="padding-right:1px;">
+                                                                <input type="text" class="form-control " value="@row.resouce_data" placeholder="enter media URL " name="t3-btn-url" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>*@
+
+                            @*}
+                                        }
+                                    </div>
+                                }*@
+                            @*@if (template == "4")
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="control-label">select data order</label>
+                                                <select id="t4-data-order" name="t4-data-order" class="form-control ">
+                                                    <option @if (bTemplate.resource_order == "TB") { @("selected")  } else { @("disabled") } value="1">brief on top / media on bottom</option>
+                                                    <option @if (bTemplate.resource_order == "BT") { @("selected")  } else { @("disabled") } value="2">media on top / brief on bottom</option>
+                                                </select>
+                                            </div>
+
+                                            @foreach (tbl_brief_master_body row in mBody)
+                                            {
+                                                if (row.resource_type == 1)
+                                                {
+                                                    <div class="col-md-12" id="div-brf-t4">
+                                                        <label class="control-label pull-right" style="color:#ff0000;font-weight:600;">Type : brief content & media</label><br />
+                                                        <label class="control-label">brief content</label>
+                                                        <div class="form-group">
+                                                            <textarea class="summernote form-control validate[required]" name="brief-rt-data-t4" id="brief-rt-data-t4">@Html.Raw(WebUtility.HtmlDecode(row.resouce_data))</textarea>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                if (row.resource_type == 2)
+                                                {
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="FirstName" class="control-label">brief media </label>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <label class="control-label">select media type</label>
+                                                                    <select id="t4-select-order" name="t4-select-order" class="form-control " onchange="changeMediaType('t4', this.value)">
+                                                                        <option @if (row.media_type == 1) { @("selected")  } else { @("disabled") } value="1">media</option>
+                                                                        <option @if (row.media_type == 2) { @("selected")  } else { @("disabled") } value="2">url</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            @if (row.media_type == 1)
+                                                            {
+                                                                <div class="row" id="">
+                                                                    <div class="col-md-8" style="padding-right:1px;">
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right:1px;">
+                                                                        <a target="_blank" class="btn btn-primary float-right" href="@(baseUrl+row.brief_destination+row.resouce_data)">click to see media -→</a>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row" id="div-t4-part1">
+                                                                    <div class="col-md-8" style="padding-right:1px;">
+                                                                        <input type="text" class="form-control " readonly value="" placeholder="Choose media file" id="t4-btn-image" name="t4-btn-image" />
+                                                                        <div id="t4-btn-error" style="color:#a90000;font-weight:600;display:none;">file is not allowed for upload .file type is restricted.</div>
+                                                                    </div>
+                                                                    <div class="col-md-2" style="padding-left:1px;">
+                                                                        <div class="fileUpload btn btn-primary">
+                                                                            <span>Browse </span>
+                                                                            <input id="t4-btn" name="t4-btn" class="upload flcheck" allow="" type="file" /> onchange="select_file('t-btn', 't-ans-image')"
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+
+                                                            @if (row.media_type == 2)
+                                                            {
+
+                                                                <div class="row" id="">
+                                                                    <div class="col-md-8" style="padding-right:1px;">
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right:1px;">
+                                                                        <a target="_blank" class="btn btn-primary float-right" href="@(row.resouce_data)">click to see media -→</a>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row" id="div-t4-part4">
+                                                                    <div class="col-md-8" style="padding-right:1px;">
+                                                                        <div class="form-group">
+                                                                            <label for="FirstName" class="control-label">media url</label>
+                                                                            <div class="row" id="append_url">
+                                                                                <div class="col-md-8" style="padding-right:1px;">
+                                                                                    <input type="text" class="form-control " value="@row.resouce_data" placeholder="enter media URL " name="t4-btn-url" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                </div>*@
+
+                            @*<hr />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Brief distribution categories</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div id="" class="form-group">
+                                            <select id="brief-distribution-category-option" name="brief-distribution-category-option" class="form-control" onchange="getCategoryList(this.value)">
+                                                <option @if (brief.brief_type == 0) { @("selected") } value="0">above selected cateogry </option>
+                                                <option @if (brief.brief_type == 2) { @("selected") } value="2">list categories</option>
+                                                <option @if (brief.brief_type == 3) { @("selected") } value="3">all categories</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+                                </div>*@
+                            @*<div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">select categories</label>
+                                        <div id="div-dist-category">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />*@
+                            @*@{
+                                    string mtdata = "";
+                                    foreach (tbl_brief_metadata pro in metadata)
+                                    {
+                                        if (metadata.Count == 1)
+                                        {
+                                            mtdata = pro.brief_metadata;
+                                        }
+                                        else
+                                        {
+                                            mtdata = mtdata + "," + pro.brief_metadata;
+                                        }
+                                    }
+
+                                }*@
+                            @*<div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">metadata</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <input type="text" class="form-control validate[required]" value="@mtdata" placeholder="add metadata to brief separated by comma " id="brief-metadata" name="brief-metadata" />
+                                        </div>
+                                    </div>
+                                </div>*@
+                            @*<hr />
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="control-label">Overide DND ...?</label>
+                                        <select id="overide-dnd" name="overide-dnd" class="form-control">
+                                            <option @if (brief.override_dnd == 0) { @("selected") } value="0">No</option>
+                                            <option @if (brief.override_dnd == 1) { @("selected") } value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="control-label">Add Enquiry</label>
+                                        <select id="isEnquiry" name="isEnquiry" onchange="enquiryChange()" class="form-control">
+                                            <option value="0" @if (brief.brief_attachment_flag == 1 || brief.brief_attachment_flag == 2 || brief.brief_attachment_flag == null) { @("selected") } else { @("disabled")}>No</option>
+                                            <option value="1" @if (brief.brief_attachment_flag == 3 || brief.brief_attachment_flag == 4) { @("selected") } else { @("disabled")}>Yes</option>
+                                        </select>
+                                    @*</div>*@
+                            @*@if (brief.brief_attachment_flag == 1 || brief.brief_attachment_flag == 2 || brief.brief_attachment_flag == null)
+                                {
+                                    <div class="col-md-2">
+                                        <label class="control-label">Add Question ...?</label>
+                                        <select id="question-option" name="question-option" class="form-control" onchange="setQuestionOption(this.value)">
+                                            <option @if (brief.is_add_question == 0) { @("selected") } else { @("disabled")} value="0">No</option>
+                                            <option @if (brief.is_add_question == 1) { @("selected") } else { @("disabled")} value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                }*@
+                            @*@if (brief.brief_attachment_flag == 3 || brief.brief_attachment_flag == 4)
+                                                            {
+                                                                <div class="col-md-2" id="urlOpt" style="display:none;">
+                                                                    <div style="">
+                                                                        <label class="control-label">URL Option</label>
+                                                                        <select id="urlStus" name="urlStus" class="form-control" onchange="setUrlOption(this.value)">
+                                                                            @*<option value="0" @if (brief.brief_attachment_flag == 3) { @("selected")}else { @("disabled")}>With URL</option>
+                                <option value="1" @if (brief.brief_attachment_flag == 4) { @("selected")}else { @("disabled")}>Without URL</option>*@
+                            @*<option value="0" @if (brief.brief_attachment_flag == 3) { @("selected") } else {  }>With URL</option>
+                                                <option value="1" @if (brief.brief_attachment_flag == 4) { @("selected") } else {  }>Without URL</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                }*@
+                            @*@if (brief.brief_attachment_flag == 3)
+                                {
+                                    <div class="col-md-2" id="urltxtVal" style="display:none;">
+                                        <div style="">
+                                            <label class="control-label">URL Value</label>
+                                            <input type="text" class="form-control validate[required]" value="@brief.brief_attachement_url" placeholder="" id="Enquiry_url" name="Enquiry_url" />
+                                        </div>
+                                    </div>
+                                }*@
+                            @*if (brief.is_add_question == 1)
+                                {
+                                    <div class="col-md-3">
+                                        <div id="div-question-counter" @if (brief.is_add_question == 0) { @("style=\"display:none;\"") }>
+                                            <label class="control-label">no of questions in this brief</label>
+                                            <select id="question-count" name="question-count" class="form-control">
+                                                @for (int i = 1; i < 11; i++)
+                                                {
+                                                    <option @if (brief.question_count == i) { @("selected") } value="@i">
+                                                        @i
+                                                    </option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                }*@
+                            @*if (brief.brief_attachment_flag == 1 || brief.brief_attachment_flag == 2 || brief.brief_attachment_flag == null)
+                                                {
+                                                    <div class="col-md-3">
+                                                        <label class="control-label pull-right">Distribution method</label>
+                                                        <select id="brief-distribution" name="brief-distribution" class="form-control pull-right">
+                                                            <option value="0">Normal Distribution of Briefs</option>
+                                                            <option value="1">Progressive Distribution of Briefs</option>
+                                                        </select>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            @*<hr />
+                                @if (brief.is_add_question == 1)
+                                {
+                                    <div class="row" id="div-question-linked">
+                                        <div class="col-md-12">
+                                            <div class="panel panel-default custom-panel">
+                                                <div class="panel-heading custom-panel-heading">
+                                                    <div class="panel-title">questions associated to brief</div>
+                                                </div>
+                                                <div class="panel-body custom-panel-body">
+                                                    @if (questions.Count() > 0)
+                                                    {
+                                                        <input type="hidden" id="row-count-hidden" value="@questions.Count()" />
+                                                        <hr />
+
+                                                        <div class="col-md-12" id="div-qtn-row">
+                                                            @{
+                                                                int j = 1;
+                                                            }
+                                                            @foreach (tbl_brief_question item in questions)
+                                                            {
+                                                                <input type="hidden" name="row-qtn-list-@(j)" value="@item.id_brief_question" />
+                                                                <div class="brief-panel brief-note" id="div-brief-qtn-@(j)">
+                                                                    <p style="padding:6px;">
+                                                                        @item.brief_question
+                                                                        <a id="div-remove-@(j)" style="padding:2px;" class=" btn-default btn-info pull-right" name="" href="javascript:void(0)" onclick="removeQuestionFromList(@(j),@item.id_brief_question)">remove from brief</a>
+                                                                    </p>
+                                                                </div>
+                                                                j++;
+                                                            }
+                                                        </div>
+                                                                }
+                                                                else
+                                                                {
+                                                        <input type="hidden" id="row-count-hidden" value="1" />
+                                                        <div class="row">
+                                                            <div class="col-md-12" id="div-qtn-row">
+                                                                <div class="form-group" style="text-align:center;">
+                                                                    <label class="control-label">there are no questions associated to the brief</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                                }
+
+                                                    <div id="div-error-limit" class="form-group" style="text-align:center;display:none;">
+                                                        <label class="control-label" style="color:red;">question limit is reached ,you cannot add more questions</label>
+                                                    </div>
+                                                    <div id="div-error-duplicate" class="form-group" style="text-align:center;display:none;">
+                                                        <label class="control-label" style="color:red;">question is already attached to the brief</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+
+                            @*<div class="col-md-12">
+                                           <div class="panel panel-default custom-panel">
+                                               <div class="panel-heading custom-panel-heading">
+                                                   <div class="panel-title">add question </div>
+                                               </div>
+                                               <div class="panel-body custom-panel-body">
+
+                                                   <div class="row">
+                                                       <div class="col-md-12">
+                                                           <div class="form-group">
+                                                               <div class="col-md-3">
+                                                                   <label class="control-label">category</label>
+                                                                   <select id="search-category" name="search-category" class="form-control selectpicker" data-live-search="true" onchange="getSubCategory(this.value,'search-sub-category')">
+                                                                       @foreach (var pro in ListCategory)
+                                                                       {
+                                                                           <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                                                       }
+                                                                   </select>
+                                                               </div>
+                                                               <div class="col-md-3">
+                                                                   <label class="control-label">sub-category</label>
+                                                                   <select id="search-sub-category" name="search-sub-category" class="form-control ">
+                                                                       @foreach (var pro in ListSubcategory)
+                                                                       {
+                                                                           <option data-tokens="@pro.brief_subcategory" value="@pro.id_brief_subcategory">@pro.brief_subcategory</option>
+                                                                       }
+                                                                   </select>
+                                                               </div>
+                                                               <div class="col-md-3">
+                                                                   <label class="control-label pull-right">metadata</label>
+                                                                   <div id="theme-1-header" class="form-group">
+                                                                       <input type="text" class="form-control" value="" placeholder="" id="search-metadata" name="search-metadata" />
+                                                                   </div>
+                                                               </div>
+                                                               <div class="col-md-3">
+                                                                   <br />
+                                                                   <input id="" type="button" class="btn btn-default btn-info" name="" value="search" onclick="searchQuestion()" />
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+
+                                                   <div class="row" id="">
+                                                       <div class="col-md-12">
+                                                           <div id="display_table">
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                                   <hr />
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                                }*@
+                            <div class="row" id="">
+                                <div class="col-md-3">
+                                    @*<label class="control-label">Episode-Sequence</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            @if (sequVal == 0)
+                                            {
+                                                <input type="text" class="form-control validate[required]" value="" placeholder="Enter Sequence Value" id="episode-seq" name="episode-seq" />
+                                            }
+                                            else
+                                            {
+                                                <input type="text" class="form-control validate[required]" value="@sequVal" placeholder="Enter Sequence Value" id="episode-seq" name="episode-seq" />
+                                            }
+                                        </div>*@
+                                </div>
+                                <div class="col-md-5">
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="control-label"></label>
+                                    <input id="btn_question2" type="submit" class="btn btn-default btn-info" name="btn_submit" value="Update Brief" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script>
+    urlonload();
+
+    function urlonload() {
+        var idf = @flagUrl;
+        if (idf == 3 || idf == 4) {
+            if (idf == 4) {
+                $("#urlOpt").show();
+                $("#urltxtVal").show();
+            }
+            else {
+                $("#urlOpt").show();
+            }
+
+        }
+    }
+
+    function setUrlOption(e) {
+        var valId = parseInt(e);
+        if (valId == 0) {
+            $("#urltxtVal").show();
+        }
+        else {
+            $("#urltxtVal").hide();
+        }
+    }
+</script>
+<style>
+    .tooltip1 {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltip1 .tooltiptext1 {
+            visibility: hidden;
+            width: 170px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip1 .tooltiptext2 {
+            visibility: hidden;
+            width: 400px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 5px 5px;
+            position: absolute;
+            z-index: 1;
+            top: -110px;
+            right: -10%;
+            margin-left: -0px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltip1 .tooltiptext1::after , .tooltip1 .tooltiptext2::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltip1:hover .tooltiptext1, .tooltip1:hover .tooltiptext2 {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>

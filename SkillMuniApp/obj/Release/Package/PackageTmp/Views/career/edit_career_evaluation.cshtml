@@ -1,0 +1,845 @@
+﻿
+@{
+    ViewBag.Title = "edit_career_evaluation";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+
+<link href="~/Content/RichText/dist/summernote.css" rel="stylesheet" />
+<script src="~/Content/RichText/dist/summernote.js"></script>
+<script src="~/Content/jquery.serializeToJSON.js"></script>
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $("#form-add-brief").validationEngine();
+        $('.summernote').summernote();
+
+        $("#datetimepicker2").datetimepicker({
+            minDate: 0,
+            dateFormat: "dd-mm-yy",
+            minDate: new Date(),
+            onSelect: function (selected) {
+                var date = $(this).datetimepicker('getDate');
+            }
+        });
+    });
+
+    function getCategoryList(ids) {
+        if (ids == 2) {
+            /**/
+            var url = '@Url.Action("getCategoryDistributionList", "Brief")';
+    /**/
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { cid: ids },
+        success: function (data) {
+            $("#div-dist-category").empty().append(data);
+        }
+    });
+}
+else {
+    $("#div-dist-category").empty();
+}
+}
+
+function setQuestionOption(ids) {
+if (ids == 1) {
+    $("#div-question-counter").show();
+    $("#div-question-linked").show();
+} else {
+    $("#div-question-counter").hide();
+    $("#div-question-linked").hide();
+}
+}
+
+    //function formSubmitRTCheck() {
+    //    var flag = $("input[type='radio'][name='template-card']:checked").val();
+    //    var rtcode = $('#brief-rt-data-t' + flag).summernote('code');
+    //    var chcat = '';
+
+    //    $("input[name='brf-category[]']").each(function () {
+    //        chcat = chcat + ',' + $(this).val();
+    //    });
+    //    $("#brf-cat-val").empty().val(chcat);
+
+    //    if (rtcode) {
+    //        $('#brf-rt-code').val(rtcode);
+    //        //$("#brf-rt-code").val($('<div />').text(rtcode).html());
+    //        return true;
+    //    } else {
+    //        return false;
+    //    }
+    //}
+
+function formSubmit() {
+var valid = true;// $("#form-add-brief").validationEngine('validate');
+
+if (valid) {
+    var form_data = $("#form-add-brief").serializeArray();
+    var rtcode = $('.summernote').summernote('code');
+
+    form_data.push({ name: "rtcode", value: rtcode });
+    var chcat = '';
+
+    $("input[name='brf-category[]']").each(function () {
+        chcat = chcat + ',' + $(this).val();
+    });
+    $("#brf-cat-val").empty().val(chcat);
+
+    /**/
+    var url = '@Url.Action("finishDratfBrief", "Brief")';
+    /**/
+
+    var obj = $("#form-add-brief").serializeToJSON();
+    var jsonForm = JSON.stringify(obj);
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { jdata: jsonForm, rtcode: rtcode },
+        success: function (msg) {
+
+            /**/
+            location.href = '@Url.Action("briefDraft", "Brief")';
+    /**/
+
+}
+});
+
+}
+}
+
+function searchQuestion() {
+var id = $("#search-category").val();
+var sid = $("#search-sub-category").val();
+/**/
+/**/
+/**/
+var url = '@Url.Action("getQuestionList", "Brief")';
+    /**/
+    /**/
+    /**/
+    var pattern = $("#search-metadata").val().trim();
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { sid: id, sbid: sid, metadata: pattern },
+
+        success: function (data) {
+            $("#display_table").empty().append(data);
+            $("#brief-table").dataTable({ "bSort": false, "pageLength": 10 });
+
+        }
+    });
+}
+
+function addQuestionToBrief(ids) {
+
+    var flag = true;
+    $("input[name='hidden-qtn-list']").each(function () {
+        var value = $(this).val();
+        if (value == ids) {
+            flag = false;
+        }
+    });
+    if (flag) {
+        var idc = $("#row-count-hidden").val();
+        var count = $("#question-count").val();
+        if (count >= idc) {
+            $("#plus-qtn-brief-" + ids).hide();
+            $("#plus-ok-" + ids).show();
+            var row = $("#row-td-" + ids).text();
+
+            if (idc == 1) {
+                $("#div-qtn-row").empty();
+                $("#row-count-hidden").val(2);
+            } else {
+                idc++;
+                $("#row-count-hidden").val(idc);
+            }
+            var option = '<div class="brief-panel brief-note"> <input type="hidden" name="hidden-qtn-list" value="' + ids + '" /><input type="hidden" name="row-qtn-list-' + idc + '" value="' + ids + '" /><p style="padding:6px;">' + row + '</p></div>';
+            $("#div-qtn-row").append(option);
+        } else {
+            $("#div-error-limit").show();
+            setTimeout(function () { $("#div-error-limit").hide(); }, 5000);
+        }
+    } else {
+        $("#div-error-duplicate").show();
+        setTimeout(function () { $("#div-error-duplicate").hide(); }, 5000);
+
+    }
+}
+
+function getSubCategory(val, ids) {
+
+    /**/
+    /**/
+    /**/
+    var url = '@Url.Action("getSubcategoryList", "Brief")';
+    /**/
+    /**/
+    /**/
+    if (val != "0") {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { cid: val },
+
+            success: function (data) {
+                $("#" + ids).empty().append(data);
+            }
+        });
+    }
+    }
+
+     function imgeBrie(el, btn, imgf, ban) {
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        } else {
+        }
+        $("#" + imgf + "").val(filename);
+        if (el.files && el.files[0]) {
+            var FR = new FileReader();
+            FR.onload = function (e) {
+                $("#leaguimg1").show();
+                $("#leaguimg1").attr("src", e.target.result);
+
+            };
+            FR.readAsDataURL(el.files[0]);
+        }
+    }
+</script>
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+</style>
+
+<style>
+    .cc-selector input {
+        margin: 0;
+        padding: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .t1 {
+        background-image: url(/Content/Theme/tt1.jpg);
+    }
+
+    .t2 {
+        background-image: url(/Content/Theme/tt2.jpg);
+    }
+
+    .t3 {
+        background-image: url(/Content/Theme/tt3.jpg);
+    }
+
+    .t4 {
+        background-image: url(/Content/Theme/tt4.jpg);
+    }
+
+    .cc-selector input:active + .drinkcard-cc {
+        opacity: .9;
+    }
+
+    .cc-selector input:checked + .drinkcard-cc {
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+    }
+
+    .drinkcard-cc {
+        cursor: pointer;
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 100px;
+        height: 70px;
+        -webkit-transition: all 100ms ease-in;
+        -moz-transition: all 100ms ease-in;
+        transition: all 100ms ease-in;
+        -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+        -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+        filter: brightness(1) grayscale(1) opacity(.7);
+    }
+
+        .drinkcard-cc:hover {
+            -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+        }
+
+    .avatar-upload .avatar-edit input {
+        display: none;
+    }
+
+    .avatar-upload .avatar-edit {
+        position: absolute;
+        right: 12px;
+        z-index: 1;
+    }
+
+
+
+    .avatar-upload {
+        position: relative;
+        max-width: 205px;
+        /*margin: 10px auto;*/
+    }
+
+        .avatar-upload .avatar-preview {
+            width: 192px;
+            height: 192px;
+            position: relative;
+            /*border-radius: 100%;*/
+            border: 6px solid #F8F8F8;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        }
+</style>
+
+<script>
+
+    $(function () {
+        $('input[type=radio][name=template-card]').change(function () {
+            var ids = $(this).val();
+            for (i = 1; i <= 4; i++) {
+                if (i == ids) {
+                    $("#div-brf-t" + i).show(500);
+                } else {
+                    $("#div-brf-t" + i).hide(500);
+                }
+            }
+
+        });
+    });
+    function select_file(btn, imgf, ban) {
+
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+            $("#" + ban + "").addClass("validate[required,custom[url]]");
+        } else {
+            $("#" + ban + "").removeClass("validate[required,custom[url]]");
+        }
+
+        $("#" + imgf + "").val(filename);
+    }
+</script>
+<script>
+    const uploads = []
+    $(function () {
+        $('.flcheck').on('change', function () {
+            var ids = this.id;
+            var file = this.files[0];
+            //   openFile(file.name);
+            const filereader = new FileReader();
+            const blob = file.slice(0, 4);
+            filereader.readAsArrayBuffer(blob);
+            filereader.onloadend = function (evt) {
+                if (evt.target.readyState === FileReader.DONE) {
+                    const uint = new Uint8Array(evt.target.result);
+                    let bytes = [];
+                    uint.forEach((byte) => {
+                        bytes.push(byte.toString(16));
+                    })
+                    const hex = bytes.join('').toUpperCase();
+                    var flag = getMimetype(hex);
+                    if (flag) {
+                        select_file(ids, ids + '-image')
+                        return true;
+                    } else {
+                        $('#' + ids).val('');
+                        $('#' + ids + '-image').val('');
+                        $('#' + ids + '-error').show();
+                        setTimeout(function () { $('#' + ids + '-error').hide(); }, 5000);
+                        return false;
+                    }
+                }
+            }
+
+        });
+    });
+
+    function openFile(file) {
+        var extension = file.substr((file.lastIndexOf('.') + 1));
+        switch (extension) {
+            case 'jpg':
+            case 'png':
+            case 'gif':
+                return true;  // There's was a typo in the example where
+                break;                         // the alert ended with pdf instead of gif.
+            case 'pdf':
+                return false;
+                break;
+            default:
+                return false;
+        }
+    };
+
+    const getMimetype = (signature) => {
+        switch (signature) {
+            case '89504E47':
+            case '47494638':
+            case 'FFD8FFDB':
+            case 'FFD8FFE0':
+            case '3026B275':
+            case '0001C':
+            case '00018':
+            case '52494646':
+            case '1A45DFA3':
+            case '00020':
+            case '464C561':
+            case '25504446':
+            case '504B34':
+            case 'D0CF11E0':
+                return true
+            case '504B0304':
+                return false
+            default:
+                return false
+        }
+    }
+
+    function changeMediaType(div, ids) {
+        if (ids == 1) {
+            $("#div-" + div + "-part1").show();
+            $("#div-" + div + "-part2").hide();
+        }
+        if (ids == 2) {
+            $("#div-" + div + "-part2").show();
+            $("#div-" + div + "-part1").hide();
+        }
+    }
+</script>
+
+@{
+    List<tbl_brief_category> category = (List<tbl_brief_category>)ViewData["category"];
+    List<tbl_brief_subcategory> subcategory = (List<tbl_brief_subcategory>)ViewData["subcategory"];
+    List<m2ostnext.Models.tbl_ce_evaluation_tile> ce_eval_tile = (List<m2ostnext.Models.tbl_ce_evaluation_tile>)ViewData["ce_eval_tile"];
+    List<m2ostnext.Models.tbl_ce_category_mapping> tcm = (List<m2ostnext.Models.tbl_ce_category_mapping>)ViewData["tcm"];
+    List<m2ostnext.Models.tbl_ce_evalution_answer_key> teak = (List<m2ostnext.Models.tbl_ce_evalution_answer_key>)ViewData["teak"];
+    m2ostnext.Models.tbl_ce_career_evaluation_master tcem = (m2ostnext.Models.tbl_ce_career_evaluation_master)ViewData["tcem"];
+    int ck = 1;
+    int catck = 0;
+    int psychoCat = 0;
+    if(tcem.ce_assessment_type == 2)
+    {        
+        if(tcm.Count > 0)
+        {
+            psychoCat = tcm[0].id_brief_category;
+        }                    
+    }
+
+
+}
+
+@using (Html.BeginForm("update_career_evaluation", "career", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data", onsubmit = "formSubmitRTCheck()" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">Career Evaluation</div>
+                </div>
+                <input type="hidden" name="brf-cat-val" id="brf-cat-val" />
+                <input type="hidden" name="brf-rt-code" id="brf-rt-code" />
+                <input type="hidden" name="ce_code" id="ce_code" value="@tcem.career_evaluation_code"/>
+                <input type="hidden" name="id_ce_mas" id="id_ce_mas" value="@tcem.id_ce_career_evaluation_master"/>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <label class="control-label">Name</label>
+                                            <div id="theme-1-header" class="form-group">
+                                                <input type="text" class="form-control validate[required]" value="@tcem.career_evaluation_title" placeholder="" id="career-name" name="career-name" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Description</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <textarea type="text" class="form-control validate[required]" value="" placeholder="" id="career-Description" name="career-Description">@tcem.ce_description</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-5">
+                                            <label class="control-label">Upload Icon/Image : </label>
+                                            <input type="text" class="form-control" readonly value="@tcem.ce_image" placeholder="Upload" id="league-image1" name="league-image1" />
+                                            <div class="fileUpload btn btn-primary" style="float:right;margin-top:-8%;">
+                                                <span>Browse</span>
+                                                <input id="league-btn1" name="career-logo" class="upload" type="file" accept="image/*" onchange="imgeBrie(this, 'league-btn1', 'league-image1', 'logo-text',1)" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" id="imagePrev1">
+                                            <label class="control-label"></label>
+                                            <div class="avatar-upload">
+                                                <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                                    <img id="leaguimg1" src="~/Content/SKILLMUNI_DATA/career/@tcem.id_organization/@tcem.ce_image" style="width:40px;height:40px;padding:5%;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="control-label">Evaluation Type</label>
+                                            <div id="theme-1-header" class="form-group">
+                                                <select id="career-evaluation-type" name="career-evaluation-type" class="form-control" data-live-search="true" onchange="rulecCondition()">
+                                                    <option value="" selected disabled>Select</option>
+                                                    @foreach (var item in ce_eval_tile)
+                                                    {
+                                                        <option value="@item.id_ce_evaluation_tile">@item.ce_evaluation_tile</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="control-label">should time rule enforced?</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <select id="career-timeCondition" name="career-timeCondition" class="form-control" data-live-search="true" onchange="rulecCondition()">
+                                                <option value="" disabled>Select</option>
+                                                <option value="1" selected>Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @if (tcem.is_time_enforced == 1)
+                                    {
+                                        <div class="col-md-6">
+                                            <label class="control-label"></label>
+                                            <div id="mintime-enter" class="form-group" style="">
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control validate[required]" value="@tcem.time_enforced" placeholder="" id="career-time-enforced" name="career-time-enforced" />
+                                                </div>
+                                                <label class="control-label">(Minutes only)</label>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="control-label">Select Assessment</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <select id="career-assessment" name="career-assessment" class="form-control" data-live-search="true" onchange="changeAssessment()">
+                                                <option value="0" selected disabled>Select</option>
+                                                <option value="1">SUL-MCA</option>
+                                                <option value="2">SUL Psychometric</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label">Ordering sequence number</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <input type="text" class="form-control validate[required]" value="@tcem.ordering_sequence_number" placeholder="" id="career-order-sequence" name="career-order-sequence" />
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (tcem.ce_assessment_type == 1)
+                                {
+                                <div class="row" id="sul-mca-category" style="">
+                                    <div class="assement-content">
+                                        <div class="col-md-6">
+                                            <label class="control-label">Number of Questions</label>
+                                            <input type="text" class="form-control validate[required]" value="@tcem.no_of_question" placeholder="" id="career-no-of-question" name="career-no-of-question" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="control-label">Job points for each right answer</label>
+                                            <select class="form-control" id="career-right-answer" name="career-right-answer" data-live-search="true">
+                                                <option value="0" selected>0</option>
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
+                                            </select>
+                                            @*<input type="text" class="form-control validate[required]" value="" placeholder="" id="career-right-answer" name="career-right-answer" />*@
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Category Lists</label>
+                                        <div class="col-md-12">
+                                            <input type="hidden" name="catChkcCount" value="@category.Count" />
+                                            @foreach (var item in category)
+                                            {
+                                                for (int c = 0; c < tcm.Count; c++)
+                                                {
+                                                    if (tcm[c].id_brief_category == item.id_brief_category)
+                                                    {
+                                                        catck = 1;
+                                                    }
+                                                }
+                                                if (catck == 1)
+                                                {
+                                                    <input type="hidden" id="bind-category-@ck" name="ce-check-@ck" value="@item.id_brief_category" />
+                                                    <div class="col-md-3"><div class="checkbox"><input class="styled" type="checkbox" id="categId-@ck" onchange="categoryOnChg(@ck)" value="@item.id_brief_category" checked><label for="check1">@item.brief_category</label></div></div>
+                                                }
+                                                else
+                                                {
+                                                    <input type="hidden" id="bind-category-@ck" name="ce-check-@ck" value="" />
+                                                    <div class="col-md-3"><div class="checkbox"><input class="styled" type="checkbox" id="categId-@ck" onchange="categoryOnChg(@ck)" value="@item.id_brief_category"><label for="check1">@item.brief_category</label></div></div>
+                                                }
+                                                catck = 0;
+                                                ck++;
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="mca-submit">
+                                        <div class="col-md-3">
+                                        </div>
+                                        <div class="col-md-7">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="submit" class="btn btn-default btn-info" name="btn_submit" value="save as Draft" style="float: right;color:white" />
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                                @if(tcem.ce_assessment_type == 2) { 
+                                <div class="row" id="sul-pyscomet" style="">
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <label class="control-label">Select Categories</label>
+                                            <div id="theme-1-header" class="form-group">
+                                                <select id="career-psycho-category" name="career-psycho-category" class="form-control" data-live-search="true">
+                                                    <option value="0" selected disabled>Select</option>
+                                                    @foreach (var item in category)
+                                                    {
+                                                        <option value="@item.id_brief_category">@item.brief_category</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="control-label">Enter Number of Keys</label>
+                                            <div id="theme-1-header" class="form-group">
+                                                <select id="career-psycho-keys" name="career-psycho-keys" class="form-control" onchange="psychoKeychange()" data-live-search="true">
+                                                    <option value="0" selected disabled>Select</option>
+                                                    @for (int i = 1; i <= 15; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                                @*<input type="text" class="form-control validate[required]" value="" placeholder="" id="career-psycho-keys" name="career-psycho-keys" />*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-8">
+                                            <table class="table" style="display:none;" id="code-key">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Key</th>
+                                                        <th>Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @for (int i = 1; i <= 15; i++)
+                                                    {
+                                                        <tr id="bindedrow-@i" style="display:none">
+                                                            <td><input type="text" id="psycho-code-@i" name="psycho-code-@i" /></td>
+                                                            <td><input type="text" id="psycho-key-@i" name="psycho-key-@i" /></td>
+                                                            <td><input type="text" id="psycho-descryp-@i" name="psycho-descryp-@i" /></td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                    </div>
+                                    <div class="sul-psychometric">
+                                        <div class="col-md-3">
+                                        </div>
+                                        <div class="col-md-7">
+                                        </div>
+                                        <div class="col-md-2">
+                                            @*id="btn_question2" removed from input field *@
+                                            <input type="submit" class="btn btn-danger btn-info" name="btn_submit" value="continue" style="float: right;color:white" />
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                                <!-- content type in  -->
+                                @*<div class="row">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Brief distribution categories</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div id="" class="form-group">
+                                                <select id="brief-distribution-category-option" name="brief-distribution-category-option" class="form-control" onchange="getCategoryList(this.value)">
+                                                    <option value="0">above selected cateogry </option>
+                                                    <option value="2">list categories</option>
+                                                    <option value="3">all categories</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                        </div>
+                                    </div>*@
+                                @*<div class="row">
+                                        <div class="col-md-12">
+                                            <label class="control-label">select categories</label>
+                                            <div id="div-dist-category">
+                                            </div>
+                                        </div>
+                                    </div>*@
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        //var validsts = $("#form-add-brief").valid();
+
+        $('#form-add-brief').submit(function () {
+
+            $(this).find('input[type=submit]').prop('disabled', true);
+        });       
+   
+            editLoad();
+
+    });
+
+    function editLoad() {
+        
+        $("#career-evaluation-type").val(@tcem.id_ce_evaluation_tile);
+        $("#career-timeCondition").val(@tcem.is_time_enforced);     
+        $("#career-assessment").val(@tcem.ce_assessment_type);     
+        $("#career-right-answer").val(@tcem.job_points_for_ra);
+        if (@tcem.ce_assessment_type == 2) {            
+            $("#career-psycho-category").val(@psychoCat);            
+            $("#career-psycho-keys").val(@teak.Count);     
+            $("#career-psycho-keys").val(@teak.Count);
+            var teakVal = @Html.Raw(Json.Encode(teak));
+            console.log(teakVal);
+            psychoKeychange()
+            for (i = 0; i <@teak.Count; i++) {
+                var icount = parseInt(i) + 1;                            
+                $("#psycho-code-" + icount).val(teakVal[i].key_code);
+                $("#psycho-key-" + icount).val(teakVal[i].answer_key);
+                $("#psycho-descryp-" + icount).val(teakVal[i].description);
+            }
+        }
+
+    }
+
+
+    var oldcount = 0;
+    function psychoKeychange() {
+        $("#code-key").show();
+        var countkey = parseInt($("#career-psycho-keys").val());
+        if (oldcount < countkey) {
+            if (oldcount == 0) {
+                for (i = 1; i <= countkey; i++) {
+                    $("#bindedrow-" + i).show();
+                }
+            }
+            else
+            {
+                for (i = parseInt(oldcount)+1; i <= countkey; i++)
+                {
+                    $("#bindedrow-" + i).show();
+                }
+            }
+        }
+        else {
+            var cur = parseInt(countkey) + 1;
+            for (i = cur; i <= oldcount; i++) {
+                $("#bindedrow-" + i).hide();
+                $("#bindedrow-" + i+" input").val("");
+            }
+        }
+
+        oldcount = countkey;
+    }
+
+    function rulecCondition() {
+        var ruleid = $("#career-timeCondition").val();
+        if (ruleid == 1) {
+            $("#mintime-enter").show();
+        }
+        else if (ruleid == 2) {
+            $("#mintime-enter").hide();
+        }
+        else {
+            $("#mintime-enter").hide();
+        }
+        }
+
+    function changeAssessment() {
+        var AssessmentId = $("#career-assessment").val();
+
+        if (AssessmentId == 1) {
+            $("#sul-mca-category").show();
+            $("#sul-pyscomet").hide();
+        }
+        else if (AssessmentId == 2) {
+            $("#sul-mca-category").hide();
+            $("#sul-pyscomet").show();
+        }
+        else {
+            $("#sul-mca-category").hide();
+            $("#sul-pyscomet").hide();
+        }
+        }
+
+    function categoryOnChg(e)
+    {
+        var checkCat=$("#categId-" + e).val();
+        var bindcat = $("#bind-category-" + e).val();
+        //alert(checkCat + " " + bindcat);
+        if (bindcat == "") {
+            $("#bind-category-" + e).val(checkCat);
+        }
+        else {
+            $("#bind-category-" + e).val("");
+        }
+
+    }
+</script>

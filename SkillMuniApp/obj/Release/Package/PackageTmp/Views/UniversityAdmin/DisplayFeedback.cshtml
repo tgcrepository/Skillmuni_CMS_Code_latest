@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewBag.Title = "DisplayFeedback";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.tbl_feedback_master> feedback = (List<m2ostnext.Models.tbl_feedback_master>)ViewData["feedback"];
+    List<m2ostnext.Models.feedback_preview> preview = (List<m2ostnext.Models.feedback_preview>)ViewData["preview"];
+
+}
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Feedback Display</h4>
+            </div>
+
+
+            <div class="panel-body">
+                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="20%">
+                                Name
+                            </th>
+                            <th width="10%">
+                                Feedback Type
+                            </th>
+                            <th width="10%">
+                                Description
+                            </th>
+                            <th width="10%">
+                                Media
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in feedback)
+                        {
+                            <tr>
+                                <td>
+                                    @item.FIRSTNAME
+                                </td>
+                                <td>
+                                    @if (item.Issues == 1)
+                                    {<p>
+                                            Issues|
+                                        </p>}
+                                    @if (item.Content == 1)
+                                    {<p>
+                                            Content|
+                                        </p>}
+                                    @if (item.Suggestions == 1)
+                                    {<p>
+                                            Suggestions|
+                                        </p>}
+
+                                    @if (item.UI == 1)
+                                    {<p>
+                                            UI|
+                                        </p>}
+
+
+                                </td>
+                                <td>
+                                    @item.Description
+                                </td>
+
+                                <td>
+                                    @if (item.MediaFlag == 1)
+                                    {
+                                        <a class="showbtn" data-toggle="modal" data-target="#Modal_@item.id_feedback"><i class="glyphicon glyphicon-eye-open"></i></a>
+
+                                    }
+
+
+                                </td>
+
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+@foreach (var itm in feedback)
+{
+    if (itm.MediaFlag == 1)
+    {
+        <div id="Modal_@itm.id_feedback" class="modal fade" role="dialog">
+            <div class="modal-dialog" style="width:80%">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">@itm.FIRSTNAME </h4>
+                    </div>
+                    <div class="modal-body" style="    padding: 4%;">
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="table-responsive">
+                                    <table class="table">
+
+                                        <tbody>
+                                            <tr>
+                                                <td class="noBorder">Name</td>
+                                                <td class="noBorder">@itm.FIRSTNAME</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td class="noBorder">FeedbackType</td>
+                                                <td class="noBorder">
+                                                    @if (itm.Issues == 1)
+                                                    {<p>
+                                                            Issues|
+                                                        </p>}
+                                                    @if (itm.Content == 1)
+                                                    {<p>
+                                                            Content|
+                                                        </p>}
+                                                    @if (itm.Suggestions == 1)
+                                                    {<p>
+                                                            Suggestions|
+                                                        </p>}
+
+                                                    @if (itm.UI == 1)
+                                                    {<p>
+                                                            UI|
+                                                        </p>}
+
+
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td class="noBorder">Description</td>
+                                                <td class="noBorder">@itm.Description</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td class="noBorder">Last Updated</td>
+                                                <td class="noBorder">@itm.updated_datetime</td>
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <img style="    margin-left: 9%;width: 75%;height: 223px;" src="http://localhost:54544/Content/SKILLMUNI_DATA/Theme_Logo/@itm.media" />
+
+                            </div>
+
+                        </div>
+
+
+                        <hr />
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    }
+}
+

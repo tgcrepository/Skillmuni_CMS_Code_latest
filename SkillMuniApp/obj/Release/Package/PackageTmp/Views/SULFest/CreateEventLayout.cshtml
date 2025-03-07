@@ -1,0 +1,568 @@
+﻿
+@{
+    ViewBag.Title = "CreateEventLayout";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_event_type_master> type = (List<tbl_event_type_master>)ViewData["event_type"];
+    m2ostnext.Models.State stateList = (m2ostnext.Models.State)ViewData["stateList"];
+    List<tbl_college_list> college = (List<tbl_college_list>)ViewData["college"];
+    List<tbl_sub_event_type_master> sub_type = (List<tbl_sub_event_type_master>)ViewData["sub_type"];
+    List<tbl_event_sponsor_master> sponsor = (List<tbl_event_sponsor_master>)ViewData["sponsor"];
+
+
+}
+
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+@*<script>
+        $(function () {
+            $("#form-add-notification").validationEngine();
+        });
+    </script>*@
+
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Create Event</h4>
+            </div>
+            <div class="panel-body">
+
+
+                @using (Html.BeginForm("CreateEventAction", "SULFest", FormMethod.Post, new { id = "form-add-notification", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event Title</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="event-title" name="event-title" />
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event Objective</label></div>
+                            <div class="col-md-9">
+                                <textarea name="event-Objective" class="form-control" placeholder="Event Objective" rows="3"></textarea>
+                                <div class="tooltip1">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    <span class="tooltiptext1">Maximum 1000 characters</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*<div class="form-group">
+                                <div class="col-md-3"><label class="control-label">Event Type</label></div>
+                                <div class="col-md-5">
+                                    <select id="event-type" multiple name="event-type" class="form-control validate[required] chosen-select">
+                                        <option value="">Select Event Type</option>
+                                        @foreach (var itm in type)
+                                        {
+                                            <option value="@itm.id_event_type">@itm.event_type</option>
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>*@
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event Logo</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control validate[required]" readonly value="" placeholder="Event Logo" id="event-logo" name="event-logo" />
+                                <div class="fileUpload btn btn-primary">
+                                    <span>Browse Image</span>
+                                    <input id="event-logo-btn" name="event-logo-btn" class="upload" type="file" accept="" onchange="select_file('event-logo-btn', 'event-logo', 'event-text')" />
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event Registration Needed</label></div>
+                            <div class="col-md-9">
+                                <input type="radio" name="is_reg_needed" value="1" onclick="registrationBlock(1)">Yes
+                                <input type="radio" name="is_reg_needed" value="0" onclick="registrationBlock(0)" checked="checked">No <br>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="form-group" style="display:none" id="reg_strt">
+                            <div class="col-md-3"><label class="control-label ">Registration Start Date</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-5">
+                                <div class='input-group date'>
+                                    <input type='text' class="form-control validate[required]" id='datetimepicker1' name="regis-start" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="display:none" id="reg_end">
+                            <div class="col-md-3"><label class="control-label">Registration End Date</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-5">
+                                <div class='input-group date'>
+                                    <input type='text' class="form-control validate[required]" id='datetimepicker2' name="regis-end" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event Start Date</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-5">
+                                <div class='input-group date'>
+                                    <input type='text' class="form-control validate[required]" id='datetimepicker3' name="event-start" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event End Date</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-5">
+                                <div class='input-group date'>
+                                    <input type='text' class="form-control validate[required]" id='datetimepicker4' name="event-end" onchange="durationcalc()" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event Duration</label></div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="event-duration" readonly name="event-duration" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event Location</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-9">
+                                <textarea name="event-location" class="form-control validate[required]" placeholder="Event Location" rows="3"></textarea>
+                                <div class="tooltip1">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    <span class="tooltiptext1">Maximum 100 characters</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">State</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-5">
+                                <select id="state" name="state" class="form-control validate[required]" onchange="getCityList()">
+                                    <option value="">Select</option>
+                                    @foreach (var itm in stateList.States)
+                                    {
+                                        <option value="@itm.id">@itm.name</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">City</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-5">
+                                <select id="city" name="city" class="form-control validate[required]"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Detailed Address</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-9">
+                                <textarea name="address" class="form-control validate[required]" placeholder="Detailed Address" rows="3"></textarea>
+                                <div class="tooltip1">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    <span class="tooltiptext1">Maximum 300 characters</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Closed Event</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-9">
+                                <input type="radio" name="closed_event" value="1" checked="checked" onclick="prtneeded(1)">Yes
+                                <input type="radio" name="closed_event" value="0" onclick="prtneeded(0)">No <br>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="display:none" id="prt_count">
+                            <div class="col-md-3"><label class="control-label">No of participants</label></div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="participants_count" name="participants_count" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">College Restriction</label></div>
+                            <div class="col-md-9">
+                                <input type="radio" name="college_restriction" onclick="clgres(1)" value="1">Yes
+                                <input type="radio" name="college_restriction" onclick="clgres(0)" value="0" checked="checked">No <br>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" id="clgblk" style="display:none">
+                            <div class="col-md-3"><label class="control-label">Select College</label></div>
+                            <div class="col-md-5">
+                                <select id="college" name="college" class="form-control validate[required]">
+                                    <option value="">Select</option>
+                                    @foreach (var itm in college)
+                                    {
+                                        <option value="@itm.id_college">@itm.college_name</option>
+
+                                    }
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Paid Event</label></div>
+                            <div class="col-md-9">
+                                <input type="radio" name="paid" value="1" onclick="paidneed(1)">Yes
+                                <input type="radio" name="paid" value="0" onclick="paidneed(0)" checked="checked">No <br>
+                            </div>
+                        </div>
+                        <div class="form-group" id="amnt" style="display:none">
+                            <div class="col-md-3"><label class="control-label">Amount</label></div>
+                            <div class="col-md-9">
+                                <input type="number" class="form-control validate[required]" value="" placeholder="" id="amount" name="amount" />
+                            </div>
+                        </div>
+
+                        @*<div class="form-group">
+                                <div class="col-md-3"><label class="control-label">Event Details</label></div>
+                                <div class="col-md-5">
+                                    <select id="sub_type" multiple name="sub_type" class="form-control validate[required] chosen-select">
+                                        <option value="">Select Event Sub Type</option>
+                                        @foreach (var itm in sub_type)
+                                        {
+                                            <option value="@itm.id_sub_event_type">@itm.sub_event_type</option>
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>*@
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Organisation Specific</label></div>
+                            <div class="col-md-9">
+                                <input type="radio" name="organisation" style=" pointer-events: none;" value="1">Yes
+                                <input type="radio" name="organisation" value="0" style=" pointer-events: none;" checked="checked">No <br>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Event Sponsor</label></div>
+                            <div class="col-md-9">
+                                <input type="radio" name="sponsor" value="1" onclick="sponsneed(1)">Yes
+                                <input type="radio" name="sponsor" value="0" onclick="sponsneed(0)" checked="checked">No <br>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display:none" id="sponsname">
+                            <div class="col-md-3"><label class="control-label">Event Sponsor</label></div>
+                            <div class="col-md-5">
+                                <select id="sponsor_id" name="sponsor_id" class="form-control validate[required]">
+                                    <option value="">Select Event Sponsor</option>
+                                    @foreach (var itm in sponsor)
+                                    {
+                                        <option value="@itm.id_sponsor">@itm.sponsor</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="display:none" id="sponslogo">
+                            <div class="col-md-3"><label class="control-label">Sponsor Logo</label></div>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control validate[required]" readonly value="" placeholder="Sponsor Logo" id="sponsor-logo" name="sponsor-logo" />
+                                <div class="fileUpload btn btn-primary">
+                                    <span>Browse Image</span>
+                                    <input id="sponsor-logo-btn" name="sponsor-logo-btn" class="upload" type="file" accept="gif/*" onchange="select_file('sponsor-logo-btn', 'sponsor-logo', 'welcome-text')" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Contact Name</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="contact_name" name="contact_name" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Contact Number</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                            <div class="col-md-9">
+                                <input type="number" class="form-control validate[required]" value="" placeholder="" id="contact_number" name="contact_number" />
+                            </div>
+                        </div>
+
+                        @*<div class="form-group">
+                                <div class="col-md-3"><label class="control-label">Event Mode</label></div>
+                                <div class="col-md-5">
+                                    <select id="eventmode" name="eventmode" class="form-control validate[required]">
+                                        <option value="">Select Event Mode</option>
+                                        <option value="1">Draft</option>
+                                        <option value="2">Publish</option>
+
+                                    </select>
+                                </div>
+                            </div>*@
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4">
+                                <input style="    background: #018ccf;color: white;margin-left: -183px;" type="submit" value="Submit" name="btn_submit" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+
+        $("#form-add-notification").validationEngine();
+
+        $("#datetimepicker1").datetimepicker(
+            { dateFormat: "dd-mm-yy" }
+        );
+        $("#datetimepicker2").datetimepicker(
+            { dateFormat: "dd-mm-yy" }
+        );
+        $("#datetimepicker3").datetimepicker(
+            { dateFormat: "dd-mm-yy" }
+        );
+        $("#datetimepicker4").datetimepicker(
+            { dateFormat: "dd-mm-yy" }
+        );
+
+
+    });
+    $(".chosen-select").chosen({
+        no_results_text: "Oops, nothing found!"
+    })
+
+    function getCityList() {
+        var idstate = $("#state").val();
+        $("#city").empty();
+        $.getJSON("https://www.skillmuni.in/sulapiproduction/api/getCities?stateId=" + idstate, function (json_data) {
+            var apndstr = "";
+            for (var i = 0; i <= json_data.Cities.length; i++) {
+                apndstr = " <option value='" + json_data.Cities[i].id + "'>" + json_data.Cities[i].name + "</option>";
+
+                $("#city").append(apndstr);
+                apndstr = "";
+            }
+        });
+    }
+
+    function select_file(btn, imgf, ban) {
+
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+            $("#" + ban + "").addClass("validate[required,custom[url]]");
+        } else {
+            $("#" + ban + "").removeClass("validate[required,custom[url]]");
+        }
+
+        $("#" + imgf + "").val(filename);
+    }
+
+    function registrationBlock(flg) {
+        if (flg == 1) {
+            $("#reg_strt").show();
+            $("#reg_end").show();
+
+
+        }
+        else {
+            $("#reg_strt").hide();
+            $("#reg_end").hide();
+
+        }
+
+    }
+
+    function prtneeded(flg) {
+        if (flg == 1) {
+            $("#prt_count").show();
+
+
+
+        }
+        else {
+            $("#prt_count").hide();
+
+
+        }
+
+
+    }
+    prtneeded(1);
+
+
+    function clgres(flg) {
+        if (flg == 1) {
+            $("#clgblk").show();
+
+
+
+        }
+        else {
+            $("#clgblk").hide();
+
+
+        }
+
+    }
+    function paidneed(flg) {
+        if (flg == 1) {
+            $("#amnt").show();
+
+
+
+        }
+        else {
+            $("#amnt").hide();
+
+
+        }
+
+    }
+
+    function sponsneed(flg) {
+        if (flg == 1) {
+            $("#sponsname").show();
+            $("#sponslogo").show();
+
+
+
+        }
+        else {
+            $("#sponsname").hide();
+            $("#sponslogo").hide();
+
+        }
+
+    }
+
+    function durationcalc() {
+        var start = $('#datetimepicker3').val();
+        var end = $('#datetimepicker4').val();
+
+        var start_day = start.slice(0, 2);
+        var start_month = start.slice(3, 5);
+        var start_year = start.slice(6, 10);
+        var start_time = start.slice(11, 16);
+
+        var end_day = end.slice(0, 2);
+        var end_month = end.slice(3, 5);
+        var end_year = end.slice(6, 10);
+        var end_time = end.slice(11, 16);
+
+
+        var start_actual_time = start_month + "/" + start_day + "/" + start_year + " " + start_time;
+
+        var end_actual_time = end_month + "/" + end_day + "/" + end_year + " " + end_time;
+
+
+        //var end_actual_time = "01/18/2012 12:25";
+
+        start_actual_time = new Date(start_actual_time);
+        end_actual_time = new Date(end_actual_time);
+
+        var diff = end_actual_time - start_actual_time;
+
+        var diffSeconds = diff / 1000;
+        var HH = Math.floor(diffSeconds / 3600);
+        var MM = Math.floor(diffSeconds % 3600) / 60;
+
+        var formatted = ((HH < 10) ? ("0" + HH) : HH) + ":" + ((MM < 10) ? ("0" + MM) : MM)
+        var finday = HH / 24;
+
+        var dy = Math.ceil(finday).toFixed(1);
+        dy = dy + " " + "Days";
+
+        $('#event-duration').val(dy);
+
+
+
+    }
+
+
+
+</script>
+<style>
+    .tooltip1 {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltip1 .tooltiptext1 {
+            visibility: hidden;
+            width: 170px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltip1 .tooltiptext1::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltip1:hover .tooltiptext1 {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>
+
+

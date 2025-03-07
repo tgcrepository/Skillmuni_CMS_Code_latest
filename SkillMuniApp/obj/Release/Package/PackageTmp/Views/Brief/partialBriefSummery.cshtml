@@ -1,0 +1,118 @@
+﻿<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<style>
+    #user-wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-users {
+        margin: 1px 2px;
+        padding: 2px 4px;
+        border-radius: 50px;
+        width: 100px;
+        align-content: center;
+        text-align: center;
+        font-size: 10px;
+        font-weight: 600;
+        height: 21px;
+    }
+</style>
+<script>
+    var allPages = null;
+
+    $(function () {
+
+    });
+</script>
+@{
+
+    List<m2ostnext.Models.BriefResultSummery> sList = (List<m2ostnext.Models.BriefResultSummery>)ViewData["summeryList"];
+    List<m2ostnext.Models.UserAssignmentList> uList = (List<m2ostnext.Models.UserAssignmentList>)ViewData["unreadList"];
+    tbl_brief_master brief = (tbl_brief_master)ViewData["briefmaster"];
+
+}
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <div class="panel panel-default custom-panel">
+            <div class="panel-heading custom-panel-heading">
+                <div class="panel-title">brief summery </div>
+            </div>
+            <div class="panel-body custom-panel-body" id="summary-tab">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Brief Title :<b> @brief.brief_title</b> (ID : @brief.id_brief_master)</h3>
+                        <br />
+                        <ul class="nav nav-tabs">
+                            <li><a data-toggle="tab" href="#home">Pending List</a></li>
+                            <li class="active"><a data-toggle="tab" href="#menu1">Details</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane fade">
+                                <br />
+                                <table id="report-table-unassinged" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="35%">user name </th>
+                                            <th width="35%">reporting manager</th>
+                                            <th width="20%">assigned date</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (m2ostnext.Models.UserAssignmentList item in uList)
+                                        {
+                                            <tr id="urb-@item.id_brief_user_assignment">
+                                                <td>@(item.prname) </td>
+                                                <td>@(item.rmname) </td>
+                                                <td>@item.assignedtime</td>
+                                                <td>
+                                                    <a class="btn btn-default btn-info" href="javascript:void(0)" onclick="removeAssignmentFromUser(@("'"+item.brief_code+"'"),@item.id_brief_user_assignment)">
+                                                        <i class="glyphicon glyphicon-remove"></i> &nbsp; remove
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="menu1" class="tab-pane fade in active">
+                                <br />
+                                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="50%">user name / reporting manager</th>
+                                            <th width="20%">completed date</th>
+                                            <th width="20%">score</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (m2ostnext.Models.BriefResultSummery item in sList)
+                                        {
+                                            <tr>
+                                                <td>@(item.prname + " ( " + item.rmname + " )")</td>
+                                                <td>@item.completedtime</td>
+                                                <td>@(item.brief_result + " %")</td>
+                                                <td>
+                                                    <a class="btn btn-default btn-info btn-users" href="@Url.Action("BriefEvaluation", "Brief", new { brf = brief.brief_code,uid=item.id_user,atm=item.attempt_no })" target="_blank">
+                                                        Result Detail
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

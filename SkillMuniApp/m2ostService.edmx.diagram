@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7680b23f0ee54219ad9ce069990a16f7" Name="Diagram1">
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.city" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.country" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.downtime_log" Width="1.5" PointX="0.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.error_log" Width="1.5" PointX="0.75" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.job_cms_users" Width="1.5" PointX="18.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.job_organization" Width="1.5" PointX="20.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.masti_teacher_galleryfolder" Width="1.5" PointX="19.75" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.masti_teacher_photo_mapping" Width="1.5" PointX="20.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.sc_game_element_weightage" Width="1.5" PointX="21.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.sc_program_assessment_scoring" Width="1.5" PointX="21.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.sc_program_content_summary" Width="1.5" PointX="20.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.sc_program_kpi_score" Width="1.5" PointX="22.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.sc_program_kpi_weightage" Width="1.5" PointX="0.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.sc_program_log" Width="1.5" PointX="22.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.sc_report_game_process_path" Width="1.5" PointX="22.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.sc_report_game_process_score" Width="1.5" PointX="22.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.special_metric_master" Width="1.5" PointX="23.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.state" Width="1.5" PointX="23.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_academic_tile_log" Width="1.5" PointX="23.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_academic_tiles" Width="1.5" PointX="24.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_academy_brief_log" Width="1.5" PointX="24.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_academy_level_brief_restriction" Width="1.5" PointX="7.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_action" Width="1.5" PointX="13.5" PointY="20.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_annual_revenue_master" Width="1.5" PointX="24.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_api_authenticate" Width="1.5" PointX="24.75" PointY="24.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment" Width="1.5" PointX="5.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_answer" Width="1.5" PointX="16.75" PointY="18.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_audit" Width="1.5" PointX="24.75" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_categoty_mapping" Width="1.5" PointX="25.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_general" Width="1.5" PointX="9.75" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_header" Width="1.5" PointX="19" PointY="18.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_index" Width="1.5" PointX="25.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_mapping" Width="1.5" PointX="25.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_push" Width="1.5" PointX="18.75" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_question" Width="1.5" PointX="16.75" PointY="22.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_scoring_key" Width="1.5" PointX="16.75" PointY="26.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_sheet" Width="1.5" PointX="7.5" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_theme" Width="1.5" PointX="26.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessment_user_assignment" Width="1.5" PointX="0.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assessmnt_log" Width="1.5" PointX="26.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assignment_role_assessment" Width="1.5" PointX="14.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assignment_role_content" Width="1.5" PointX="26.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_assignment_role_program" Width="1.5" PointX="26.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_authcode" Width="1.5" PointX="26.75" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_badge_data" Width="1.5" PointX="27.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_badge_master" Width="1.5" PointX="27.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_badge_reward_mapping" Width="1.5" PointX="20.75" PointY="31.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_badge_won_message" Width="1.5" PointX="27.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_banner" Width="1.5" PointX="5.25" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_banner_ad_config" Width="1.5" PointX="22.75" PointY="31.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_banner_body" Width="1.5" PointX="28.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_banner_config_master" Width="1.5" PointX="28.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_batch" Width="1.5" PointX="7.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_answer" Width="1.5" PointX="9.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_audit" Width="1.5" PointX="11.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_b2c_index" Width="1.5" PointX="16.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_b2c_right_audit" Width="1.5" PointX="28.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_b2c_score_audit" Width="1.5" PointX="28.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_category" Width="1.5" PointX="24.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_category_mapping" Width="1.5" PointX="28.75" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_category_tile" Width="1.5" PointX="26.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_enquiry" Width="1.5" PointX="28.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_feedback_media" Width="1.5" PointX="29.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_index" Width="1.5" PointX="29.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_log" Width="1.5" PointX="29.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_log_audit" Width="1.5" PointX="30.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_m2ost_category_mapping" Width="1.5" PointX="0.75" PointY="34.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_master" Width="1.5" PointX="13.75" PointY="34.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_master_body" Width="1.5" PointX="30.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_master_template" Width="1.5" PointX="30.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_metadata" Width="1.5" PointX="30.75" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_progdist_mapping" Width="1.5" PointX="30.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_question" Width="1.5" PointX="30.75" PointY="34.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_question_complexity" Width="1.5" PointX="31.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_question_mapping" Width="1.5" PointX="31.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_question_metadata" Width="1.5" PointX="31.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_read_status" Width="1.5" PointX="15.75" PointY="35.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_status" Width="1.5" PointX="17.75" PointY="35.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_subcategory" Width="1.5" PointX="19.75" PointY="35.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_tile_academic_mapping" Width="1.5" PointX="21.75" PointY="35.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_tile_category_mapping" Width="1.5" PointX="23.75" PointY="35.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_tile_level_brief_restriction" Width="1.5" PointX="32.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_user_assignment" Width="1.5" PointX="7.75" PointY="36.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_user_feedback_master" Width="1.5" PointX="32.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_brief_version_control" Width="1.5" PointX="32.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_buisiness_stages_master" Width="1.5" PointX="32.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_business_type" Width="1.5" PointX="0.75" PointY="21.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_category" Width="1.5" PointX="5.25" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_category_associantion" Width="1.5" PointX="7.5" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_category_default" Width="1.5" PointX="32.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_category_heading" Width="1.5" PointX="7.5" PointY="24.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_category_heading_default" Width="1.5" PointX="32.75" PointY="33.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_category_order" Width="1.5" PointX="32.75" PointY="36.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_category_tiles" Width="1.5" PointX="5.25" PointY="23.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_category_tiles_default" Width="1.5" PointX="33.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_career_evaluation_master" Width="1.5" PointX="9.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_category_mapping" Width="1.5" PointX="33.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_company_details" Width="1.5" PointX="25.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_audit" Width="1.5" PointX="27.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_completion_report" Width="1.5" PointX="34.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_index" Width="1.5" PointX="0.75" PointY="38.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_job_organization_setup" Width="1.5" PointX="34.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_jobindustry" Width="1.5" PointX="34.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_jobindustry_tgc_setup" Width="1.5" PointX="34.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_jobindustry_user_mapping" Width="1.5" PointX="19.75" PointY="38.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_jobrole" Width="1.5" PointX="21.75" PointY="38.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_jobrole_user_mapping" Width="1.5" PointX="34.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_log" Width="1.5" PointX="34.75" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_progdist_mapping" Width="1.5" PointX="34.75" PointY="33.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_role_answerkey_setup" Width="1.5" PointX="34.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evaluation_tile" Width="1.5" PointX="35.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evalution_answer_key" Width="1.5" PointX="15.75" PointY="39.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evalution_answer_key_setup" Width="1.5" PointX="29.75" PointY="39.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_evalution_psychometric_setup" Width="1.5" PointX="36.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_industry" Width="1.5" PointX="36.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_industry_role" Width="1.5" PointX="36.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_organization_ce_setup" Width="1.5" PointX="11.75" PointY="40.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_ce_organization_ce_setup_industry" Width="1.5" PointX="36.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_certificate_assignment" Width="1.5" PointX="36.75" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_certificate_configure" Width="1.5" PointX="36.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_certificate_configure_data" Width="1.5" PointX="36.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_childinformation" Width="1.5" PointX="36.75" PointY="34.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cms_role_action" Width="1.5" PointX="31.75" PointY="40.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cms_role_action_mapping" Width="1.5" PointX="33.75" PointY="40.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cms_roles" Width="1.5" PointX="37.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cms_users" Width="1.5" PointX="17.75" PointY="41.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_college_list" Width="1.5" PointX="23.75" PointY="41.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_color_config" Width="1.5" PointX="38.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_color_config_flag" Width="1.5" PointX="0.75" PointY="42.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content" Width="1.5" PointX="5.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_answer" Width="1.5" PointX="11.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_answer_default" Width="1.5" PointX="38.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_answer_steps" Width="1.5" PointX="14" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_banner" Width="1.5" PointX="7.5" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_counters" Width="1.5" PointX="38.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_default" Width="1.5" PointX="38.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_footer" Width="1.5" PointX="5.25" PointY="41.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_header" Width="1.5" PointX="5.25" PointY="28" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_header_footer" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_level" Width="1.5" PointX="19.75" PointY="42.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_link" Width="1.5" PointX="38.75" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_metadata" Width="1.5" PointX="14" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_notification_master" Width="1.5" PointX="38.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_organization_mapping" Width="1.5" PointX="10.5" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_organization_mapping_default" Width="1.5" PointX="38.75" PointY="34.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_program_mapping" Width="1.5" PointX="38.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_right_association" Width="1.5" PointX="10.25" PointY="24" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_role_mapping" Width="1.5" PointX="35.75" PointY="42.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_type" Width="1.5" PointX="14.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_type_link" Width="1.5" PointX="17" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_content_user_assisgnment" Width="1.5" PointX="37.75" PointY="42.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_couponsredeemed" Width="1.5" PointX="7.75" PointY="43.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_csst_role" Width="1.5" PointX="5.25" PointY="31.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_currency_data" Width="1.5" PointX="13.75" PointY="43.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_currency_points" Width="1.5" PointX="39.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cv_additional_info" Width="1.5" PointX="25.75" PointY="43.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cv_education" Width="1.5" PointX="27.75" PointY="43.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cv_master" Width="1.5" PointX="29.75" PointY="43.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cv_personel_info" Width="1.5" PointX="31.75" PointY="43.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_cv_project" Width="1.5" PointX="39.75" PointY="42.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_degree_master" Width="1.5" PointX="40.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_device_type" Width="1.5" PointX="13.5" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_email_feedback_user" Width="1.5" PointX="40.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_email_template" Width="1.5" PointX="9.75" PointY="44.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_email_template_body" Width="1.5" PointX="40.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_employee_strength_master" Width="1.5" PointX="40.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_enquiry_reason" Width="1.5" PointX="40.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_entrepreneurship_files" Width="1.5" PointX="40.75" PointY="24.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_entrepreneurship_master" Width="1.5" PointX="40.75" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_event_organisation_master" Width="1.5" PointX="40.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_event_sponsor_master" Width="1.5" PointX="40.75" PointY="35.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_event_type_mapping" Width="1.5" PointX="40.75" PointY="38.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_event_type_master" Width="1.5" PointX="0.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_excel" Width="1.5" PointX="2.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_facilitator_users" Width="1.5" PointX="4.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_feedback_bank" Width="1.5" PointX="10.5" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_feedback_bank_link" Width="1.5" PointX="12.75" PointY="28.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_feedback_data" Width="1.5" PointX="12.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_feedback_master" Width="1.5" PointX="15.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_feedback_media" Width="1.5" PointX="41.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_feedback_role" Width="1.5" PointX="17.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_foundation_master" Width="1.5" PointX="19.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_academic_mapping" Width="1.5" PointX="21.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_creation" Width="1.5" PointX="33.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_group" Width="1.5" PointX="41.75" PointY="41.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_group_association" Width="1.5" PointX="41.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_group_participatant" Width="1.5" PointX="42.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_master" Width="1.5" PointX="42.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_metric_kpi_mapping" Width="1.5" PointX="42.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_path" Width="1.5" PointX="42.75" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_phase" Width="1.5" PointX="42.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_process_path" Width="1.5" PointX="42.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_solo" Width="1.5" PointX="42.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_game_user_data" Width="1.5" PointX="42.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_graduation_year" Width="1.5" PointX="35.75" PointY="46.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_industry" Width="1.5" PointX="0.75" PointY="18.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job" Width="1.5" PointX="37.75" PointY="46.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_assessment_mapping" Width="1.5" PointX="9.75" PointY="47.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_category" Width="1.5" PointX="27.75" PointY="47.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_category_header" Width="1.5" PointX="43.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_email_template_body" Width="1.5" PointX="43.75" PointY="41.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_interview_master" Width="1.5" PointX="43.75" PointY="44.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_interview_result_log" Width="1.5" PointX="43.75" PointY="47.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_interview_rounds_mapping" Width="1.5" PointX="44.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_location_mapping" Width="1.5" PointX="44.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_offline_mapping" Width="1.5" PointX="6.75" PointY="48.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_online_mapping" Width="1.5" PointX="44.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_publish_calender_report" Width="1.5" PointX="11.75" PointY="48.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_reject_feedback_log" Width="1.5" PointX="44.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_round_histroy" Width="1.5" PointX="17.75" PointY="48.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_telephonic_mapping" Width="1.5" PointX="44.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_user_log" Width="1.5" PointX="44.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_job_zoom_meeting_id" Width="1.5" PointX="23.75" PointY="48.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_joburl_master" Width="1.5" PointX="44.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_kpi_grid" Width="1.5" PointX="44.75" PointY="33.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_kpi_master" Width="1.5" PointX="29.75" PointY="48.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_kpi_program_scoring" Width="1.5" PointX="44.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_landing_page" Width="1.5" PointX="45.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_league_message" Width="1.5" PointX="13.75" PointY="49.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_leagues_data" Width="1.5" PointX="19.75" PointY="49.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_mail_verification" Width="1.5" PointX="45.75" PointY="41.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_menu" Width="1.5" PointX="45.75" PointY="44.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_menu_default" Width="1.5" PointX="45.75" PointY="47.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_menu_type" Width="1.5" PointX="46.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_min_qualification_mapping" Width="1.5" PointX="0.75" PointY="50.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_mini_quali_master" Width="1.5" PointX="2.75" PointY="50.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_mutthi_mein_sitare_milestone" Width="1.5" PointX="46.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_mutthi_mein_sitare_skill" Width="1.5" PointX="46.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_mutthi_skill_development_detail" Width="1.5" PointX="46.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_mutthi_skill_milestone_detail" Width="1.5" PointX="46.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_mutthimeinsitare_master" Width="1.5" PointX="46.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_news_ticker" Width="1.5" PointX="46.75" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_non_disclousure_clause_content" Width="1.5" PointX="46.75" PointY="33.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_non_disclousure_clause_log" Width="1.5" PointX="46.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_notification" Width="1.5" PointX="39.75" PointY="50.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_notification_config" Width="1.5" PointX="45.75" PointY="50.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_notification_pre_config" Width="1.5" PointX="15.75" PointY="51.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_notification_reminder" Width="1.5" PointX="47.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_offline_expiry" Width="1.5" PointX="9.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_org_mapping" Width="1.5" PointX="25.75" PointY="51.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_organisation_banner" Width="1.5" PointX="5.25" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_organisation_banner_links" Width="1.5" PointX="31.75" PointY="51.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_organisation_status" Width="1.5" PointX="33.75" PointY="51.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_organization" Width="1.5" PointX="3" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_popup_info" Width="1.5" PointX="47.75" PointY="40.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_popup_info_mapping" Width="1.5" PointX="47.75" PointY="43.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_profile" Width="1.5" PointX="47.75" PointY="47.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_promocode_master" Width="1.5" PointX="48.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_referral_code_master" Width="1.5" PointX="4.75" PointY="52.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_referral_code_points_config" Width="1.5" PointX="48.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_referral_code_user_mapping" Width="1.5" PointX="6.75" PointY="52.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_relegtion_data" Width="1.5" PointX="8.75" PointY="52.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_reminder_notification_config" Width="1.5" PointX="48.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_reminder_notification_log" Width="1.5" PointX="48.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_report_content" Width="1.5" PointX="48.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_report_login_log" Width="1.5" PointX="48.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_restriction_user_log" Width="1.5" PointX="48.75" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_rewards_master" Width="1.5" PointX="27.75" PointY="52.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_rewards_redeem_master" Width="1.5" PointX="48.75" PointY="33.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_role" Width="1.5" PointX="5.25" PointY="37.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_role_user_mapping" Width="1.5" PointX="0.75" PointY="53.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_rs_type_qna" Width="1.5" PointX="10.75" PointY="53.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_saksham_assessment_detail" Width="1.5" PointX="49.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_saksham_assessment_master" Width="1.5" PointX="12.75" PointY="53.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_saksham_assessment_milestone_detail" Width="1.5" PointX="21.75" PointY="53.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_saksham_assessment_skill_detail" Width="1.5" PointX="49.75" PointY="38.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_scheduled_event" Width="1.5" PointX="49.75" PointY="41.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_scheduled_event_subscription_log" Width="1.5" PointX="41.75" PointY="53.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_signup_config" Width="1.5" PointX="49.75" PointY="51.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_skill_development" Width="1.5" PointX="50.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_skill_milestone" Width="1.5" PointX="50.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_social_entrepreneurship" Width="1.5" PointX="50.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_social_entrepreneurship_product_mapping" Width="1.5" PointX="17.75" PointY="54.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_social_entrepreneurship_product_master" Width="1.5" PointX="50.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_social_platform_active_directory" Width="1.5" PointX="50.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_social_platform_master" Width="1.5" PointX="23.75" PointY="54.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_special_metric_master" Width="1.5" PointX="50.75" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sso_log" Width="1.5" PointX="50.75" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_stream_master" Width="1.5" PointX="29.75" PointY="54.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sub_event_type_mapping" Width="1.5" PointX="50.75" PointY="35.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sub_event_type_master" Width="1.5" PointX="31.75" PointY="54.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_subscriber_attendance" Width="1.5" PointX="33.75" PointY="54.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_subscriptions" Width="1.5" PointX="9.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_event_college_list" Width="1.5" PointX="49.75" PointY="54.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_fest_event_mapping" Width="1.5" PointX="51.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_fest_event_registration" Width="1.5" PointX="25.75" PointY="55.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_fest_master" Width="1.5" PointX="51.75" PointY="38.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_fest_otp" Width="1.5" PointX="51.75" PointY="46.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_fest_otp_expiry_config" Width="1.5" PointX="43.75" PointY="55.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_higher_education_master" Width="1.5" PointX="51.75" PointY="49.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_higher_education_timeslot" Width="1.5" PointX="45.75" PointY="55.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_higher_education_user_registration" Width="1.5" PointX="51.75" PointY="53.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_seminar_master" Width="1.5" PointX="0.75" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_seminar_timeslot" Width="1.5" PointX="52.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_seminar_timeslot_new" Width="1.5" PointX="2.75" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_seminar_user_registration" Width="1.5" PointX="4.75" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_sul_slot_seminar" Width="1.5" PointX="52.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_survey" Width="1.5" PointX="16.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_survey_bank" Width="1.5" PointX="16.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_survey_bank_link" Width="1.5" PointX="18.5" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_survey_data" Width="1.5" PointX="18.5" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_task" Width="1.5" PointX="52.75" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_temp_user_upload" Width="1.5" PointX="14.75" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_theme_leagues" Width="1.5" PointX="52.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_theme_master" Width="1.5" PointX="52.75" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_theme_metric" Width="1.5" PointX="19.75" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_theme_organisation_mapping" Width="1.5" PointX="52.75" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_themes" Width="1.5" PointX="52.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_third_party_app_right_swipe_mapping" Width="1.5" PointX="52.75" PointY="33.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_third_party_right_swipe_m2ost" Width="1.5" PointX="35.75" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_university_kpi_grid" Width="1.5" PointX="37.75" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_university_kpi_master" Width="1.5" PointX="53.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_university_special_point_grid" Width="1.5" PointX="6.75" PointY="57.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_university_special_points_master" Width="1.5" PointX="16.75" PointY="57.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_url_notification_master" Width="1.5" PointX="21.75" PointY="57.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user" Width="1.5" PointX="7.5" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_applied_job" Width="1.5" PointX="27.75" PointY="57.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_badge_log" Width="1.5" PointX="29.75" PointY="57.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_currency_log" Width="1.5" PointX="53.75" PointY="37.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_data" Width="1.5" PointX="15.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_device_link" Width="1.5" PointX="53.75" PointY="40.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_enquiry_data" Width="1.5" PointX="53.75" PointY="43.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_event_mapping" Width="1.5" PointX="53.75" PointY="47.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_extra_curricular_certificates" Width="1.5" PointX="53.75" PointY="51.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_game_assignment" Width="1.5" PointX="47.75" PointY="57.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_game_score_log" Width="1.5" PointX="49.75" PointY="57.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_game_special_metric_score_log" Width="1.5" PointX="53.75" PointY="54.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_gcm_log" Width="1.5" PointX="54.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_job_preferences" Width="1.5" PointX="54.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_job_preferences_category" Width="1.5" PointX="8.75" PointY="58.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_job_preferences_job_type" Width="1.5" PointX="10.75" PointY="58.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_job_preferences_location" Width="1.5" PointX="54.75" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_job_preferences_skill" Width="1.5" PointX="54.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_league_log" Width="1.5" PointX="54.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_log_master" Width="1.5" PointX="54.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_login_log" Width="1.5" PointX="54.75" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_programs" Width="1.5" PointX="54.75" PointY="33.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_ref_mapping" Width="1.5" PointX="31.75" PointY="58.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_zone" Width="1.5" PointX="39.75" PointY="58.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_user_zone_master" Width="1.5" PointX="41.75" PointY="58.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_version_control" Width="1.5" PointX="51.75" PointY="58.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_version_control_ios" Width="1.5" PointX="53.75" PointY="58.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_video_cv" Width="1.5" PointX="55.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_web_version_control" Width="1.5" PointX="18.75" PointY="59.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.tbl_welcome_gif" Width="1.5" PointX="23.75" PointY="59.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_sul_prd_v2Model.userscore" Width="1.5" PointX="55.75" PointY="36.375" IsExpanded="true" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk3_tbl_user_data" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assesment_sht2" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assessment1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assessment_header3" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assess_gene1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assess_gene2" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assess_gene3" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assessment_header1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assessment_header2" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_assesment_sht1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_bann2" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_org_banner" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk2_tbl_organization" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_asso3" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_org_cont2" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_category" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_asso1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_head1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_tile1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_bann1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_hf1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_org_2" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_org_cont3" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk2_tbl_subscriptions" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_content_answer_steps" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_content_metadata" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_content_type_link" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_survey" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk2_tbl_survey" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_hf2" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_hf3" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_org_cont1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_content_org_1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk2_tbl_content_type_link" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_org_csst" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk2_tbl_user_data" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.FK2_tbl_feedback_bank_link" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk2_tbl_feedback_data" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk3_tbl_feedback_data" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_organization" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_offline_expiry" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk_org_ban" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.tbl_role1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_subscriptions" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.FK1_tbl_survey_bank_link" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_survey_data" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.FK2_tbl_survey_bank_link" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk2_tbl_survey_data" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk3_tbl_survey_data" ManuallyRouted="false" />
+        <AssociationConnector Association="db_sul_prd_v2Model.fk1_tbl_user_data" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

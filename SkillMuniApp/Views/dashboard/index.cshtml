@@ -1,0 +1,916 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+
+}
+
+@{
+    List<tbl_organization> organisation = (List<tbl_organization>)ViewData["organisation"];
+    m2ostnext.Models.UserSession Sessions = (m2ostnext.Models.UserSession)HttpContext.Current.Session["UserSession"];
+    db_m2ostEntities db = new db_m2ostEntities();
+    tbl_organization org = new tbl_organization();
+    int usercount = Convert.ToInt32(ViewData["usercount"]);
+    int totalCat = Convert.ToInt32(ViewData["totalCat"]);
+    int breifcount = Convert.ToInt32(ViewData["breifcount"]);
+    int ActiveUser = Convert.ToInt32(ViewData["ActiveUser"]);
+    int InActiveUser = Convert.ToInt32(ViewData["InActiveUser"]);
+    int Activebrief = Convert.ToInt32(ViewData["Activebrief"]);
+    int InActivebrief = Convert.ToInt32(ViewData["InActivebrief"]);
+    int Activecat = Convert.ToInt32(ViewData["Activecat"]);
+    int InActivecat = Convert.ToInt32(ViewData["InActivecat"]);
+    int noneProf = Convert.ToInt32(ViewData["noneProf"]);
+    List<dashboard_brief_percentage> dbp = (List<dashboard_brief_percentage>)ViewData["dbp"];
+    List<m2ostnext.Models.location_user_piechart> lcp = (List<m2ostnext.Models.location_user_piechart>)ViewData["lup"];
+    List<m2ostnext.Models.tbl_corporate_form> tcp = (List<m2ostnext.Models.tbl_corporate_form>)ViewData["tcf"];
+    List<tbl_academic_tiles> tat = (List<tbl_academic_tiles>)ViewData["tat"];
+    List<m2ostnext.Models.dashboard_index_tile_report> ditr = (List<m2ostnext.Models.dashboard_index_tile_report>)ViewData["ditr"];
+    List<tbl_brief_category_tile> tbct = (List<tbl_brief_category_tile>)ViewData["tbct"];
+
+    DateTime date = (DateTime)ViewData["date"];
+    if (Sessions.id_ORGANIZATION != "")
+    {
+        int ids = Convert.ToInt32(Sessions.id_ORGANIZATION);
+        org = db.tbl_organization.Find(ids);
+    }
+    int flagmsg = (int)ViewData["flag"];
+    int cl = 1;
+    string bgcolor = "";
+    string iconF = "";
+    string wordB = "";
+}
+<script src="~/Content/amcharts_3.21.14.free/amc/v4/core.js"></script>
+<script src="~/Content/amcharts_3.21.14.free/amc/v4/charts.js"></script>
+<script src="~/Content/amcharts_3.21.14.free/amc/v4/animated.js"></script>
+
+<link href="~/Content/datatable/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="~/Content/datatable/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<script src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/datatable/js/dataTables.buttons.min.js"></script>
+<script src="~/Content/datatable/js/jszip.min.js"></script>
+<script src="~/Content/datatable/js/buttons.html5.min.js"></script>
+@*<link href="~/Content/bower_components/Ionicons/css/ionicons.css" rel="stylesheet" type="text/css">*@
+<style>
+    .content {
+        min-height: 250px;
+        padding: 15px;
+        margin-right: auto;
+        margin-left: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .small-box {
+        border-radius: 2px;
+        position: relative;
+        display: block;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    }
+
+        .small-box h3, .small-box p {
+            z-index: 5;
+        }
+
+        .small-box h3 {
+            font-size: 38px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            white-space: nowrap;
+            padding: 0;
+            color: #fff !important;
+        }
+
+    .bg-red, .bg-yellow, .bg-aqua, .bg-blue, .bg-light-blue, .bg-green, .bg-navy, .bg-teal, .bg-olive, .bg-lime, .bg-orange, .bg-fuchsia, .bg-purple, .bg-maroon, .bg-black, .bg-red-active, .bg-yellow-active, .bg-aqua-active, .bg-blue-active, .bg-light-blue-active, .bg-green-active, .bg-navy-active, .bg-teal-active, .bg-olive-active, .bg-lime-active, .bg-orange-active, .bg-fuchsia-active, .bg-purple-active, .bg-maroon-active, .bg-black-active, .callout.callout-danger, .callout.callout-warning, .callout.callout-info, .callout.callout-success, .alert-success, .alert-danger, .alert-error, .alert-warning, .alert-info, .label-danger, .label-info, .label-warning, .label-primary, .label-success, .modal-primary .modal-body, .modal-primary .modal-header, .modal-primary .modal-footer, .modal-warning .modal-body, .modal-warning .modal-header, .modal-warning .modal-footer, .modal-info .modal-body, .modal-info .modal-header, .modal-info .modal-footer, .modal-success .modal-body, .modal-success .modal-header, .modal-success .modal-footer, .modal-danger .modal-body, .modal-danger .modal-header, .modal-danger .modal-footer {
+        color: #fff !important;
+    }
+
+    .small-box > .inner {
+        padding: 10px;
+    }
+
+    .small-box > .small-box-footer {
+        position: relative;
+        text-align: center;
+        padding: 3px 0;
+        color: #fff;
+        color: rgba(255,255,255,0.8);
+        display: block;
+        z-index: 10;
+        background: rgba(0,0,0,0.1);
+        text-decoration: none;
+    }
+
+    .bg-aqua, .callout.callout-info, .alert-info, .label-info, .modal-info .modal-body {
+        background-color: #00c0ef !important;
+    }
+
+    .bg-green, .callout.callout-success, .alert-success, .label-success, .modal-success .modal-body {
+        background-color: #00a65a !important;
+    }
+
+    .bg-yellow, .callout.callout-warning, .alert-warning, .label-warning, .modal-warning .modal-body {
+        background-color: #f39c12 !important;
+    }
+
+    .bg-red, .callout.callout-danger, .alert-danger, .alert-error, .label-danger, .modal-danger .modal-body {
+        background-color: #dd4b39 !important;
+    }
+
+    .small-box:hover .icon {
+        font-size: 95px;
+    }
+
+    .small-box .icon {
+        -webkit-transition: all .3s linear;
+        -o-transition: all .3s linear;
+        transition: all .3s linear;
+        position: absolute;
+        top: 0px;
+        right: 30px;
+        z-index: 0;
+        font-size: 90px;
+        color: rgba(0,0,0,0.15);
+    }
+</style>
+<style>
+
+    .connectedSortable {
+        min-height: 100px;
+    }
+
+    .nav-tabs-custom {
+        margin-bottom: 20px;
+        background: #fff;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        border-radius: 3px;
+    }
+
+    .tab-pane {
+        position: relative;
+        padding-top: 0px;
+    }
+</style>
+
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 280px;
+    }
+</style>
+
+<script>
+    am4core.ready(function () {
+        var datajs = @Html.Raw(Json.Encode(lcp));
+        //console.log(datajs);
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create("chartdiv", am4charts.PieChart);
+
+        // Add data
+        //chart.data = [{
+        //    "country": "Lithuania",
+        //    "litres": 501.9
+        //}, {
+        //    "country": "Czech Republic",
+        //    "litres": 301.9
+        //}, {
+        //    "country": "Ireland",
+        //    "litres": 201.1
+        //}, {
+        //    "country": "Germany",
+        //    "litres": 165.8
+        //}, {
+        //    "country": "Australia",
+        //    "litres": 139.9
+        //}, {
+        //    "country": "Austria",
+        //    "litres": 128.3
+        //}, {
+        //    "country": "UK",
+        //    "litres": 99
+        //}, {
+        //    "country": "Belgium",
+        //    "litres": 60
+        //}, {
+        //    "country": "The Netherlands",
+        //    "litres": 50
+        //}];
+
+        chart.data = datajs;
+
+        // Add and configure Series
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "total_user";
+        pieSeries.dataFields.category = "location";
+        pieSeries.slices.template.stroke = am4core.color("#fff");
+        pieSeries.slices.template.strokeWidth = 2;
+        pieSeries.slices.template.strokeOpacity = 1;
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+    }); // end am4core.ready()
+</script>
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3>@usercount</h3>
+                    <p>Number of registered users</p>
+                </div>
+                <div class="icon">
+                    <i class="glyphicon glyphicon-user"></i>
+                </div>
+                <div class="small-box-footer">
+                    <span style="float: left;margin-left: 10%;">Active : @ActiveUser</span>
+                    <span>Inactive : @InActiveUser</span>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>@breifcount</h3>
+                    <p>Total Number of Briefs</p>
+                </div>
+                <div class="icon">
+                    <i class="glyphicon glyphicon-book"></i>
+                </div>
+                <div class="small-box-footer">
+                    <span style="float: left;margin-left: 10%;">Active : @Activebrief</span>
+                    <span>Inactive : @InActivebrief</span>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <h3>@totalCat</h3>
+                    <p>Total Number of categories</p>
+                </div>
+                <div class="icon">
+                    <i class="glyphicon glyphicon-tags"></i>
+                </div>
+                <div class="small-box-footer">
+                    <span style="float: left;margin-left: 10%;">Active : @Activecat</span>
+                    <span>Inactive : @InActivecat</span>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-red">
+                <div class="inner">
+                    @*<h3>@date.ToString("dd/MM/yyyy")</h3>*@
+                    <h3>@noneProf</h3>
+                    <p>Profile not updated users</p>
+                </div>
+                <div class="icon">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </div>
+                <div class="small-box-footer">
+                    <span style="float: left;margin-left: 10%;"></span>
+                    @*<span>@DateTime.Now.DayOfWeek</span>*@
+                    <span><br /></span>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <!-- TABLE: LATEST ORDERS -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Top 5 Location Registered Users</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="chartdiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Brief Reports</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- Info Boxes Style 2 -->
+                @foreach (var item in dbp)
+                {
+                    if (cl == 1)
+                    {
+                        bgcolor = "bg-yellow";
+                        iconF = "fa-book";
+                        wordB = "completed";
+                    }
+                    else if (cl == 2)
+                    {
+                        bgcolor = "bg-green";
+                        iconF = "fa-clock-o";
+                        wordB = "Pending";
+                    }
+                    else if (cl == 3)
+                    {
+                        bgcolor = "bg-red";
+                        iconF = "fa-trash-o";
+                        wordB = "Deleted";
+                    }
+                    <div class="info-box @bgcolor">
+                        <span class="info-box-icon"><i class="fa @iconF" aria-hidden="true"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">@item.Status</span>
+                            <span class="info-box-number">@item.status_count</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: @item.percentage%"></div>
+                            </div>
+                            <span class="progress-description">
+                                @item.percentage% @wordB
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    cl++;
+                }
+            </div>
+            <!-- /.info-box -->
+            @*<div class="info-box bg-aqua">
+                    <span class="info-box-icon"><i class="ion-ios-chatbubble-outline"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Direct Messages</span>
+                        <span class="info-box-number">163,921</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 40%"></div>
+                        </div>
+                        <span class="progress-description">
+                            40% Increase in 30 Days
+                        </span>
+                    </div>
+                </div>*@
+            <!-- /.info-box -->
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Academic Report</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Select Academy</label>
+                            <select class="form-control" id="academicId" onchange="getTile()">
+                                <option value="0" selected>All</option>
+                                @foreach (var item in tat)
+                                {
+                                    <option value="@item.id_academic_tile">@item.tile_name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Select Tile</label>
+                            <select class="form-control" id="tileId" onchange="getTileValues()">
+                                <option value="0">All</option>
+                                @foreach (var item in tbct)
+                                {
+                                    <option value="@item.id_brief_category_tile">@item.category_tile</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <table class="table" id="tileRep">
+                        <thead>
+                            <tr style="font-size: 12px;">
+                                <th>Tile Name</th>
+                                <th>Category Tile</th>
+                                <th>Brief Category</th>
+                                <th>Brief</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tileTBody">
+                            @foreach (var item in ditr)
+                            {
+                                <tr style="font-size: 12px;">
+                                    <td>@item.tile_name</td>
+                                    <td>@item.category_tile</td>
+                                    <td>@item.brief_category</td>
+                                    <td>@item.brief_title</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Lead Generation</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <label class="control-label">Select Type</label>
+                    <select class="form-control" id="flagType" onchange="changeFlag()" style="width:50%">
+                        <option value="" disabled>select</option>
+                        <option value="tpo" selected>TPO</option>
+                        <option value="corp">Corporate</option>
+                    </select>
+                    <br />
+                    <table class="table" id="leadTbl">
+                        <thead style="font-size: 12px;">
+                            <tr>
+                                <th>Name</th>
+                                <th>Contact No</th>
+                                <th>Email</th>
+                                <th>College</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyApp" style="font-size: 12px;"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+
+    <div style="display:none">
+        <div id="tpoApp">
+            @foreach (var item in tcp)
+            {
+                if (item.form_flag == "tpo")
+                {
+                    <tr>
+                        <td>@item.name</td>
+                        <td>@item.contact_number</td>
+                        <td>@item.email</td>
+                        <td>@item.college_name</td>
+                    </tr>
+                }
+            }
+        </div>
+        <div id="corpApp">
+            @foreach (var item in tcp)
+            {
+                if (item.form_flag == "corp")
+                {
+                    <tr>
+                        <td>@item.name</td>
+                        <td>@item.contact_number</td>
+                        <td>@item.email</td>
+                        <td>@item.college_name</td>
+                    </tr>
+                }
+            }
+        </div>
+    </div>
+
+    @*<div class="row">
+            <div class="col-md-6">
+                <!-- TO DO List -->
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">To Do List</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
+                        <ul class="todo-list">
+                            <li>
+                                <!-- drag handle -->
+                                <span class="handle">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <!-- checkbox -->
+                                <input type="checkbox" value="">
+                                <!-- todo text -->
+                                <span class="text">Design a nice theme</span>
+                                <!-- Emphasis label -->
+                                <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
+                                <!-- General tools such as edit or delete-->
+                                <div class="tools">
+                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-trash-o"></i>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="handle">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <input type="checkbox" value="">
+                                <span class="text">Make the theme responsive</span>
+                                <small class="label label-info"><i class="fa fa-clock-o"></i> 4 hours</small>
+                                <div class="tools">
+                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-trash-o"></i>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="handle">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <input type="checkbox" value="">
+                                <span class="text">Let theme shine like a star</span>
+                                <small class="label label-warning"><i class="fa fa-clock-o"></i> 1 day</small>
+                                <div class="tools">
+                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-trash-o"></i>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="handle">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <input type="checkbox" value="">
+                                <span class="text">Let theme shine like a star</span>
+                                <small class="label label-success"><i class="fa fa-clock-o"></i> 3 days</small>
+                                <div class="tools">
+                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-trash-o"></i>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="handle">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <input type="checkbox" value="">
+                                <span class="text">Check your messages and notifications</span>
+                                <small class="label label-primary"><i class="fa fa-clock-o"></i> 1 week</small>
+                                <div class="tools">
+                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-trash-o"></i>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="handle">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <input type="checkbox" value="">
+                                <span class="text">Let theme shine like a star</span>
+                                <small class="label label-default"><i class="fa fa-clock-o"></i> 1 month</small>
+                                <div class="tools">
+                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-trash-o"></i>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix no-border">
+                        <button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Add item</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- TABLE: LATEST ORDERS -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Oraganisation Status</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Popularity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><a href="pages/examples/invoice.html">OR9842</a></td>
+                                        <td>Call of Duty IV</td>
+                                        <td><span class="label label-success">Active</span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><a href="pages/examples/invoice.html">OR1848</a></td>
+                                        <td>Samsung Smart TV</td>
+                                        <td><span class="label label-warning">Active</span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><a href="pages/examples/invoice.html">OR7429</a></td>
+                                        <td>iPhone 6 Plus</td>
+                                        <td><span class="label label-danger">Active</span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><a href="pages/examples/invoice.html">OR7429</a></td>
+                                        <td>Samsung Smart TV</td>
+                                        <td><span class="label label-info">Active</span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><a href="pages/examples/invoice.html">OR1848</a></td>
+                                        <td>Samsung Smart TV</td>
+                                        <td><span class="label label-warning">Inactive</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="pages/examples/invoice.html">OR7429</a></td>
+                                        <td>iPhone 6 Plus</td>
+                                        <td><span class="label label-danger">Inactive</span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><a href="pages/examples/invoice.html">OR9842</a></td>
+                                        <td>Call of Duty IV</td>
+                                        <td><span class="label label-success">Active</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">View All</a>
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>*@
+    @*<div class="row">
+            <div class="col-md-8">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Recently Added organization</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <ul class="products-list product-list-in-box">
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="~/Content/images/bannerSkillmuni.png" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title">
+                                        Samsung TV
+                                        <span class="label label-warning pull-right">$1800</span>
+                                    </a>
+                                    <span class="product-description">
+                                        Samsung 32" 1080p 60Hz LED Smart HDTV.
+                                    </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="~/Content/images/bcscc.png" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title">
+                                        Bicycle
+                                        <span class="label label-info pull-right">$700</span>
+                                    </a>
+                                    <span class="product-description">
+                                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                                    </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="~/Content/images/skillmunilogo.png" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title">
+                                        Xbox One <span class="label label-danger pull-right">$350</span>
+                                    </a>
+                                    <span class="product-description">
+                                        Xbox One Console Bundle with Halo Master Chief Collection.
+                                    </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="~/Content/images/cscc.png" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title">
+                                        PlayStation 4
+                                        <span class="label label-success pull-right">$399</span>
+                                    </a>
+                                    <span class="product-description">
+                                        PlayStation 4 500GB Console (PS4)
+                                    </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                        </ul>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer text-center">
+                        <a href="javascript:void(0)" class="uppercase">View All</a>
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                </div>
+        </div>*@
+</section>
+<script>
+    function changeFlag() {
+        var ft = $("#flagType").val();
+        var data = @Html.Raw(Json.Encode(tcp));
+        $('#leadTbl').dataTable().fnDestroy();
+        $("#bodyApp").html("");
+        if (ft == "tpo") {
+            var str = '';
+            for (i = 0; i < data.length; i++)
+            {
+                if (data[i].form_flag == "tpo") {
+                    str += '<tr><td>' + data[i].name + '</td><td>' + data[i].contact_number + '</td><td>' + data[i].email + '</td><td>' + data[i].college_name + '</td></tr>';
+                }
+            }            
+            $("#bodyApp").append(str);
+             dataTable_func();
+        }
+        else {
+            var str = '';
+            for (i = 0; i < data.length; i++)
+            {
+                if (data[i].form_flag == "corp") {
+                    str += '<tr><td>' + data[i].name + '</td><td>' + data[i].contact_number + '</td><td>' + data[i].email + '</td><td>' + data[i].college_name + '</td></tr>';
+                }
+            }            
+            $("#bodyApp").append(str);
+            dataTable_func();
+        }
+    }
+
+    function initTable() {
+         var ft = $("#flagType").val();
+        var data = @Html.Raw(Json.Encode(tcp));
+        $('#leadTbl').dataTable().fnDestroy();
+        $("#bodyApp").html("");
+        if (ft == "tpo") {
+            var str = '';
+            for (i = 0; i < data.length; i++)
+            {
+                if (data[i].form_flag == "tpo") {
+                    str += '<tr><td>' + data[i].name + '</td><td>' + data[i].contact_number + '</td><td>' + data[i].email + '</td><td>' + data[i].college_name + '</td></tr>';
+                }
+            }            
+            $("#bodyApp").append(str);
+             dataTable_func();
+        }
+    }
+
+    $(document).ready(function () {
+        initTable();        
+         $('#tileRep').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                //'copy', 'csv', 'excel', 'pdf', 'print'
+                'csv', 'excel'
+            ]
+        });
+    });
+
+    function dataTable_func() {        
+         $('#leadTbl').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                //'copy', 'csv', 'excel', 'pdf', 'print'
+                'csv', 'excel'
+            ]
+         });         
+    }
+
+    function getTile() {
+        var aId = $("#academicId").val();
+
+        $.ajax({
+            url: '@Url.Action("tile_report_json","Dashboard")',     
+            type: "GET",
+            data: { "acadId" : aId }, 
+            success: function (data) {
+                if (data.ditr.length > 0) {
+                    $('#tileRep').dataTable().fnDestroy();
+                    $("#tileTBody").html("");
+                    var str = '';
+                    for (i = 0; i < data.ditr.length; i++) {
+                        str += '<tr style="font-size: 12px;"><td>' + data.ditr[i].tile_name + '</td><td>' + data.ditr[i].category_tile + '</td><td>' + data.ditr[i].brief_category + '</td><td>' + data.ditr[i].brief_title + '</td></tr>'
+                    }                    
+                    $("#tileTBody").append(str);
+                    tileReportDatatable();
+                }
+                if (data.tbct.length > 0) {                    
+                    var str = '';
+                    str += '<option value="0" selected>All</option>';
+                    for (i = 0; i < data.tbct.length; i++) {
+                        str += '<option value="'+data.tbct[i].id_brief_category_tile+'">' + data.tbct[i].category_tile + '</option>';
+                    }
+                    $("#tileId").html(str);
+                }
+
+
+
+                    }
+                });
+    }
+
+    function getTileValues() {
+        var aId = $("#academicId").val();
+        var tId = $("#tileId").val();        
+        $.ajax({
+            url: '@Url.Action("academic_tile_dashboard_report","Dashboard")',
+            type: "GET",
+            data: { "acadId": aId, "tileId": tId },
+            success: function (data) {
+                if (data.length > 0) {
+                      $('#tileRep').dataTable().fnDestroy();
+                    $("#tileTBody").html("");
+                    var str = '';
+                    for (i = 0; i < data.length; i++) {
+                        str += '<tr style="font-size: 12px;"><td>' + data[i].tile_name + '</td><td>' + data[i].category_tile + '</td><td>' + data[i].brief_category + '</td><td>' + data[i].brief_title + '</td></tr>'
+                    }                    
+                    $("#tileTBody").append(str);
+                    tileReportDatatable();
+                }
+            }
+        });
+    }
+
+    function tileReportDatatable() {
+        $('#tileRep').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                //'copy', 'csv', 'excel', 'pdf', 'print'
+                'csv', 'excel'
+            ]
+        });
+    }
+
+</script>

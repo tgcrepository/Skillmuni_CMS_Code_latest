@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "JourneyTileMapping";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+@{
+
+
+
+
+
+    List<tbl_academic_tiles> TilesList = (List<tbl_academic_tiles>)ViewData["tiles"];
+}
+@*@{
+
+        List<tbl_category> catList = (List<tbl_category>)ViewData["category"];
+        List<m2ostnext.Models.AssessmentSheet> assessment = (List<m2ostnext.Models.AssessmentSheet>)ViewData["assessmentList"];
+    }*@
+<script>
+            $(document).ready(function () {
+                $("#report-table").dataTable({
+                    "bSort": false,
+                    "pageLength": 50
+                });
+
+            });
+
+            function getjourneyTiles() {
+
+                var id = $("#select-GameTile").val();
+                var url = '@Url.Action("GetJourneyTilesForGameTile", "RoadMap")';
+                var pattern = "";
+
+if (id > 0) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { gametiles: id },
+
+                success: function (data) {
+                    $("#display_table").empty().append(data);
+                    $("#report-table").dataTable({ "pageLength": 25 });
+                }
+            });
+        } else {
+            $("#msg-txt").html("<p>Please select Category  for the Assessment</p>");
+            $('#m2ost-dialog').modal('show');
+        }
+
+    }
+
+
+    function addJourneyToGame(value) {
+        var id_gametile = $("#select-GameTile").val();
+        if (id_gametile > 0) {
+            var url = '@Url.Action("addJourneyToGame", "RoadMap")';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { id_gametile: id_gametile, id_journeytile: value },
+                success: function (data) {
+                    if (data == "1") {
+                        $("#msg-txt").html("<p>Category Tile to Academic Tile Attached.</p>");
+                        $('#m2ost-dialog').modal('show');
+                        $("#add_" + value).hide();
+                        $("#link_" + value).show();
+                        $("#done_" + value).show();
+                    } else if (data == "2") {
+                        $("#msg-txt").html("<p>Category Tile to Academic Tile attachment already Present.</p>");
+                        $('#m2ost-dialog').modal('show');
+                        $("#add_" + value).hide();
+                        $("#link_" + value).show();
+                        $("#done_" + value).show();
+                    }
+                }
+            });
+        } else {
+            $("#msg-txt").html("<p>Select Academic Tile for Association </p>");
+            $('#m2ost-dialog').modal('show');
+        }
+    }
+
+
+    function removeJourneyFromGame(value) {
+      
+        var id_gametile = $("#select-GameTile").val();
+        if (id_gametile > 0) {
+            var url = '@Url.Action("removeJourneyFromGame", "RoadMap")';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { id_gametile: id_gametile, id_journeytile: value },
+                success: function (data) {
+                    if (data == "1") {
+                        $("#msg-txt").html("<p>Category Tile From Academic Tile Removed.</p>");
+                        $('#m2ost-dialog').modal('show');
+
+                        $("#link_" + value).hide();
+                        $("#done_" + value).hide();
+                        $("#add_" + value).show();
+                    }
+                }
+            });
+        }
+    }
+
+
+</script>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title"> Category Tile To Academic Tile Assignment</h6>
+            </div>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="FirstName" class="control-label col-md-2 regLabel">Select Academic Tile </label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="select-GameTile" name="select-category" onchange="getjourneyTiles()">
+                                    <option value="0" disabled selected>Select Academic Tile </option>
+                                    @foreach (var items in TilesList)
+                                    {
+                                        <option value="@items.id_academic_tile"> @items.tile_name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-12" id="display_table">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

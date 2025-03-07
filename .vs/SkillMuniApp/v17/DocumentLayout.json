@@ -1,0 +1,79 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\TGC\\SkillmuniCMS\\SkillMuniApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B13AB672-A3F1-4736-88FD-45D595C6027B}|SkillMuniApp\\SkillMuniApp.csproj|f:\\tgc\\skillmunicms\\skillmuniapp\\skillmuniapp\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{B13AB672-A3F1-4736-88FD-45D595C6027B}|SkillMuniApp\\SkillMuniApp.csproj|solutionrelative:skillmuniapp\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B13AB672-A3F1-4736-88FD-45D595C6027B}|SkillMuniApp\\SkillMuniApp.csproj|f:\\tgc\\skillmunicms\\skillmuniapp\\skillmuniapp\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B13AB672-A3F1-4736-88FD-45D595C6027B}|SkillMuniApp\\SkillMuniApp.csproj|solutionrelative:skillmuniapp\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B13AB672-A3F1-4736-88FD-45D595C6027B}|SkillMuniApp\\SkillMuniApp.csproj|f:\\tgc\\skillmunicms\\skillmuniapp\\skillmuniapp\\packages.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{B13AB672-A3F1-4736-88FD-45D595C6027B}|SkillMuniApp\\SkillMuniApp.csproj|solutionrelative:skillmuniapp\\packages.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Web.config",
+              "DocumentMoniker": "F:\\TGC\\SkillmuniCMS\\SkillMuniApp\\SkillMuniApp\\Web.config",
+              "RelativeDocumentMoniker": "SkillMuniApp\\Web.config",
+              "ToolTip": "F:\\TGC\\SkillmuniCMS\\SkillMuniApp\\SkillMuniApp\\Web.config",
+              "RelativeToolTip": "SkillMuniApp\\Web.config",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAAAHoAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-03-07T10:17:39.073Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "packages.config",
+              "DocumentMoniker": "F:\\TGC\\SkillmuniCMS\\SkillMuniApp\\SkillMuniApp\\packages.config",
+              "RelativeDocumentMoniker": "SkillMuniApp\\packages.config",
+              "ToolTip": "F:\\TGC\\SkillmuniCMS\\SkillMuniApp\\SkillMuniApp\\packages.config",
+              "RelativeToolTip": "SkillMuniApp\\packages.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-03-07T10:10:26.574Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "F:\\TGC\\SkillmuniCMS\\SkillMuniApp\\SkillMuniApp\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "SkillMuniApp\\Controllers\\LoginController.cs",
+              "ToolTip": "F:\\TGC\\SkillmuniCMS\\SkillMuniApp\\SkillMuniApp\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "SkillMuniApp\\Controllers\\LoginController.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAnwD4AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-07T10:05:49.637Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

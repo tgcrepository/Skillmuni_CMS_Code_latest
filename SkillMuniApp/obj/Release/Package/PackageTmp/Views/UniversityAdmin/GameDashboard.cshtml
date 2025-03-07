@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "GameDashboard";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_game_master> game = (List<tbl_game_master>)ViewData["game"];
+
+}
+
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Games Dashboard</h4>
+            </div>
+            <div class="panel-body">
+                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="20%">
+                                Game
+                            </th>
+                            <th width="10%">
+                                Metrics Added
+                            </th>
+                            <th width="10%">
+                                Status
+                            </th>
+                            <th width="20%">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in game)
+                        {
+                            <tr>
+                                <td>
+                                    @item.name
+                                </td>
+                                <td>
+                                    @if (item.metricname != "")
+                                    {
+
+                                        <p>@item.metricname</p>
+
+
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (item.status == "A")
+                                    {
+                                        <p>Active</p>
+                                    }
+                                    else if (item.status == "S")
+                                    {
+                                        <p>Hold</p>
+                                    }
+                                    else
+                                    {
+                                        <p>In Active</p>
+
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.status == "D")
+                                    {
+                                        <a href="@Url.Action("editGame", "UniversityAdmin", new { id = item.id_game })"><i class="glyphicon glyphicon-edit"></i>Edit &nbsp; &nbsp;</a>
+                                        if (item.id_kpi != 0)
+                                        {
+                                            <a href="@Url.Action("ActivateGame", "UniversityAdmin", new { id = item.id_game })"><i class="glyphicon glyphicon-check"></i>Activate&nbsp; &nbsp;</a>
+                                        }
+                                        if (item.metrics_completion_flag == 0)
+                                        {
+                                            <a href="@Url.Action("AddGameAttribute", "UniversityAdmin", new { id_game = item.id_game, id_theme = item.id_theme })"><i class="glyphicon glyphicon-plus-sign"></i>Add Game Attribute</a>
+
+
+
+
+
+                                        }
+                                        else
+                                        {
+                                            <span>All the metrics are configured.</span> 
+                                        }
+
+
+                                    }
+                                    else if (item.status == "A")
+                                    {
+                                        <a href="@Url.Action("DeActivateGame", "UniversityAdmin", new { id = item.id_game })"><i class="glyphicon glyphicon-remove-sign"></i>&nbsp; De Activate</a>
+
+                                    }
+                                    else if (item.status == "S")
+                                    {
+                                        <a href="@Url.Action("ActivateGame", "UniversityAdmin", new { id = item.id_game })"><i class="glyphicon glyphicon-check"></i>Activate</a>
+                                    }
+                                </td>
+                            </tr>
+
+
+
+
+
+
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

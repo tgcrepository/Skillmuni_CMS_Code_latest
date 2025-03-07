@@ -1,0 +1,624 @@
+﻿
+@{
+    ViewBag.Title = "AddGameAttribute";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.tbl_theme_metric> theme_metric = (List<m2ostnext.Models.tbl_theme_metric>)ViewData["metric"];
+    List<m2ostnext.Models.tbl_university_kpi_master> kpi = (List<m2ostnext.Models.tbl_university_kpi_master>)ViewData["kpi"];
+    List<m2ostnext.Models.tbl_university_kpi_master> kpiadded = (List<m2ostnext.Models.tbl_university_kpi_master>)ViewData["kpiaddedd"];
+    //m2ostnext.Models.special_metric_master sm = (m2ostnext.Models.special_metric_master)ViewData["sm"];
+    m2ostnext.Models.tbl_game_master specialmetFlag = (m2ostnext.Models.tbl_game_master)ViewData["specialMetFlag"];
+    List<m2ostnext.Models.tbl_special_metric_master> specialMetr = (List<m2ostnext.Models.tbl_special_metric_master>)ViewData["specialmetric"];
+    m2ostnext.Models.tbl_university_special_points_master tbl_univerSP = (m2ostnext.Models.tbl_university_special_points_master)ViewData["tbl_univerSP"];
+    int SpMasCount = Convert.ToInt32(ViewData["SpMasCount"]);
+     
+    int theme_id = (int)ViewData["themeid"];
+    int game_id = (int)ViewData["id_game"];
+
+}
+
+<style>
+    .m2ost_info_hat #minus {
+        display: none;
+    }
+
+    /*.m2ost_info_hat .*/
+</style>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>Add Game Attribute</span>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("AddGameAttributeAction", "UniversityAdmin", FormMethod.Post, new { id = "form-add-kpi" }))
+                {
+                <div class="form-horizontal">
+                    <input type="hidden" name="themVal" id="themVal" value="@theme_id" />
+                    <input type="hidden" name="id_game" id="idgame" value="@game_id" />
+                    <input type="hidden" name="id_sm_hid" id="id_sm_hid" value="@tbl_univerSP.id_special_points" />
+                    <input type="hidden" name="sm_type_hid" id="sm_type_hid" value="@tbl_univerSP.special_value_type" />
+
+
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Select Metric</label></div>
+                        <div class="col-md-4">
+                            <select id="metricdrop" name="idmetric" class="form-control" onchange="CheckmetricAvailability()">
+                                <option value="0">select</option>
+                                @foreach (var item in theme_metric)
+                                {
+                                    <option value="@item.id_metric">@item.metric_value</option>
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Select KPI</label></div>
+                        <div class="col-md-4">
+                            <select id="kpiid" name="kpiid" class="form-control" onchange="getKPIType()">
+                                <option value="0">select</option>
+
+                                @foreach (var item in kpi)
+                                {
+                                    <option value="@item.id_kpi_master">@item.kpi_name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="kpitype">
+
+                    </div>
+
+
+                    <div class="row" id="rightanswerdiv" style="display:none">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-3"><label class="control-label">For 1 correct answer KPI value is</label></div>
+                                <div class="col-md-5">
+                                    <input style="color:black;" type="number" min="1" class="form-control select-control validate[required,custom[number]]" name="OneCorrect" value="" placeholder="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="rangediv" style="display:none">
+                        <div id="kpi-grid" class="form-group">
+                            <div class="col-md-2"><label class="control-label">Select No of Grid</label></div>
+                            <div class="col-md-4">
+                                <select id="grid-value" name="kpi-grid-count" class="form-control" onchange="changeKpiGrid(this.value)">
+                                    <option value="0">Select No. of Grid</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="div-kpi-data-grid">
+                            <table class="table" style="height:80px;width: 100%;">
+                                <thead>
+                                    <tr style="background-color:#367fa9;color:white">
+                                        <th>KPI Text </th>
+                                        <th>Start Range</th>
+                                        <th>End Range</th>
+                                        <th style="width: 10%;">KPI Value </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="prog-table">
+                                    <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-1" name="kpi-text-1" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-1" onchange="kpi_end(1)" name="kpi-end-1" /></td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-1" /> </td></tr>
+                                    <tr class="drg2" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-2" name="kpi-text-2" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-2" onchange="kpi_start(2)" name="kpi-start-2" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-2" onchange="kpi_end(2)" name="kpi-end-2" /> </td><td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-2" /> </td></tr>
+                                    <tr class="drg3" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-3" name="kpi-text-3" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-3" onchange="kpi_start(3)" name="kpi-start-3" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-3" onchange="kpi_end(3)" name="kpi-end-3" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-3" /> </td></tr>
+                                    <tr class="drg4" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-4" name="kpi-text-4" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-4" onchange="kpi_start(4)" name="kpi-start-4" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-4" onchange="kpi_end(4)" name="kpi-end-4" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-4" /> </td></tr>
+                                    <tr class="drg5" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-5" name="kpi-text-5" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-5" onchange="kpi_start(5)" name="kpi-start-5" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-5" onchange="kpi_end(5)" name="kpi-end-5" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-5" /> </td></tr>
+                                    <tr class="drg6" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-6" name="kpi-text-6" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-6" onchange="kpi_start(6)" name="kpi-start-6" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-6" onchange="kpi_end(6)" name="kpi-end-6" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-6" /> </td></tr>
+                                    <tr class="drg7" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-7" name="kpi-text-7" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-7" onchange="kpi_start(7)" name="kpi-start-7" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-7" onchange="kpi_end(7)" name="kpi-end-7" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-7" /> </td></tr>
+                                    <tr class="drg8" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-8" name="kpi-text-8" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-8" onchange="kpi_start(8)" name="kpi-start-8" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-8" onchange="kpi_end(8)" name="kpi-end-8" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-8" /> </td></tr>
+                                    <tr class="drg9" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-9" name="kpi-text-9" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-9" onchange="kpi_start(9)" name="kpi-start-9" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-9" onchange="kpi_end(9)" name="kpi-end-9" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-9" /> </td></tr>
+                                    <tr class="drg10" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-10" name="kpi-text-10" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-10" onchange="kpi_start(10)" name="kpi-start-10" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-10" onchange="kpi_end(10)" name="kpi-end-10" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-10" /> </td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div id="div-kpi-data-grid" style="margin-bottom: 1%;">
+                        <div class="panel-heading m2ost_info_hat" data-toggle="collapse" href="#collapse1" style="background: #222d32;color: white;">
+                            <label class="control-label">Leagues</label>
+                            <label id="plus" style="float:right;">+</label>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <table class="table" style="height:80px;width: 100%;">
+                                <thead>
+                                    <tr style="background-color:#367fa9;color:white">
+                                        <th>Leagues</th>
+                                        <th>Min Eligiblity Scores</th>
+                                        <th>Method of Evaluation</th>
+                                        <th style="width: 20%;">Value of Movement</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="prog-table" id="leagueGrid"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Relegation Between<br />Leagues</label></div>
+                        <div class="col-md-4">
+                            <label>off </label><input value="0" name="relegationswitch" type="radio" id="relegatOff" checked />
+                            <input value="1" name="relegationswitch" type="radio" id="relegatOn" /><label> on</label>
+                        </div>
+                    </div>
+                    <div id="div-kpi-data-grid" class="relegatGrid" style="display:none;margin-bottom: 1%;">
+                        <div class="panel-heading m2ost_info_hat" data-toggle="collapse" href="#collapse4" style="background: #222d32;color: white;">
+                            <label class="control-label">Relegation</label>
+                            <label id="plus" style="float:right;">+</label>
+                        </div>
+                        <div id="collapse4" class="panel-collapse collapse">
+                            <table class="table" style="height:80px;width: 100%;">
+                                <thead>
+                                    <tr style="background-color:#367fa9;color:white">
+                                        <th>Leagues</th>
+                                        <th>Relegation Frequency</th>
+                                        <th>Method of Relegation</th>
+                                        <th style="width: 20%;">Relegation of Movement</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="prog-table" id="RelegationGrid"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="div-kpi-data-grid" style="margin-bottom: 1%;">
+                        <div class="panel-heading m2ost_info_hat" data-toggle="collapse" href="#collapse2" style="background: #222d32;color: white;">
+                            <label class="control-label">Badges</label>
+                            <label id="plus" style="float:right;">+</label>
+                        </div>
+                        <div id="collapse2" class="panel-collapse collapse">
+                            <table class="table" style="height:80px;width: 100%;">
+                                <thead>
+                                    <tr style="background-color:#367fa9;color:white">
+                                        <th>Select</th>
+                                        <th>Badge Name</th>
+                                        <th>Badge Value</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody class="prog-table" id="badgeBind"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="div-kpi-data-grid" style="margin-bottom: 1%;">
+                        <div class="panel-heading m2ost_info_hat" data-toggle="collapse" href="#collapse3" style="background: #222d32;color: white;">
+                            <label class="control-label">Currency Points</label>
+                            <label id="plus" style="float:right;">+</label>
+                        </div>
+                        <div id="collapse3" class="panel-collapse collapse">
+                            <table class="table" style="height:80px;width: 100%;">
+                                <thead>
+                                    <tr style="background-color:#367fa9;color:white">
+                                        <th></th>
+                                        <th>Badge Name</th>
+                                        <th>Currency Value</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="prog-table" id="currencyBind">
+                                    @*<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>
+                        <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>
+                        <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>*@
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    @if (SpMasCount == 0)
+                    {
+                        if (specialmetFlag.id_special_metric == 1)
+                        {
+                            <div class="form-group">
+                                <div class="col-md-2"><label class="control-label">Config Special Points</label></div>
+                                <div class="col-md-4">
+                                    <label>off </label><input value="0" name="smswitch" type="radio" id="smswitchoff" checked />
+                                    <input value="1" name="smswitch" type="radio" id="smswitchon" /><label> on</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <input type="hidden" value="0" name="smswitch" />
+                    }
+
+                    @if (tbl_univerSP.special_value_type == 1)
+                    {
+                        <div class="row smrange" style="display:none">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-3"><label class="control-label">1 correct answer is equal to </label></div>
+                                    <div class="col-md-5">
+                                        <input style="color:black;    width: 78%;" type="number" min="1" class="form-control select-control validate[required,custom[number]]" name="sm_value" value="" placeholder="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    else if (tbl_univerSP.special_value_type == 2)
+                    {
+                        <div class="smrange" style="display:none">
+                            <div id="kpi-grid" class="form-group">
+                                <div class="col-md-2"><label class="control-label">Select No of Grid</label></div>
+                                <div class="col-md-4">
+                                    <select id="grid-value" name="smgridcnt" class="form-control" onchange="changesmGrid(this.value)">
+                                        <option value="0">Select No. of Grid</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="sm-grid" style="">
+                                <table class="table" style="height:80px;width: 100%;">
+                                    <thead>
+                                        <tr style="background-color:#367fa9;color:white">
+
+                                            <th>Start Range</th>
+                                            <th>End Range</th>
+                                            <th style="width: 10%;">Metrics Value </th>
+                                            <th style="width: 10%;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="prog-table">
+                                        <tr class="smrng1" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start1" onchange="kpi_start(1)" name="smrng-start1" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end1" onchange="kpi_end(1)" name="smrng-end1" /></td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val1" /> </td><td></td></tr>
+                                        <tr class="smrng2" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start2" onchange="kpi_start(2)" name="smrng-start2" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end2" onchange="kpi_end(2)" name="smrng-end2" /> </td><td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val2" /> </td><td></td></tr>
+                                        <tr class="smrng3" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start3" onchange="kpi_start(3)" name="smrng-start3" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end3" onchange="kpi_end(3)" name="smrng-end3" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val3" /> </td><td></td></tr>
+                                        <tr class="smrng4" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start4" onchange="kpi_start(4)" name="smrng-start4" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end4" onchange="kpi_end(4)" name="smrng-end4" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val4" /> </td><td></td></tr>
+                                        <tr class="smrng5" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start5" onchange="kpi_start(5)" name="smrng-start5" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end5" onchange="kpi_end(5)" name="smrng-end5" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val5" /> </td><td></td></tr>
+                                        <tr class="smrng6" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start6" onchange="kpi_start(6)" name="smrng-start6" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end6" onchange="kpi_end(6)" name="smrng-end6" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val6" /> </td><td></td></tr>
+                                        <tr class="smrng7" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start7" onchange="kpi_start(7)" name="smrng-start7" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end7" onchange="kpi_end(7)" name="smrng-end7" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val7" /> </td><td></td></tr>
+                                        <tr class="smrng8" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start8" onchange="kpi_start(8)" name="smrng-start8" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end8" onchange="kpi_end(8)" name="smrng-end8" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val8" /> </td><td></td></tr>
+                                        <tr class="smrng9" style="background-color:rgb(41, 148, 211);color:white;display:none;"> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start9" onchange="kpi_start(9)" name="smrng-start9" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end9" onchange="kpi_end(9)" name="smrng-end9" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val9" /> </td><td></td></tr>
+                                        <tr class="smrng10" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-start10" onchange="kpi_start(10)" name="smrng-start10" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="smrng-end10" onchange="kpi_end(10)" name="smrng-end10" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="smrng-val10" /></td><td></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                    @if (SpMasCount == 0)
+                    {
+                        if (specialmetFlag.id_special_metric == 1)
+                        {
+                            <div class="form-group" style="display:none" id="spl_metric_dropdwn">
+                                <div class="col-md-2"><label class="control-label">Select Special Metric</label></div>
+                                <div class="col-md-4">
+                                    <select id="SpecialMet" name="SpecialMet" class="form-control" style="margin-left:27%;">
+                                        <option value="0">select</option>
+                                        @foreach (var item in specialMetr)
+                                        {
+                                            <option value="@item.id_special_metric">@item.name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <input type="hidden" name="SpecialMet" value="0" />
+                    }
+                    <div class="form-group">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4"><button type="submit" class="btn btn-primary">Create</button> </div>
+                        <div class="col-md-4"> </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        themeSelect();
+        $("#relegatOn").click(function () {
+            var themVal = $("#themVal").val();
+            $(".relegatGrid").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("LeagueName", "UniversityKPI")',
+            data: { "themId": themVal},
+                success: function (data)
+                    {
+                    //console.log(data);
+                    var z = 0;
+                    //var badge = currencyValGet(themVal);
+                    //console.log(badge);
+                    $("#RelegationGrid").html("");
+                    for (var i = 0; i < data.length; i++) {
+                        $("#RelegationGrid").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td>' + data[i].league_name + '</td><td><div class="moveRow" style="width:50%;display:inline-block;padding-right:1%;"><input style="color:black;" type="number" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" name="freq_' + i + '" /></div><div class="moveRow" style="width:50%;display:inline-block;"><select name="freqType' + z + '" class="form-control"><option value="">select</option><option value="D">day</option><option value="W">week</option><option value="M">month</option></select></div></td><td><select name="relmethod' + i + '" class="form-control"><option value="1">Percentile</option><option value="2">Rank</option></select></td><td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="compari' + i + '" class="form-control"><option value="1">=</option><option value="2"><</option><option value="3"><</option><option value="4"><=</option><option value="5">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="minscore' + i + '" type="text" /></div><input type="hidden" value="' + data[i].id_league + '" name="rellegid_' + i + '" /></td></tr>');
+                        z++;
+                    }
+
+
+                }
+            });
+        });
+        $("#relegatOff").click(function () {
+            $(".relegatGrid").hide();
+        });
+
+        $("#metricOn").click(function () {
+            $("#dropMetricShow").show();
+        });
+
+        $("#metricOff").click(function () {
+            $("#dropMetricShow").hide();
+        });
+        $("#smswitchon").click(function () {
+            $(".smrange").show();
+            $("#spl_metric_dropdwn").show();
+            
+        });
+
+        $("#smswitchoff").click(function () {
+            $(".smrange").hide();
+            $("#spl_metric_dropdwn").hide();
+        });
+
+
+        $("#assignUser").click(function () {
+            $("#uassign").show();
+        });
+        $("#assignAll").click(function () {
+            $("#uassign").hide();
+        });
+
+
+
+
+    });
+    function themeSelect()
+    {
+        $("#currencyBind").html("");
+        $("#RelegationGrid").html("");
+
+        var themVal = $("#themVal").val();
+        var id_game = $("#idgame").val();
+
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("metricValue", "UniversityKPI")',
+                data: { "themVal": themVal},
+                success: function (data)
+                {
+                    $("#metricBind").html("");
+                    $("#metricBind").append('<option value="">select</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#metricBind").append('<option value=' + data[i].id_metric + '>' + data[i].metric_value + '</option>');
+                    }
+                }
+        });
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("LeagueName", "UniversityKPI")',
+            data: { "themId": themVal},
+                success: function (data)
+                    {
+                    //console.log(data);
+                    var z = 0;
+                    //var badge = currencyValGet(themVal);
+                    //console.log(badge);
+                    $("#leagueGrid").html("");
+                    for (var i = 0; i < data.length; i++) {
+                        $("#leagueGrid").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].league_name + '  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" name="eligiblity_' + i + '" /> </td> <td> <select name="evaluation_type' + i + '" class="form-control"><option value="1">Percentile</option><option value="2">Rank</option></select></td><td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="comparileague' + i + '" class="form-control"><option value="1">=</option><option value="2"><</option><option value="3">></option><option value="4"><=</option><option value="5">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="movement_number_' + i + '" type="number" /></div><input type="hidden" name="leagueid_' + i + '"  value="' + data[i].id_league + '"/></td></tr>');
+                        //$("#currencyBind").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].league_name + ' <input type="hidden" name="currnId' + z + '" value="' + data[i].id_league + '"></td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="badgTxt' + z + '" name="CurrncyVal' + z + '" /> </td></tr>');
+                        //z++;
+                    }
+
+                    $("#leagueGrid").append("<input type='hidden' value='" + data.length + "' name='leaguecount' />");
+                }
+            });
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("BadgeName", "UniversityKPI")',
+            data: { "themVal": themVal, "id_game": id_game},
+                success: function (data)
+                {
+                    //console.log(data);
+                    var z = 0;
+                    $("#badgeBind").html("");
+                    for (var i = 0; i < data.length; i++) {
+                        $("#badgeBind").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> <input type="checkbox" style="height: 18px; width: 18px;" id="bd_' + i + '" onchange="badgeCheck(' + i + ')" name="chk_badge" value="' + i + '"></td><td> ' + data[i].badge_name + ' <input type="hidden" name="badgId' + z + '" value="' + data[i].id_badge + '"></td> <td> <input style="color:black;" type="number" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="badgTxt' + z + '" name="badgVal' + z + '" /> </td></tr>');
+                        z++;
+                    }
+
+                    $("#badgeBind").append(' <input type="hidden" name="badgecount"  value="' + data.length+'" />');
+                }
+        });
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCurrency", "UniversityKPI")',
+                data: { "themVal": themVal, "id_game": id_game},
+                success: function (data) {
+                    //dat = data;
+
+                   // console.log(data);
+                    $("#currencyBind").html(data);
+                    //var z = 1;
+                    //$("#currencyBind").html("");
+                    //for (var i = 0; i < data.length; i++) {
+                    //    $("#currencyBind").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].currency_value + ' <input type="hidden" name="currnId' + z + '" value="' + data[i].id_currency + '"></td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="badgTxt' + z + '" name="CurrncyVal'+z+'" /> </td></tr>');
+                    //    z++;
+                    //}
+                }
+            });
+    }
+
+
+
+    function CheckmetricAvailability()
+    {
+
+        var id_metric = $("#metricdrop").val();
+        var id_game = $("#idgame").val();
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("CheckmetricAvailability", "UniversityAdmin")',
+            data: { "id_metric": id_metric, "id_game": id_game },
+            success: function (data) {
+
+                if (data == "1") { alert("Selected metric is already configured. Please try with other metrics. "); $('#metricdrop').prop('selectedIndex', 0); }
+
+
+                }
+            });
+
+    }
+
+    @*function metricChange()
+    {
+        var themVal = $("#themVal").val();
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("LeagueName", "UniversityKPI")',
+            data: { "themId": themVal},
+                success: function (data)
+                    {
+                    //console.log(data);
+                    $("#leagueGrid").html("");
+  //                  $("#metricBind").append('<option value="">select</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#leagueGrid").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].league_name +'  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" name="eligiblity-'+i+'" /> </td> <td> <select name="score'+i+'" class="form-control"><option value="percentile">Percentile</option><option value="Rank">Rank</option></select></td><td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="compari'+i+'" class="form-control"><option value="">=</option><option value=""><</option><option value=""><</option><option value=""><=</option><option value="">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="opValue'+i+'" type="text" /></div></td></tr>');
+                    }
+                }
+            });
+    }*@
+
+    function badgeCheck(id)
+    {
+
+        if ($("#bd_" + id).prop('checked') == true) {
+
+
+            $('#cr_' + id).prop('checked', true);
+            $('#cr_' + id).show();
+
+        }
+        else { $('#cr_' + id).prop('checked', false); $('#cr_' + id).hide(); }
+
+    }
+
+    function getKPIType()
+    {        
+        var id_kpi = $("#kpiid").val();
+        //alert(id_kpi);
+        if (id_kpi > 0) {
+
+             $.ajax({
+                type: "GET",
+                url: '@Url.Action("getKPIType", "UniversityAdmin")',
+                 data: { "id_kpi": id_kpi},
+                 success: function (data) {
+                     console.log(data);
+                     if (data == "1")
+                     {
+
+                         $("#rightanswerdiv").show();
+                         $("#rangediv").hide();
+                         $("#kpitype").html("");
+                         $("#kpitype").html('<input type="hidden" value="1" name="kpi_type_val" />');
+                         
+
+                     }
+                     else if (data == "2")
+                     {
+
+                         $("#rangediv").show();
+                         $("#rightanswerdiv").hide();
+                         $("#kpitype").html("");
+                         $("#kpitype").html('<input type="hidden" value="2" name="kpi_type_val" />');
+
+                     }
+                     else
+                     {
+                         $("#rangediv").hide();
+                         $("#rightanswerdiv").hide();
+                         $("#kpitype").html("");
+                        
+
+                     }
+
+
+                }
+            });
+
+
+        }
+        else
+        {
+            $("#rangediv").hide();
+            $("#rightanswerdiv").hide();
+
+        }
+
+
+
+
+    }
+    function changeKpiGrid(id) {
+        if (id >= 1) { $('.drg1').show(); } else { $('.drg1').hide(); }
+        if (id >= 2) { $('.drg2').show(); } else { $('.drg2').hide(); }
+        if (id >= 3) { $('.drg3').show(); } else { $('.drg3').hide(); }
+        if (id >= 4) { $('.drg4').show(); } else { $('.drg4').hide(); }
+        if (id >= 5) { $('.drg5').show(); } else { $('.drg5').hide(); }
+        if (id >= 6) { $('.drg6').show(); } else { $('.drg6').hide(); }
+        if (id >= 7) { $('.drg7').show(); } else { $('.drg7').hide(); }
+        if (id >= 8) { $('.drg8').show(); } else { $('.drg8').hide(); }
+        if (id >= 9) { $('.drg9').show(); } else { $('.drg9').hide(); }
+        if (id == 10) { $('.drg10').show(); } else { $('.drg10').hide(); }
+
+    }
+    function changesmGrid(id) {
+        if (id >= 1) { $('.smrng1').show(); } else { $('.smrng1').hide(); }
+        if (id >= 2) { $('.smrng2').show(); } else { $('.smrng2').hide(); }
+        if (id >= 3) { $('.smrng3').show(); } else { $('.smrng3').hide(); }
+        if (id >= 4) { $('.smrng4').show(); } else { $('.smrng4').hide(); }
+        if (id >= 5) { $('.smrng5').show(); } else { $('.smrng5').hide(); }
+        if (id >= 6) { $('.smrng6').show(); } else { $('.smrng6').hide(); }
+        if (id >= 7) { $('.smrng7').show(); } else { $('.smrng7').hide(); }
+        if (id >= 8) { $('.smrng8').show(); } else { $('.smrng8').hide(); }
+        if (id >= 9) { $('.smrng9').show(); } else { $('.smrng9').hide(); }
+        if (id == 10) { $('.smrng10').show(); } else { $('.smrng10').hide(); }
+
+    }
+</script>
+<script>
+
+
+</script>
+

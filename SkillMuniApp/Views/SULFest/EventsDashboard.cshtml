@@ -1,0 +1,116 @@
+﻿
+@{
+    ViewBag.Title = "EventsDashboard";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_sul_fest_master> mas = (List<tbl_sul_fest_master>)ViewData["mas"];
+}
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable({
+            "pageLength": 15
+        });
+    });
+
+</script>
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Events Dashboard</h4>
+            </div>
+            <div class="panel-body">
+                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="20%">
+                                Event Title
+                            </th>
+                            <th width="10%">
+                                Event Objective
+                            </th>
+                            <th width="10%">
+                                Event Status
+                            </th>
+                            <th width="10%">
+                                Action
+                            </th>
+                            <th width="10%">
+                                Notifications
+                            </th>
+                        </tr>
+                    </thead>
+                    @{
+                        int i = 0;
+                    }
+                    <tbody>
+                        @foreach (var item in mas)
+                        {
+                            <tr>
+                                <td>
+                                    @item.event_title
+                                </td>
+                                <td>
+                                    @item.event_objective
+                                </td>
+
+                                <td>
+                                    @if (item.event_status == "P")
+                                    {<p>Published</p> }
+                                    else
+                                    {
+                                        <p>Draft</p>
+
+                                    }
+                                </td>
+                                <td>
+                                    @if (!(item.event_status == "P"))
+                                    {
+
+                                        <a href="@Url.Action("EditEventLayout", "SULFest", new { event_id = item.id_event })"><i class="glyphicon glyphicon-edit"></i></a>
+                                    }
+                                </td>
+                                <td style="padding-left:14px;">
+                                    
+                                    <a href="javascript:sendEventNotification(@item.id_event)">
+                                        <i class="fa fa-bell-o" aria-hidden="true"></i>
+                                    </a>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <a href="javascript:sendMailNotification(@item.id_event)">
+                                        <i class="fa fa-envelope-o" aria-hidden="true" style="padding-left:10px;"></i>
+                                    </a>
+
+
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function sendEventNotification(ids) {
+        //var idstate = $("#state").val();
+
+        $.get("http://180.149.241.40/sulapiproduction/api/TriggerSulFestInAppInvitaion?id_event=" + ids, function (json_data) {
+        });
+    }
+
+    function sendMailNotification(ids) {
+        //var idstate = $("#state").val();
+
+        $.get("http://180.149.241.40/sulapiproduction/api/TriggerSulFestMailInvitaion?id_event=" + ids, function (json_data) {
+        });
+    }
+
+</script>

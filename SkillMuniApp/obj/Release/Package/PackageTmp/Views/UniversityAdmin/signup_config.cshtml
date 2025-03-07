@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "signup_config";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+    List<m2ostnext.Models.tbl_signup_config> tbl_signup = (List<m2ostnext.Models.tbl_signup_config>)ViewData["tbl_signup"];
+    int i = 1;
+}
+
+<div class="content">
+    @using (Html.BeginForm("update_signup_config", "UniversityAdmin", FormMethod.Post, new { id = "form-add-brief-question", enctype = "multipart/form-data" }))
+    {
+        <div class="col-md-12 column">
+            <h3>Sign-UP Configuration</h3>
+            <div class="col-md-2">
+
+            </div>
+            <input type="hidden" value="@tbl_signup.Count" name="totalCount" />
+            <div class="col-md-8">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Sign-Up Category</th>
+                            <th scope="col">&nbsp;&nbsp;&nbsp;&nbsp;Mandatory Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in tbl_signup)
+                        {
+
+                            <tr>
+                                <input type="hidden" name="signupId-@i" value="@item.id_signup_config" />
+                                <td>@item.reg_name</td>
+                                <td>
+                                    <div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;">
+                                        @if (item.mandatory == 0)
+                                        {
+                                            <label>YES</label>
+                                            <label>
+                                                <input type="radio" id="check-box-2" name="check-box-option-@i" value="1" />
+                                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                            </label>
+                                            <label>NO</label>
+                                            <label>
+                                                <input type="radio" id="check-box-2" name="check-box-option-@i" value="0" checked/>
+                                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                            </label>
+                                        }
+                                        else if (item.mandatory == 1)
+                                        {
+                                            <label>YES</label>
+                                            <label>
+                                                <input type="radio" id="check-box-2" name="check-box-option-@i" value="1" checked/>
+                                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                            </label>
+                                            <label>NO</label>
+                                            <label>
+                                                <input type="radio" id="check-box-2" name="check-box-option-@i" value="0"/>
+                                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                            </label>
+                                        }
+
+                                    </div>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-2">
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </div>        
+    }
+</div>

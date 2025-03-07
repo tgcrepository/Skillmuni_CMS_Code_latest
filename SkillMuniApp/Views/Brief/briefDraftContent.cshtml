@@ -1,0 +1,1046 @@
+﻿
+@{
+    ViewBag.Title = "briefDraftContent";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+<link href="~/Content/RichText/dist/summernote.css" rel="stylesheet" />
+<script src="~/Content/RichText/dist/summernote.js"></script>
+<script src="~/Content/jquery.serializeToJSON.js"></script>
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+
+<script>
+
+</script>
+@{
+    List<tbl_brief_category> category = (List<tbl_brief_category>)ViewData["category"];
+    List<tbl_brief_subcategory> subcategory = (List<tbl_brief_subcategory>)ViewData["subcategory"];
+    List<tbl_brief_question_complexity> complexity = (List<tbl_brief_question_complexity>)ViewData["complexity"];
+}
+
+
+
+@using (Html.BeginForm("finishDraftBriefContent", "Brief", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data", onsubmit = "formSubmitRTCheck()" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">create new brief </div>
+                </div>
+                <input type="hidden" name="brf-cat-val" id="brf-cat-val" />
+                <input type="hidden" name="brf-rt-code" id="brf-rt-code" />
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12" style="margin-left: -14px;">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <label class="control-label">category</label>
+                                            <select id="select-category" name="select-category" class="form-control selectpicker" data-live-search="true" onchange="getSubCategory(this.value,'select-sub-category')">
+                                                @foreach (var pro in category)
+                                                {
+                                                    <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">sub-category</label>
+                                            <select id="select-sub-category" name="select-sub-category" class="form-control">
+                                                @foreach (var pro in subcategory)
+                                                {
+                                                    <option data-tokens="@pro.brief_subcategory" value="@pro.id_brief_subcategory">@pro.brief_subcategory</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                    <label class="control-label pull-right">Expiry Date</label>
+                                    <div class='input-group date pull-right'>
+                                        <input type='text' class="form-control validate[required]" id='datetimepicker2' name="brief-expiry" autocomplete="off"/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">brief title</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <input type="text" class="form-control validate[required]" value="" placeholder="brief Title" id="brief-title" name="brief-title" autocomplete="off"  />
+                                            <div class="tooltip1"> <i class="fa fa-info-circle" aria-hidden="true"></i> <span class="tooltiptext1" style="margin-left: -51px;">Brief Title must not exceed more than 5 to 7 words</span> </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- content type in  -->
+                                <!-- content type out  -->
+
+                                <div class="row" style="">
+                                    <div class="col-md-12" id="div-brf-t1">
+                                        <label class="control-label pull-right" style="color:#ff0000;font-weight:600;"></label><br />
+                                        <label class="control-label">brief content</label>
+                                        <div class="form-group">
+                                            <textarea name="brief-rt-data-t3" id="" style="width:100%"></textarea>
+                                            <div class="tooltip1"> <i class="fa fa-info-circle" aria-hidden="true"></i> <span class="tooltiptext1" style="margin-left: -51px;">Brief Content must not exceed 70 words</span> </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">Brief Media</label>
+                                        <div id="div-dist-category">
+
+                                            <div class="col-md-6">
+                                                <input type="radio" id="t2-select-order" name="t2-select-order" style="margin-left: 238px;" value="2" onclick="logoneed(1)">URL
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="radio" id="t2-select-order" name="t2-select-order" style="margin-left: 161px;" value="1" onclick="logoneed(0)" checked="checked">Media<div class="tooltip1"> <i class="fa fa-info-circle" aria-hidden="true" style="margin-left: 260px;"></i> <span class="tooltiptext2">You can upload:<br />1. Image files with .png, .jpeg extension and the file size limit is 450kb.<br />2. Video files with .mp4 extension and the file size limit is 20mb. The length of the video should be max 10 minutes.</span> </div><br>
+                                            </div><br />
+
+                                        </div><br />
+                                    </div>
+
+                                </div>
+                                @*//url*@
+                                <div class="row" id="evnt1" style="display:none;">
+                                    <div class="col-md-6" style="padding-right:1px;">
+                                        <div class="form-group">
+                                            <div class="row" id="append_url">
+                                                <div class="col-md-12" style="padding-right:1px;">
+                                                    <input type="text" style="text-align:center;" class="form-control " value="" placeholder="enter media URL " name="t2-btn-url" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            @*medoia*@
+
+                            @*medoia*@
+
+                            <div class="row" id="evnt2">
+                                <div class="col-md-12" style="">
+                                    <div class="col-md-6" style="margin-left: 503px;  width: 438px;">
+                                        <input type="text" class="form-control " style="text-align:center;" readonly value="" placeholder="Choose media file" id="t2-btn-image" name="t2-btn-image" />
+                                        <div id="t2-btn-error" style="color:#a90000;font-weight:600;display:none;">file is not allowed for upload .file type is restricted.</div><br />
+                                    </div>
+                                    <div class="col-md-2" style="width: unset;">
+                                        <div class="fileUpload btn btn-primary">
+                                            <span>Browse </span>
+                                            <input id="t2-btn" name="t2-btn" class="upload flcheck" allow="" type="file" /><!-- onchange="select_file('t-btn', 't-ans-image')"-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="control-label">metadata</label>
+                                    <div id="theme-1-header" class="form-group">
+                                        <input type="text" class="form-control validate[required]" value="" placeholder="add metadata to brief separated by comma " id="brief-metadata" name="brief-metadata" />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-left: 864px;">
+                                    <input style="    background: #018ccf;color: white;margin-right: 2%;width: 162px;" type="submit" id="btn_question2" value="Save And Add Questions" name="btn_submit" class="btn btn-default btn-info" />
+                                    @*<input style="    background: #018ccf;color: white;margin-right: 2%;width: 150px;" type="button" id="btn1" name="btn_save" value="ADD Questions"  onclick="prtneeded()" class="btn btn-default btn-info" />*@
+                                    @*<span style="    background: #018ccf;color: white;width: 120px;" class="btn btn-default" onclick="addquestions()">Add Questions</span>*@
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr />
+
+                @*question code start*@
+
+
+                <div class="panel-body custom-panel-body" style="display:none" id="prt_count">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+
+                                </div>
+                                <br />
+                                <div class="form-group" id="choiceImg" style="">
+                                    <div class="row">
+                                        <div class="col-md-12">
+
+                                            <label class="control-label">No.of questions in this brief</label>
+
+                                            <select id="question-count" name="question-count" class="form-control " onchange="setCount('question-count')">
+
+                                                @for (int i = 1; i < 11; i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
+
+                                            </select><br />
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Brief Question </label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <input type="radio" class="inputRadThem" name="themtyp" id="radthm1" value="1" />
+                                                <i class="fa fa-file-text fa-2x fonticon" aria-hidden="true" onclick="radThemSel(1)"></i>
+                                                <input type="radio" class="inputRadThem" name="themtyp" id="radthm2" value="2" />
+                                                <i class="fa fa-picture-o fa-2x fonticon" aria-hidden="true" onclick="radThemSel(2)"></i>
+                                                <input type="radio" class="inputRadThem" name="themtyp" id="radthm3" value="3" />
+                                                <i class="fa fa-newspaper-o fa-2x fonticon" aria-hidden="true" onclick="radThemSel(3)"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" id="textsel" style="display:none">
+                                            <div class="form-group">
+                                                <input class="form-control" placeholder="Your Question" name="questionText" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" id="imagesel">
+                                            <input type="text" class="form-control" readonly value="" placeholder="Brief Image" id="league-image" name="league-image" />
+                                            <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                                <span>Browse</span>
+                                                <input id="league-btn" name="league-btn" class="upload" type="file" accept="image/*" onchange="imgeBrieQues(this, 'league-btn', 'league-image', 'logo-text')" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" id="imagePrev">
+                                            <div class="avatar-upload" style="margin:-10px auto;">
+                                                <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                                    <img id="briefImgQue" style="display:none;width:40px;height:40px;padding:5%;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <label>Choice No</label>
+                                        </div>
+                                        <div class="col-md-2"><label>Theme</label></div>
+                                        <div class="col-md-7">
+                                            <label>Option</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Right Option</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Action</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            @*<input type="hidden" id="imgChoiCount" name="imgChoiCount" value="1" />*@
+                                            <div class="col-md-1">
+                                                <label>1 </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <input type="radio" class="inputRadThem" name="choiceType1" id="radCho11" value="1" />
+                                                    <i class="fa fa-file-text fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(1,1)"></i>
+                                                    <input type="radio" class="inputRadThem" name="choiceType1" id="radCho21" value="2" />
+                                                    <i class="fa fa-picture-o fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(2,1)"></i>
+                                                    <input type="radio" class="inputRadThem" name="choiceType1" id="radCho31" value="3" checked />
+                                                    <i class="fa fa-newspaper-o fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(3,1)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="textsel1">
+                                                <div class="form-group">
+                                                    <input class="form-control" placeholder="Your Question" name="questionText1" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="imagesel1">
+                                                <input type="text" class="form-control" readonly value="" placeholder="Brief Image" id="league-image1" name="league-image1" />
+                                                <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                                    <span>Browse</span>
+                                                    <input id="league-btn1" name="imgBrief-btn1" class="upload" type="file" accept="image/*" onchange="imgeBrie(this, 'league-btn1', 'league-image1', 'logo-text',1)" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" id="imagePrev1">
+                                                <div class="avatar-upload">
+                                                    <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                                        <img id="leaguimg1" style="display:none;width:40px;height:40px;padding:5%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;">
+                                                    <label>
+                                                        <input type="radio" id="check-box-img-1"
+                                                               name="check-box-img-option" value="1" checked="checked" />
+                                                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @*<div class="col-md-1" id="league_add_btn_div_1">
+                                        <label class="control-label"><a onclick="addImgCheck(1)"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a> </label>
+                                    </div>*@
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <input type="hidden" id="imgChoiCount" name="imgChoiCount" value="2" />
+                                            <div class="col-md-1">
+                                                <label>2 </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <input type="radio" class="inputRadThem" name="choiceType2" id="radCho12" value="1" />
+                                                    <i class="fa fa-file-text fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(1,2)"></i>
+                                                    <input type="radio" class="inputRadThem" name="choiceType2" id="radCho22" value="2" />
+                                                    <i class="fa fa-picture-o fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(2,2)"></i>
+                                                    <input type="radio" class="inputRadThem" name="choiceType2" id="radCho32" value="3" checked />
+                                                    <i class="fa fa-newspaper-o fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(3,2)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="textsel2">
+                                                <div class="form-group">
+                                                    <input class="form-control" placeholder="Your Choice" name="questionText2" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="imagesel2">
+                                                <input type="text" class="form-control" readonly value="" placeholder="Brief Image" id="league-image2" name="league-image2" />
+                                                <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                                    <span>Browse</span>
+                                                    <input id="league-btn2" name="imgBrief-btn2" class="upload" type="file" accept="image/*" onchange="imgeBrie(this, 'league-btn2', 'league-image2', 'logo-text',2)" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" id="imagePrev2">
+                                                <div class="avatar-upload">
+                                                    <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                                        <img id="leaguimg2" style="display:none;width:40px;height:40px;padding:5%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;">
+                                                    <label>
+                                                        <input type="radio" id="check-box-img-2"
+                                                               name="check-box-img-option" value="2" checked="checked" />
+                                                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" id="league_add_btn_div_2">
+                                                <label class="control-label"><a onclick="addImgCheck(2)"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a> </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="imgConAdd">
+
+                                    </div>
+                                </div>
+                                <div class="form-group" id="briefQues">
+
+
+
+                                    <div class="row" id="qtn-option-2">
+                                        <input type="hidden" value="2" id="hid-row-count" name="hid-row-count" />
+
+
+                                    </div>
+                                </div>
+                                <div id="div-qtn-option">
+                                </div>
+                                <br />
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">MetaData</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <input type="text" class="form-control validate[required]" value="" placeholder="add metadata to question separated by comma " id="question-metadata" name="question-metadata" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row" id="qtn-option-0">
+                                    <div class="col-md-1">
+                                    </div>
+                                    <div class="col-md-10">
+                                    </div>
+                                    @*<div class="col-md-1">*@
+                                        <div class="col-md-12" style="margin-left: 871px;">
+                                            @*<button class="btn btn-primary" onclick="questionrestrict()>Save</button>*@
+                                            <button class="btn btn-primary" onclick="questionrestrict()">Save</button>
+                                            @*div class="btn btn-primary"*@
+                                            <input id="btn_question2" type="submit" style="" class="btn btn-primary" name="btn_submit" value="Send for Approval " onclick="" />
+                                        </div>
+                                        @*</div>*@
+                                    </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+
+
+
+
+
+
+
+
+
+                @*question code end*@
+
+
+                <div class="row" id="">
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-7">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script>
+    $(document).ready(function () {
+        $("#form-add-brief").validationEngine();
+        $('.summernote').summernote();
+
+        $("#datetimepicker2").datetimepicker({
+            minDate: 0,
+            dateFormat: "dd-mm-yy",
+            minDate: new Date(),
+            onSelect: function (selected) {
+                var date = $(this).datetimepicker('getDate');
+            }
+        });
+    });
+    const uploads = []
+    $(function () {
+        $('.flcheck').on('change', function () {
+            var ids = this.id;
+            var file = this.files[0];
+            //   openFile(file.name);
+            const filereader = new FileReader();
+            const blob = file.slice(0, 4);
+            filereader.readAsArrayBuffer(blob);
+            filereader.onloadend = function (evt) {
+                if (evt.target.readyState === FileReader.DONE) {
+                    const uint = new Uint8Array(evt.target.result);
+                    let bytes = [];
+                    uint.forEach((byte) => {
+                        bytes.push(byte.toString(16));
+                    })
+                    const hex = bytes.join('').toUpperCase();
+                    var flag = getMimetype(hex);
+                    if (flag) {
+                        select_file(ids, ids + '-image')
+                        return true;
+                    } else {
+                        $('#' + ids).val('');
+                        $('#' + ids + '-image').val('');
+                        $('#' + ids + '-error').show();
+                        setTimeout(function () { $('#' + ids + '-error').hide(); }, 5000);
+                        return false;
+                    }
+                }
+            }
+
+        });
+    });
+
+    function openFile(file) {
+        var extension = file.substr((file.lastIndexOf('.') + 1));
+        switch (extension) {
+            case 'jpg':
+            case 'png':
+            case 'gif':
+                return true;  // There's was a typo in the example where
+                break;                         // the alert ended with pdf instead of gif.
+            case 'pdf':
+                return false;
+                break;
+            default:
+                return false;
+        }
+    };
+
+
+
+    const getMimetype = (signature) => {
+        switch (signature) {
+            case '89504E47':
+            case '47494638':
+            case 'FFD8FFDB':
+            case 'FFD8FFE0':
+            case '3026B275':
+            case '0001C':
+            case '00018':
+            case '52494646':
+            case '1A45DFA3':
+            case '00020':
+            case '464C561':
+            case '25504446':
+            case '504B34':
+            case 'D0CF11E0':
+                return true
+            case '504B0304':
+                return false
+            default:
+                return false
+        }
+    }
+
+
+
+
+    function logoneed(flg) {
+
+        if (flg == 1) {
+
+            $("#evnt1").show();
+            $("#evnt2").hide();
+
+
+
+        }
+        else {
+
+            $("#evnt2").show();
+            $("#evnt1").hide();
+
+        }
+
+
+    }
+    function radThemSel(e) {
+        $("#radthm" + e).prop("checked", true);
+        checkonchg(e);
+    }
+    function imgeBrieQues(el, btn, imgf, ban) {
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        } else {
+        }
+        $("#" + imgf + "").val(filename);
+        if (el.files && el.files[0]) {
+            var FR = new FileReader();
+            FR.onload = function (e) {
+                $("#briefImgQue").show();
+                $("#briefImgQue").attr("src", e.target.result);
+
+            };
+            FR.readAsDataURL(el.files[0]);
+        }
+    }
+    function radChoiSel(e, el) {
+        //console.log("radCho" + e + el);
+        $("#radCho" + e + el).prop("checked", true);
+        Choionchg(e, el);
+    }
+    //image add function in brief question method
+    function addImgCheck(cur) {
+
+        var cur_updated = cur + 1;
+        $("#league_add_btn_div_" + cur).hide();
+        var str = "<div class='row' id='imageBre-" + cur_updated + "' style='margin-top:1%;'><div class='col-md-1'><label>" + cur_updated + "</label></div><div class='col-md-2'><div class='form-group'><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho1" + cur_updated + "' value='1' /><i class='fa fa-file-text fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(1, " + cur_updated + ")'></i><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho2" + cur_updated + "' value='2' /><i class='fa fa-picture-o fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(2, " + cur_updated + ")'></i><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho3" + cur_updated + "' value='3' checked/><i class='fa fa-newspaper-o fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(3," + cur_updated + ")'></i></div></div><div class='col-md-3' id='textsel" + cur_updated + "'><div class='form-group'><input class='form-control' placeholder='Your Question' name='questionText" + cur_updated + "' /></div></div><div class='col-md-3' id='imagesel" + cur_updated + "'><input type='text' class='form-control' readonly value='' placeholder='Brief Image' id='league-image" + cur_updated + "' name='league-image1' /><div class='fileUpload btn btn-primary' style='float:right;margin-top:-13%;'><span>Browse</span><input id='league-btn" + cur_updated + "' name='imgBrief-btn" + cur_updated + "' class='upload' type='file' accept='image/*' onchange='imgeBrie(this,\"league-btn" + cur_updated + "\",\"league-image" + cur_updated + "\",\"logo-text\"," + cur_updated + ")' /></div></div><div class='col-md-1' id='imagePrev" + cur_updated + "'><div class='avatar-upload'><div class='avatar-preview' style='width:50px;height:50px;margin-left:auto;margin-right:auto;'><img id='leaguimg" + cur_updated + "' style='display:none;width:40px;height:40px;padding:5%;'></div></div></div><div class='col-md-1'><div class='checkbox' style='margin-top: 2px;margin-bottom: 2px;'><label><input type='radio' id='check-box-img-" + cur_updated + "' name='check-box-img-option' value='" + cur_updated + "' checked='checked' /><span class='cr'><i class='cr-icon glyphicon glyphicon-ok'></i></span></label></div></div><div class='col-md-1' id='league_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addImgCheck(" + cur_updated + ")'><i class='fa fa-plus-circle fa-lg' aria-hidden='true'></i></a> <a onclick='delImgCheck(" + cur_updated + ")'><i class='fa fa-times fa-lg' aria-hidden='true' style='color:red;'></i></a></label></div></div>";
+
+        $("#imgConAdd").append(str);
+        //$("#leaguecnt").html("");
+        //$("#leaguecnt").append("<input type='hidden' id='leagueCoun' value='" + cur_updated + "' name='leaguecount' />");
+        $("#imgChoiCount").val(cur_updated);
+
+    }
+
+    function delImgCheck(cur) {
+        var cur_updated = cur - 1;
+        if (cur == 2) {
+            $("#league_add_btn_div_1").show();
+            $("#imageBre-" + cur).remove();
+            $("#imgChoiCount").val(cur_updated);
+        }
+        else {
+            $("#imageBre-" + cur).remove();
+            $("#league_add_btn_div_" + cur_updated).show();
+            $("#imgChoiCount").val(cur_updated);
+            //addmetric(cur_updated);
+        }
+    }
+
+
+    function imgeBrie(el, btn, imgf, ban, idVal) {
+        // console.log(idVal);
+        if (idVal == 1) {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#leaguimg1").show();
+                    $("#leaguimg1").attr("src", e.target.result);
+
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+        else {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#leaguimg" + idVal).show();
+                    $("#leaguimg" + idVal).attr("src", e.target.result);
+
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+
+    }
+
+    function checkonchg(e) {
+        //alert(e);
+        if (e == 1) {
+            $("#textsel").show();
+            $("#imagesel").hide();
+            $("#imagePrev").hide();
+        }
+        else if (e == 2) {
+            $("#textsel").hide();
+            $("#imagesel").show();
+            $("#imagePrev").show();
+        }
+        else if (e == 3) {
+            $("#textsel").show();
+            $("#imagesel").show();
+            $("#imagePrev").show();
+        }
+    }
+
+    function radChoiSel(e, el) {
+        //console.log("radCho" + e + el);
+        $("#radCho" + e + el).prop("checked", true);
+        Choionchg(e, el);
+    }
+
+    function Choionchg(e, el) {
+        //var e = String(el).charAt(1);
+        if (e == 1) {
+            $("#textsel" + el).show();
+            $("#imagesel" + el).hide();
+            $("#imagePrev" + el).hide();
+        }
+        else if (e == 2) {
+            $("#textsel" + el).hide();
+            $("#imagesel" + el).show();
+            $("#imagePrev" + el).show();
+        }
+        else if (e == 3) {
+            $("#textsel" + el).show();
+            $("#imagesel" + el).show();
+            $("#imagePrev" + el).show();
+        }
+    }
+
+
+    function addquestions() {
+        $("#extraquestions").show();
+        return false;
+    }
+    function adddynamicquestion() {
+        var a = document.getElementById("briefnoquestion").value;
+        var str = '';
+        $("#adddynamicfield").html(str);
+        for (var i = 0; i < a; i++) {
+
+            str = '<input type="text" style="text-align: center;" class="form-control validate[required]" value="" placeholder="Your Question" id="brief-metadata" name="brief-metadata" /><br />';
+            $("#adddynamicfield").append(str);
+        }
+    }
+    function select_file(btn, imgf, ban) {
+
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+            $("#" + ban + "").addClass("validate[required,custom[url]]");
+        } else {
+            $("#" + ban + "").removeClass("validate[required,custom[url]]");
+        }
+
+        $("#" + imgf + "").val(filename);
+    }
+
+    function getSubCategory(val, ids) {
+
+    /**/
+    /**/
+    /**/
+    var url = '@Url.Action("getSubcategoryList", "Brief")';
+    /**/
+    /**/
+    /**/
+    if (val != "0") {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { cid: val },
+
+            success: function (data) {
+                $("#" + ids).empty().append(data);
+            }
+        });
+    }
+}
+
+    function formSubmitRTCheck() {
+        var flag = $("input[type='radio'][name='template-card']:checked").val();
+        var rtcode = $('#brief-rt-data-t' + flag).summernote('code');
+        var chcat = '';
+
+        $("input[name='brf-category[]']").each(function () {
+            chcat = chcat + ',' + $(this).val();
+        });
+        $("#brf-cat-val").empty().val(chcat);
+
+        if (rtcode) {
+            $('#brf-rt-code').val(rtcode);
+            //$("#brf-rt-code").val($('<div />').text(rtcode).html());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function formSubmit() {
+        var valid = true;// $("#form-add-brief").validationEngine('validate');
+
+        if (valid) {
+            var form_data = $("#form-add-brief").serializeArray();
+            var rtcode = $('.summernote').summernote('code');
+
+            form_data.push({ name: "rtcode", value: rtcode });
+            var chcat = '';
+
+            $("input[name='brf-category[]']").each(function () {
+                chcat = chcat + ',' + $(this).val();
+            });
+            $("#brf-cat-val").empty().val(chcat);
+
+            /**/
+            var url = '@Url.Action("finishDraftBriefContent", "Brief")';
+            /**/
+
+            var obj = $("#form-add-brief").serializeToJSON();
+            var jsonForm = JSON.stringify(obj);
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { jdata: jsonForm, rtcode: rtcode },
+                success: function (msg) {
+
+                    /**/
+                    location.href = '@Url.Action("briefDraftContent", "Brief")';
+                    /**/
+
+                }
+            });
+        }
+    }
+
+    function prtneeded() {
+
+        $("#prt_count").show();
+
+    }
+
+
+    
+
+</script>
+<style>
+    .switch {
+        position: relative;
+        height: 26px;
+        width: 120px;
+        /*margin: 20px auto;*/
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .switch-label {
+        position: relative;
+        z-index: 2;
+        float: left;
+        width: 58px;
+        line-height: 26px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+    }
+
+        .switch-label:active {
+            font-weight: bold;
+        }
+
+    .switch-label-off {
+        padding-left: 2px;
+    }
+
+    .switch-label-on {
+        padding-right: 2px;
+    }
+
+
+    .switch-input {
+        display: none;
+    }
+
+        .switch-input:checked + .switch-label {
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.65);
+            text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+            -webkit-transition: 0.15s ease-out;
+            -moz-transition: 0.15s ease-out;
+            -ms-transition: 0.15s ease-out;
+            -o-transition: 0.15s ease-out;
+            transition: 0.15s ease-out;
+            -webkit-transition-property: color, text-shadow;
+            -moz-transition-property: color, text-shadow;
+            -ms-transition-property: color, text-shadow;
+            -o-transition-property: color, text-shadow;
+            transition-property: color, text-shadow;
+        }
+
+        .switch-input:checked + .switch-label-on ~ .switch-selection {
+            left: 60px;
+            /* Note: left: 50%; doesn't transition in WebKit */
+        }
+
+    .switch-selection {
+        position: absolute;
+        z-index: 1;
+        top: 2px;
+        left: 2px;
+        display: block;
+        width: 58px;
+        height: 22px;
+        border-radius: 3px;
+        background-color: #65bd63;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+        background-image: -webkit-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -moz-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -ms-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -o-linear-gradient(top, #9dd993, #65bd63);
+        background-image: linear-gradient(top, #9dd993, #65bd63);
+        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        -webkit-transition: left 0.15s ease-out;
+        -moz-transition: left 0.15s ease-out;
+        -ms-transition: left 0.15s ease-out;
+        -o-transition: left 0.15s ease-out;
+        transition: left 0.15s ease-out;
+    }
+
+    .switch-blue .switch-selection {
+        background-color: #3aa2d0;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4fc9ee), color-stop(100%, #3aa2d0));
+        background-image: -webkit-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -moz-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -ms-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -o-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: linear-gradient(top, #4fc9ee, #3aa2d0);
+    }
+
+    .switch-yellow .switch-selection {
+        background-color: #c4bb61;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e0dd94), color-stop(100%, #c4bb61));
+        background-image: -webkit-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -moz-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -ms-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -o-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: linear-gradient(top, #e0dd94, #c4bb61);
+    }
+
+    .avatar-upload .avatar-edit input {
+        display: none;
+    }
+
+    .avatar-upload .avatar-edit {
+        position: absolute;
+        right: 12px;
+        z-index: 1;
+    }
+
+
+
+    .avatar-upload {
+        position: relative;
+        max-width: 205px;
+        /*margin: 10px auto;*/
+    }
+
+        .avatar-upload .avatar-preview {
+            width: 192px;
+            height: 192px;
+            position: relative;
+            /*border-radius: 100%;*/
+            border: 6px solid #F8F8F8;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        }
+
+    .inputRadThem {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .fonticon {
+        cursor: pointer;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 2; /* Sit on top */
+        padding-top: 200px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        /*float: right;
+        margin-right: 0%;*/
+        margin-top: 5%;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+<style>
+    .tooltip1 {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltip1 .tooltiptext1 {
+            visibility: hidden;
+            width: 170px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -0px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip1 .tooltiptext2 {
+            visibility: hidden;
+            width: 400px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 5px 5px;
+            position: absolute;
+            z-index: 1;
+            top: -110px;
+            right: -10%;
+            margin-left: -0px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip1 .tooltiptext1::after, .tooltip1 .tooltiptext2::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+        .tooltip1:hover .tooltiptext1, .tooltip1:hover .tooltiptext2 {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>

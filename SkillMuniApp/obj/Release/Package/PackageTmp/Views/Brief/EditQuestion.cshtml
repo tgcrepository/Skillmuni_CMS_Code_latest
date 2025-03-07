@@ -1,0 +1,970 @@
+﻿
+@{
+    ViewBag.Title = "EditQuestion";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+    List<tbl_brief_question> BriefQue = (List<tbl_brief_question>)ViewData["BriefQue"];
+    List<tbl_brief_answer> BriefAns = (List<tbl_brief_answer>)ViewData["BriefAns"];
+    List<tbl_brief_question_metadata> BriefMeta = (List<tbl_brief_question_metadata>)ViewData["BriefMeta"];
+
+    int questionId = 0;
+    Nullable<int> orgaId = 0;
+    Nullable<int> idCateg = 0;
+    Nullable<int> subCateg = 0;
+    Nullable<System.DateTime> expDate = null;
+    Nullable<int> complx = 0;
+    int questionType = 0;
+    Nullable<int> QthemTyp = 0;
+    Nullable<int> qChoiTyp = 0;
+    string briefQuestion = "";
+    string imageQuestion = "";
+    foreach (var item in BriefQue)
+    {
+        questionId = item.id_brief_question;
+        orgaId = item.id_organization;
+        idCateg = item.id_brief_category;
+        subCateg = item.id_brief_sub_category;
+        expDate = item.expiry_date;
+        complx = item.question_complexity;
+        questionType = item.question_type;
+        QthemTyp = item.question_theme_type;
+        qChoiTyp = item.question_choice_type;
+        string queChec = item.brief_question;
+        if(queChec == null)
+        {
+            briefQuestion = "";
+        }
+        else
+        {
+            briefQuestion = queChec;
+        }
+
+        imageQuestion = item.question_image;
+    }
+
+    int briefAnsCount = BriefAns.Count;
+
+}
+
+<style>
+    .switch {
+        position: relative;
+        height: 26px;
+        width: 120px;
+        /*margin: 20px auto;*/
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .switch-label {
+        position: relative;
+        z-index: 2;
+        float: left;
+        width: 58px;
+        line-height: 26px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+    }
+
+        .switch-label:active {
+            font-weight: bold;
+        }
+
+    .switch-label-off {
+        padding-left: 2px;
+    }
+
+    .switch-label-on {
+        padding-right: 2px;
+    }
+
+
+    .switch-input {
+        display: none;
+    }
+
+        .switch-input:checked + .switch-label {
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.65);
+            text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+            -webkit-transition: 0.15s ease-out;
+            -moz-transition: 0.15s ease-out;
+            -ms-transition: 0.15s ease-out;
+            -o-transition: 0.15s ease-out;
+            transition: 0.15s ease-out;
+            -webkit-transition-property: color, text-shadow;
+            -moz-transition-property: color, text-shadow;
+            -ms-transition-property: color, text-shadow;
+            -o-transition-property: color, text-shadow;
+            transition-property: color, text-shadow;
+        }
+
+        .switch-input:checked + .switch-label-on ~ .switch-selection {
+            left: 60px;
+            /* Note: left: 50%; doesn't transition in WebKit */
+        }
+
+    .switch-selection {
+        position: absolute;
+        z-index: 1;
+        top: 2px;
+        left: 2px;
+        display: block;
+        width: 58px;
+        height: 22px;
+        border-radius: 3px;
+        background-color: #65bd63;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+        background-image: -webkit-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -moz-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -ms-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -o-linear-gradient(top, #9dd993, #65bd63);
+        background-image: linear-gradient(top, #9dd993, #65bd63);
+        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        -webkit-transition: left 0.15s ease-out;
+        -moz-transition: left 0.15s ease-out;
+        -ms-transition: left 0.15s ease-out;
+        -o-transition: left 0.15s ease-out;
+        transition: left 0.15s ease-out;
+    }
+
+    .switch-blue .switch-selection {
+        background-color: #3aa2d0;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4fc9ee), color-stop(100%, #3aa2d0));
+        background-image: -webkit-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -moz-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -ms-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -o-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: linear-gradient(top, #4fc9ee, #3aa2d0);
+    }
+
+    .switch-yellow .switch-selection {
+        background-color: #c4bb61;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e0dd94), color-stop(100%, #c4bb61));
+        background-image: -webkit-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -moz-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -ms-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -o-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: linear-gradient(top, #e0dd94, #c4bb61);
+    }
+
+    .avatar-upload .avatar-edit input {
+        display: none;
+    }
+
+    .avatar-upload .avatar-edit {
+        position: absolute;
+        right: 12px;
+        z-index: 1;
+    }
+
+
+
+    .avatar-upload {
+        position: relative;
+        max-width: 205px;
+        /*margin: 10px auto;*/
+    }
+
+        .avatar-upload .avatar-preview {
+            width: 192px;
+            height: 192px;
+            position: relative;
+            /*border-radius: 100%;*/
+            border: 6px solid #F8F8F8;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        }
+
+    .inputRadThem {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .fonticon {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#select-category").val(@idCateg);
+         $("#select-sub-category").val(@subCateg);
+         $("#question-complexity").val(@complx);
+        $("#question-type").val(@questionType);               
+        var qthemTyp =@QthemTyp;
+        if (qthemTyp == 1)
+         {
+             //alert(qthemTyp);
+            $("#thme1").attr('disabled', true);
+             $('#thme2').attr('checked', true);
+             $("#briefQues").show();
+            $("#choiceImg").hide();
+            $("#question-title").val("@briefQuestion");
+            //console.log("@briefQuestion");
+            BriefAnswer()
+         }
+         else if (qthemTyp == 2)
+         {
+             //alert(qthemTyp);
+            $("#thme2").attr('disabled', true);
+             $('#thme1').attr('checked', true);
+             $("#choiceImg").show();
+             $("#briefQues").hide();
+             var choiceType = @qChoiTyp;
+             var briefQuest ="@briefQuestion.ToString()";
+             var imageQuest = "@imageQuestion";             
+             //console.log(choiceType);
+             if (choiceType == 1)
+             {
+                 $("#radthm2").attr('disabled', true);
+                 $("#radthm3").attr('disabled', true);
+                 $("#radthm1").attr('checked', true);
+                 $("#textsel").show();
+                 $("#imagesel").hide();
+                 $("#imagePrev").hide();
+                 $("#questionText").val(briefQuest);
+                 BriefAnswer()
+             }
+             else if (choiceType == 2)
+             {
+                 $("#radthm1").attr('disabled', true);
+                 $("#radthm3").attr('disabled', true);
+                 $("#radthm2").attr('checked', true);
+                 $("#textsel").hide();
+                 $("#imagesel").show();
+                 $("#imagePrev").show();
+                 $("#league-image").val(imageQuest);    
+                 $("#briefImgQue").attr("src", "../Content/SKILLMUNI_DATA/briefQuesion/@orgaId/question/@imageQuestion");
+                 BriefAnswer()
+             }
+             else if (choiceType == 3)
+             {
+                 $("#radthm2").attr('disabled', true);
+                 $("#radthm1").attr('disabled', true);
+                 $("#radthm3").attr('checked', true);
+                 $("#textsel").show();
+                 $("#imagesel").show();
+                 $("#imagePrev").show();
+                 $("#questionText").val(briefQuest);
+                 $("#league-image").val(imageQuest);                 
+                 $("#briefImgQue").attr("src", "../Content/SKILLMUNI_DATA/briefQuesion/@orgaId/question/@imageQuestion");
+                 BriefAnswer()
+                 
+             }
+         }       
+
+        $("#form-add-brief-question").validationEngine();
+
+        $("#datetimepicker2").datetimepicker({
+            minDate: 0,
+            dateFormat: "dd-mm-yy",
+            minDate: new Date(),
+            onSelect: function (selected) {
+                var date = $(this).datetimepicker('getDate');
+            }
+        });
+    });
+
+    function BriefAnswer() {
+        var qthemTyp =@QthemTyp;
+        var briefAnser = @Html.Raw(Json.Encode(BriefAns));
+       // console.log(briefAnser);
+
+        if (qthemTyp == 1) {            
+            for (var i = 0; i < briefAnser.length; i++) {                
+                var incI = i + 1;
+                if (incI>2)
+                {
+                    DynamaddNewOption(incI);
+                }
+                if (briefAnser[i].is_correct_answer == 1)
+                {
+                    $("#check-box-" + incI).attr("checked", true);
+                }
+                $("#brief-option-" + incI).val(briefAnser[i].brief_answer);
+                $('#idchoceques-' + incI).val(briefAnser[i].id_brief_answer);
+            }
+        }
+        else if (qthemTyp == 2) {            
+            for (var i = 0; i < briefAnser.length; i++) {
+                var incI = i + 1;
+                if (incI > 2) {
+                    DynaddImgCheck(incI);
+                }                
+                if (briefAnser[i].choice_type == 1) {                    
+                    $("#radCho1" + incI).attr('checked', true);
+                    $("#textsel" + incI).show();
+                    $("#imagesel" + incI).hide();
+                    $("#imagePrev" + incI).hide();
+                    $("#questionText" + incI).val(briefAnser[i].brief_answer);
+                    if (briefAnser[i].is_correct_answer == 1) {
+                        $("#check-box-img-" + incI).attr("checked", true);
+                    }
+
+                }
+                else if (briefAnser[i].choice_type == 2) {                    
+                    $("#radCho2" + incI).attr('checked', true);
+                    $("#textsel" + incI).hide();
+                    $("#imagesel" + incI).show();
+                    $("#imagePrev" + incI).show();
+                    $("#league-image" + incI).val(briefAnser[i].choice_image);
+                    $("#leaguimg" + incI).attr("src", "../Content/SKILLMUNI_DATA/briefQuesion/@orgaId/choice/" + briefAnser[i].choice_image + "");
+                    if (briefAnser[i].is_correct_answer == 1) {
+                        $("#check-box-img-" + incI).attr("checked", true);
+                    }
+                }
+                else if (briefAnser[i].choice_type == 3) {                    
+                    //console.log("type 3");
+                    $("#radCho3" + incI).attr('checked', true);
+                    $("#textsel" + incI).show();
+                    $("#imagesel" + incI).show();
+                    $("#imagePrev" + incI).show();
+                    $("#questionText" + incI).val(briefAnser[i].brief_answer);
+                    $("#league-image" + incI).val(briefAnser[i].choice_image);
+                    $("#leaguimg" + incI).attr("src", "../Content/SKILLMUNI_DATA/briefQuesion/@orgaId/choice/" + briefAnser[i].choice_image + "");
+                    if (briefAnser[i].is_correct_answer == 1) {
+                        $("#check-box-img-" + incI).attr("checked", true);
+                    }
+                }
+                $('#secondchoceid-' + incI).val(briefAnser[i].id_brief_answer);
+            }
+        }
+
+        briefMetaDataFun()
+    }
+
+    function briefMetaDataFun()
+    {
+        var briefMetaData = @Html.Raw(Json.Encode(BriefMeta));
+        //console.log(briefMetaData);
+        var metStr = "";
+        for (var j = 0; j < briefMetaData.length; j++) {
+            if (j == briefMetaData.length-1) {                
+                metStr += briefMetaData[j].brief_question_metadata;                
+            }
+            else {                
+                metStr += briefMetaData[j].brief_question_metadata + ",";                
+            }
+        }
+        //console.log(metStr);
+        $("#question-metadata").val(metStr);
+    }
+
+    function DynamaddNewOption(e) {        
+        var option = '';
+        var id = $("#hid-row-count").val();
+        var countVal = parseInt(e);
+        var vcheck = $("#brief-option-" + id).val();
+
+        if (countVal > 0) {
+            $("#addoption" + id).hide();
+            var ids = parseInt(e);
+            if (ids < 7) {
+                option = option + '<div class="row" id="qtn-option-' + ids + '"><div class="col-md-1">' + ids + ' </div><div class="col-md-9"> ';
+                option = option + '<div id="theme-1-header" class="form-group">';
+                option = option + '<input type="hidden" name="idchoceques-' + ids + '" id="idchoceques-' + ids + '" value="" /><input type="text" class="form-control validate[required]" value="" placeholder="option ' + ids + ' of question" id="brief-option-' + ids + '" name="brief-option-' + ids + '" />';
+                option = option + '</div></div><div class="col-md-1"><div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;"><label> <input type="radio" id="check-box-' + ids + '" name="check-box-option" value="' + ids + '" /> <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span></label></div> </div><div class="col-md-1" id="addoption' + countVal + '"><a href="javascript:void(0)" onclick="addNewOption()" class="btn btn-info"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a><a href="javascript:void(0)" onclick="DelNewOption()" class="btn btn-danger"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a><br /> <br /></div></div>';
+                $("#div-qtn-option").append(option);
+                $("#hid-row-count").val(ids);
+            }
+            else {
+                $("#addoption" + 6).show();
+            }
+        }
+    }
+
+    function addNewOption() {        
+        var option = '';
+        var id = $("#hid-row-count").val();
+        var countVal = parseInt(id) + 1;        
+        var vcheck = $("#brief-option-" + id).val();
+        if (vcheck.length > 0) {
+            $("#addoption" + id).hide();
+            var ids = parseInt(id) + 1;
+            if (ids < 7) {
+                option = option + '<div class="row" id="qtn-option-' + ids + '"><div class="col-md-1">' + ids + ' </div><div class="col-md-9"> ';
+                option = option + '<div id="theme-1-header" class="form-group">';
+                option = option + '<input type="text" class="form-control validate[required]" value="" placeholder="option ' + ids + ' of question" id="brief-option-' + ids + '" name="brief-option-' + ids + '" />';
+                option = option + '</div></div><div class="col-md-1"><div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;"><label> <input type="radio" id="check-box-' + ids + '" name="check-box-option" value="' + ids + '" /> <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span></label></div> </div><div class="col-md-1" id="addoption' + countVal + '"><a href="javascript:void(0)" onclick="addNewOption()" class="btn btn-info"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a><a href="javascript:void(0)" onclick="DelNewOption()" class="btn btn-danger"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a><br /> <br /></div></div>';
+                $("#div-qtn-option").append(option);
+                $("#hid-row-count").val(ids);
+            }
+            else {
+                $("#addoption" + 6).show();
+            }
+        }
+    }
+
+    function DelNewOption()
+    {
+        var id = $("#hid-row-count").val();
+        var countVal = parseInt(id);
+        //console.log(countVal);
+        var briefAnser = @Html.Raw(Json.Encode(BriefAns));
+        if (countVal > briefAnser.length) {            
+            var countVal1 = parseInt(id) - 1;
+            $("#qtn-option-" + countVal).remove();
+            $("#addoption" + countVal1).show();
+            var id = $("#hid-row-count").val(countVal1);
+        }
+
+    }
+
+    function getSubCategory(val,ids) {
+
+        var url = '@Url.Action("getSubcategoryList", "Brief")';
+        if (val != "0") {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { cid: val },
+
+                success: function (data) {
+                    $("#" + ids).empty().append(data);
+
+                }
+            });
+        }
+    }
+
+
+    function imgeBrieQues(el, btn, imgf, ban) {
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        } else {
+        }
+        $("#" + imgf + "").val(filename);
+        if (el.files && el.files[0]) {
+            var FR = new FileReader();
+            FR.onload = function (e) {
+                $("#briefImgQue").show();
+                $("#briefImgQue").attr("src", e.target.result);
+
+            };
+            FR.readAsDataURL(el.files[0]);
+        }
+    }
+
+    function imgeBrie(el, btn, imgf, ban, idVal) {
+        // console.log(idVal);
+        if (idVal == 1) {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#leaguimg1").show();
+                    $("#leaguimg1").attr("src", e.target.result);
+
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+        else {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#leaguimg" + idVal).show();
+                    $("#leaguimg" + idVal).attr("src", e.target.result);
+
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+
+    }
+
+</script>
+
+@{
+    List<tbl_brief_category> category = (List<tbl_brief_category>)ViewData["category"];
+    List<tbl_brief_subcategory> subcategory = (List<tbl_brief_subcategory>)ViewData["subcategory"];
+    List<tbl_brief_question_complexity> complexity = (List<tbl_brief_question_complexity>)ViewData["complexity"];
+}
+
+@using (Html.BeginForm("updateQuestionAction", "Brief", FormMethod.Post, new { id = "form-update-brief-question", enctype = "multipart/form-data" }))
+{
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">Edit Brief Question </div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                            <input type="hidden" name="idQues" value="@questionId" />
+                                             <label class="control-label">Category</label>
+                                            <select id="select-category" name="select-category" class="form-control selectpicker" data-live-search="true" onchange="getSubCategory(this.value,'select-sub-category')">
+                                                @foreach (var pro in category)
+                                                {
+                                                    <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                                }
+                                            </select>
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label">Sub-Category</label>
+                                            <select id="select-sub-category" name="select-sub-category" class="form-control">
+                                                @foreach (var pro in subcategory)
+                                                {
+                                                    <option data-tokens="@pro.brief_subcategory" value="@pro.id_brief_subcategory">@pro.brief_subcategory</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label pull-right">Expiry Date</label>
+                                            <div class='input-group date pull-right'>
+                                                <input type='text' class="form-control validate[required]" id='datetimepicker2' value="@expDate.Value.ToString("dd-MM-yyyy HH:mm")" name="question-expiry" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="control-label pull-right">Complexity</label>
+                                            <select id="question-complexity" name="question-complexity" class="form-control ">
+                                                @foreach (tbl_brief_question_complexity item in complexity)
+                                                {
+                                                    <option value="@item.question_complexity">@item.question_complexity_label</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <label class="control-label">Brief Question Type </label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <select id="question-type" name="question-type" class="form-control ">
+                                                <option value="1">Multiple choice (Q&A) </option>
+                                                <option value="2" disabled>Rank</option>
+                                                <option value="3" disabled>Range</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="control-label">Select Theme </label>
+                                        <div id="theme-1-header" class="form-group switch">
+                                            <input class="switch-input" type="radio" value="1" id="thme2" onchange="showTheme1()" name="themeSele" checked />
+                                            <label for="thme2" class="switch-label switch-label-off">Theme 1</label>
+                                            <input class="switch-input" type="radio" value="2" id="thme1" onchange="showTheme2()" name="themeSele" />
+                                            <label for="thme1" class="switch-label switch-label-on">Theme 2</label>
+                                            <span class="switch-selection"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-group" id="choiceImg" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Brief Question </label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <input type="radio" class="inputRadThem" name="themtyp" id="radthm1" value="1" />
+                                                <i class="fa fa-file-text fa-2x fonticon" aria-hidden="true" onclick="radThemSel(1)"></i>
+                                                <input type="radio" class="inputRadThem" name="themtyp" id="radthm2" value="2" />
+                                                <i class="fa fa-picture-o fa-2x fonticon" aria-hidden="true" onclick="radThemSel(2)"></i>
+                                                <input type="radio" class="inputRadThem" name="themtyp" id="radthm3" value="3" />
+                                                <i class="fa fa-newspaper-o fa-2x fonticon" aria-hidden="true" onclick="radThemSel(3)"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" id="textsel" style="display:none">
+                                            <div class="form-group">
+                                                <input class="form-control" placeholder="Your Question" id="questionText" name="questionText" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" id="imagesel">
+                                            <input type="text" class="form-control" readonly value="" placeholder="Brief Image" id="league-image" name="league-image" />
+                                            <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                                <span>Browse</span>
+                                                <input id="league-btn" name="league-btn" class="upload" type="file" accept="image/*" onchange="imgeBrieQues(this, 'league-btn', 'league-image', 'logo-text')" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" id="imagePrev">
+                                            <div class="avatar-upload" style="margin:-10px auto;">
+                                                <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                                    <img id="briefImgQue" style="width:40px;height:40px;padding:5%;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <label>Choice No</label>
+                                        </div>
+                                        <div class="col-md-2"><label>Theme</label></div>
+                                        <div class="col-md-7">
+                                            <label>Option</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Right Option</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>Action</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            @*<input type="hidden" id="imgChoiCount" name="imgChoiCount" value="1" />*@
+                                            <div class="col-md-1">
+                                                <label>1 </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <input type="hidden" name="secondchoceid-1" id="secondchoceid-1" value=""/>
+                                                    <input type="radio" class="inputRadThem" name="choiceType1" id="radCho11" value="1" />
+                                                    <i class="fa fa-file-text fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(1,1)"></i>
+                                                    <input type="radio" class="inputRadThem" name="choiceType1" id="radCho21" value="2" />
+                                                    <i class="fa fa-picture-o fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(2,1)"></i>
+                                                    <input type="radio" class="inputRadThem" name="choiceType1" id="radCho31" value="3" checked />
+                                                    <i class="fa fa-newspaper-o fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(3,1)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="textsel1">
+                                                <div class="form-group">
+                                                    <input class="form-control" placeholder="Your Question" id="questionText1" name="questionText1" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="imagesel1">
+                                                <input type="text" class="form-control" readonly value="" placeholder="Brief Image" id="league-image1" name="league-image1" />
+                                                <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                                    <span>Browse</span>
+                                                    <input id="league-btn1" name="imgBrief-btn1" class="upload" type="file" accept="image/*" onchange="imgeBrie(this, 'league-btn1', 'league-image1', 'logo-text',1)" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" id="imagePrev1">
+                                                <div class="avatar-upload">
+                                                    <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                                        <img id="leaguimg1" style="width:40px;height:40px;padding:5%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;">
+                                                    <label>
+                                                        <input type="radio" id="check-box-img-1" name="check-box-img-option" value="1" />
+                                                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @*<div class="col-md-1" id="league_add_btn_div_1">
+                                                    <label class="control-label"><a onclick="addImgCheck(1)"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a> </label>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <input type="hidden" id="imgChoiCount" name="imgChoiCount" value="2" />
+                                            <div class="col-md-1">
+                                                <label>2 </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <input type="hidden" name="secondchoceid-2" id="secondchoceid-2" value="" />
+                                                    <input type="radio" class="inputRadThem" name="choiceType2" id="radCho12" value="1" />
+                                                    <i class="fa fa-file-text fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(1,2)"></i>
+                                                    <input type="radio" class="inputRadThem" name="choiceType2" id="radCho22" value="2" />
+                                                    <i class="fa fa-picture-o fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(2,2)"></i>
+                                                    <input type="radio" class="inputRadThem" name="choiceType2" id="radCho32" value="3" checked />
+                                                    <i class="fa fa-newspaper-o fa-2x fonticon" aria-hidden="true" onclick="radChoiSel(3,2)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="textsel2">
+                                                <div class="form-group">
+                                                    <input class="form-control" placeholder="Your Choice" id="questionText2" name="questionText2" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="imagesel2">
+                                                <input type="text" class="form-control" readonly value="" placeholder="Brief Image" id="league-image2" name="league-image2" />
+                                                <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                                    <span>Browse</span>
+                                                    <input id="league-btn2" name="imgBrief-btn2" class="upload" type="file" accept="image/*" onchange="imgeBrie(this, 'league-btn2', 'league-image2', 'logo-text',2)" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" id="imagePrev2">
+                                                <div class="avatar-upload">
+                                                    <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                                        <img id="leaguimg2" style="width:40px;height:40px;padding:5%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;">
+                                                    <label>
+                                                        <input type="radio" id="check-box-img-2" name="check-box-img-option" value="2" />
+                                                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" id="league_add_btn_div_2">
+                                                <label class="control-label"><a onclick="addImgCheck(2)"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a> </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="imgConAdd">
+
+                                    </div>
+                                </div>
+                                <div class="form-group" id="briefQues">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="control-label">Brief Question </label>
+                                            <div id="theme-1-header" class="form-group">
+                                                <input type="text" class="form-control validate[required]" value="" placeholder="brief question" id="question-title" name="question-title" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="row" id="qtn-option-1">
+                                            <div class="col-md-1">
+                                                <input type="hidden" value="2" id="hid-row-count" name="hid-row-count" />
+                                                <a href="javascript:void(0)" onclick="addNewOption()" class="btn btn-info">add new option</a>
+                                                <br /><br />
+                                            </div>
+                                            <div class="col-md-10">
+                                            </div>
+                                            <div class="col-md-1">
+                                            </div>
+                                        </div>*@
+                                    <div class="row" id="qtn-option-0">
+                                        <div class="col-md-1">
+                                            <label class="control-label">Sr No</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div id="theme-1-header" class="form-group">
+                                                <label class="control-label">Option </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="control-label">Right Option </label>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                    <div class="row" id="qtn-option-1">
+                                        <div class="col-md-1">1</div>
+                                        <div class="col-md-9">
+                                            <div id="theme-1-header" class="form-group">
+                                                <input type="hidden" name="idchoceques-1" id="idchoceques-1" value=""/>
+                                                <input type="text" class="form-control validate[required]" value="" placeholder="option 1 of question" id="brief-option-1" name="brief-option-1" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;">
+                                                <label>
+                                                    <input type="radio" id="check-box-1"
+                                                           name="check-box-option" value="1" checked="checked" />
+                                                    <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                        </div>
+                                    </div>
+                                    <div class="row" id="qtn-option-2">
+                                        <input type="hidden" value="2" id="hid-row-count" name="hid-row-count" />
+                                        <div class="col-md-1">2 </div>
+                                        <div class="col-md-9">
+                                            <div id="theme-1-header" class="form-group">
+                                                <input type="hidden" name="idchoceques-2" id="idchoceques-2" value="" />
+                                                <input type="text" class="form-control validate[required]" value="" placeholder="option 2 of question" id="brief-option-2" name="brief-option-2" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="checkbox" style="margin-top: 2px;margin-bottom: 2px;">
+                                                <label>
+                                                    <input type="radio" id="check-box-2"
+                                                           name="check-box-option" value="2" />
+                                                    <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <a href="javascript:void(0)" id="addoption2" onclick="addNewOption()" class="btn btn-info"><i class='fa fa-plus-circle fa-lg' aria-hidden='true'></i></a>
+                                            <br /><br />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="div-qtn-option">
+                                </div>
+                                <br />
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">MetaData</label>
+                                        <div id="theme-1-header" class="form-group">
+                                            <input type="text" class="form-control validate[required]" value="" placeholder="add metadata to question separated by comma " id="question-metadata" name="question-metadata" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row" id="qtn-option-0">
+                                    <div class="col-md-1">
+                                    </div>
+                                    <div class="col-md-10">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input id="btn_question2" type="submit" class="btn btn-primary" name="btn_submit" value="Save " />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function radThemSel(e) {
+        //$("#radthm" + e).prop("checked", true);
+        //checkonchg(e);
+    }
+
+    //function checkonchg(e) {
+    //    //alert(e);
+    //    if (e == 1) {
+    //        $("#textsel").show();
+    //        $("#imagesel").hide();
+    //        $("#imagePrev").hide();
+    //    }
+    //    else if (e == 2) {
+    //        $("#textsel").hide();
+    //        $("#imagesel").show();
+    //        $("#imagePrev").show();
+    //    }
+    //    else if (e == 3) {
+    //        $("#textsel").show();
+    //        $("#imagesel").show();
+    //        $("#imagePrev").show();
+    //    }
+    //}
+
+    function radChoiSel(e, el) {
+        var briefAnser = @Html.Raw(Json.Encode(BriefAns));
+        //console.log(briefAnser.length);
+        if (el > briefAnser.length) {
+            $("#radCho" + e + el).prop("checked", true);
+            Choionchg(e, el);
+        }
+    }
+
+    function Choionchg(e, el) {
+        //var e = String(el).charAt(1);
+        if (e == 1) {
+            $("#textsel" + el).show();
+            $("#imagesel" + el).hide();
+            $("#imagePrev" + el).hide();
+        }
+        else if (e == 2) {
+            $("#textsel" + el).hide();
+            $("#imagesel" + el).show();
+            $("#imagePrev" + el).show();
+        }
+        else if (e == 3) {
+            $("#textsel" + el).show();
+            $("#imagesel" + el).show();
+            $("#imagePrev" + el).show();
+        }
+    }
+
+    function showTheme2() {
+        //alert($("#thme1").val());
+        $("#choiceImg").show();
+        $("#briefQues").hide();
+        $("#div-qtn-option").hide();
+    }
+    function showTheme1() {
+        //alert('thm1');
+        $("#choiceImg").hide();
+        $("#briefQues").show();
+        $("#div-qtn-option").show();
+    }
+
+//dynamic image increment method 
+    function DynaddImgCheck(cur) {
+
+        var cur_updated = cur;
+        var showid = cur - 1;
+        $("#league_add_btn_div_" + showid).hide();
+        $("#league_add_btn_div_" + cur).hide();
+        var str = "<div class='row' id='imageBre-" + cur_updated + "' style='margin-top:1%;'><div class='col-md-1'><label>" + cur_updated + "</label></div><div class='col-md-2'><div class='form-group'><input type='hidden' name='secondchoceid-" + cur_updated + "' id='secondchoceid-" + cur_updated + "' value='' /><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho1" + cur_updated + "' value='1' /><i class='fa fa-file-text fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(1, " + cur_updated + ")'></i><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho2" + cur_updated + "' value='2' /><i class='fa fa-picture-o fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(2, " + cur_updated + ")'></i><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho3" + cur_updated + "' value='3' checked/><i class='fa fa-newspaper-o fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(3," + cur_updated + ")'></i></div></div><div class='col-md-3' id='textsel" + cur_updated + "'><div class='form-group'><input class='form-control' placeholder='Your Question' id='questionText" + cur_updated + "' name='questionText" + cur_updated + "' /></div></div><div class='col-md-3' id='imagesel" + cur_updated + "'><input type='text' class='form-control' readonly value='' placeholder='Brief Image' id='league-image" + cur_updated + "' name='league-image" + cur_updated + "' /><div class='fileUpload btn btn-primary' style='float:right;margin-top:-13%;'><span>Browse</span><input id='league-btn" + cur_updated + "' name='imgBrief-btn" + cur_updated + "' class='upload' type='file' accept='image/*' onchange='imgeBrie(this,\"league-btn" + cur_updated + "\",\"league-image" + cur_updated + "\",\"logo-text\"," + cur_updated + ")' /></div></div><div class='col-md-1' id='imagePrev" + cur_updated + "'><div class='avatar-upload'><div class='avatar-preview' style='width:50px;height:50px;margin-left:auto;margin-right:auto;'><img id='leaguimg" + cur_updated + "' style='width:40px;height:40px;padding:5%;'></div></div></div><div class='col-md-1'><div class='checkbox' style='margin-top: 2px;margin-bottom: 2px;'><label><input type='radio' id='check-box-img-" + cur_updated + "' name='check-box-img-option' value='" + cur_updated + "' /><span class='cr'><i class='cr-icon glyphicon glyphicon-ok'></i></span></label></div></div><div class='col-md-1' id='league_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addImgCheck(" + cur_updated + ")'><i class='fa fa-plus-circle fa-lg' aria-hidden='true'></i></a> <a onclick='delImgCheck(" + cur_updated + ")'><i class='fa fa-times fa-lg' aria-hidden='true' style='color:red;'></i></a></label></div></div>";
+
+        $("#imgConAdd").append(str);
+        //$("#leaguecnt").html("");
+        //$("#leaguecnt").append("<input type='hidden' id='leagueCoun' value='" + cur_updated + "' name='leaguecount' />");
+        $("#imgChoiCount").val(cur_updated);
+
+    }
+
+    //image add function in brief question method
+    function addImgCheck(cur) {
+
+        var cur_updated = cur + 1;
+        $("#league_add_btn_div_" + cur).hide();
+        var str = "<div class='row' id='imageBre-" + cur_updated + "' style='margin-top:1%;'><div class='col-md-1'><label>" + cur_updated + "</label></div><div class='col-md-2'><div class='form-group'><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho1" + cur_updated + "' value='1' /><i class='fa fa-file-text fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(1, " + cur_updated + ")'></i><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho2" + cur_updated + "' value='2' /><i class='fa fa-picture-o fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(2, " + cur_updated + ")'></i><input type='radio' class='inputRadThem' name='choiceType" + cur_updated + "' id='radCho3" + cur_updated + "' value='3' checked/><i class='fa fa-newspaper-o fa-2x fonticon' aria-hidden='true' onclick='radChoiSel(3," + cur_updated + ")'></i></div></div><div class='col-md-3' id='textsel" + cur_updated + "'><div class='form-group'><input class='form-control' placeholder='Your Question' id='questionText" + cur_updated + "' name='questionText" + cur_updated + "' /></div></div><div class='col-md-3' id='imagesel" + cur_updated + "'><input type='text' class='form-control' readonly value='' placeholder='Brief Image' id='league-image" + cur_updated + "' name='league-image" + cur_updated + "' /><div class='fileUpload btn btn-primary' style='float:right;margin-top:-13%;'><span>Browse</span><input id='league-btn" + cur_updated + "' name='imgBrief-btn" + cur_updated + "' class='upload' type='file' accept='image/*' onchange='imgeBrie(this,\"league-btn" + cur_updated + "\",\"league-image" + cur_updated + "\",\"logo-text\"," + cur_updated + ")' /></div></div><div class='col-md-1' id='imagePrev" + cur_updated + "'><div class='avatar-upload'><div class='avatar-preview' style='width:50px;height:50px;margin-left:auto;margin-right:auto;'><img id='leaguimg" + cur_updated + "' style='display:none;width:40px;height:40px;padding:5%;'></div></div></div><div class='col-md-1'><div class='checkbox' style='margin-top: 2px;margin-bottom: 2px;'><label><input type='radio' id='check-box-img-" + cur_updated + "' name='check-box-img-option' value='" + cur_updated + "' /><span class='cr'><i class='cr-icon glyphicon glyphicon-ok'></i></span></label></div></div><div class='col-md-1' id='league_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addImgCheck(" + cur_updated + ")'><i class='fa fa-plus-circle fa-lg' aria-hidden='true'></i></a> <a onclick='delImgCheck(" + cur_updated + ")'><i class='fa fa-times fa-lg' aria-hidden='true' style='color:red;'></i></a></label></div></div>";
+
+        $("#imgConAdd").append(str);
+        //$("#leaguecnt").html("");
+        //$("#leaguecnt").append("<input type='hidden' id='leagueCoun' value='" + cur_updated + "' name='leaguecount' />");
+        $("#imgChoiCount").val(cur_updated);
+
+    }
+
+
+    function delImgCheck(cur) {
+        var cur_updated = cur - 1;
+        if (cur == 2) {
+            $("#league_add_btn_div_1").show();
+            $("#imageBre-" + cur).remove();
+            $("#imgChoiCount").val(cur_updated);
+        }
+        else {
+            $("#imageBre-" + cur).remove();
+            $("#league_add_btn_div_" + cur_updated).show();
+            $("#imgChoiCount").val(cur_updated);
+            //addmetric(cur_updated);
+        }
+    }
+
+
+
+</script>

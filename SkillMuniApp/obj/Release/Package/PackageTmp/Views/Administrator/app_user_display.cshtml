@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Content Detail";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+}
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable({
+            "pageLength": 15, "scrollX": true
+        });
+    });
+
+</script>
+<style>
+    div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+    }
+</style>
+@{
+    List<m2ostnext.Models.AppUser> cmsList = (List<m2ostnext.Models.AppUser>)ViewData["userlist"];
+}
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">Application User List</h6>
+            </div>
+            <div class="panel-body">
+                <a href="@Url.Action("add_app_user", "Administrator")" class="btn btn-default btn-info pull-right">create user</a>
+                <hr />
+                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Email id</th>
+                            <th>Mobile No</th>
+                            <th>Location</th>
+                            <th>Designation</th>
+                            <th>DOB</th>
+                            <th>Date of Joining</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (m2ostnext.Models.AppUser item in cmsList)
+                        {
+                            <tr>
+                                <td>@item.User.USERID</td>
+                                <td>@item.User.EMPLOYEEID</td>
+                                <td>@(item.Profile.FIRSTNAME + " " + item.Profile.LASTNAME)</td>
+                                <td>@item.Profile.EMAIL</td>
+                                <td>@item.Profile.MOBILE</td>
+                                <td>@item.Profile.LOCATION</td>
+                                <td>@item.User.user_designation</td>
+                                <td>
+                                    @if (item.Profile.DATE_OF_BIRTH != null)
+                                    {
+                                        @(item.Profile.DATE_OF_BIRTH.Value.ToShortDateString() + " (" + @item.Profile.AGE + ")")
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Profile.DATE_OF_JOINING != null)
+                                    {
+                                        @item.Profile.DATE_OF_JOINING.Value.ToShortDateString()
+                                    }
+                                </td>
+
+                                <td><a href="@Url.Action("edit_app_user", "Administrator", new { id = item.User.ID_USER })"><i class="glyphicon glyphicon-edit"></i></a></td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

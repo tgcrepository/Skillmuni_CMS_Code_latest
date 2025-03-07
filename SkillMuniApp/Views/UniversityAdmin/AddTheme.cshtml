@@ -1,0 +1,872 @@
+﻿
+@{
+    ViewBag.Title = "AddTheme";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.tbl_special_metric_master> spMet = (List<m2ostnext.Models.tbl_special_metric_master>)ViewData["SpMetDrop"];
+}
+
+<style>
+    .switch {
+        position: relative;
+        height: 26px;
+        width: 120px;
+        /*margin: 20px auto;*/
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .switch-label {
+        position: relative;
+        z-index: 2;
+        float: left;
+        width: 58px;
+        line-height: 26px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+    }
+
+        .switch-label:active {
+            font-weight: bold;
+        }
+
+    .switch-label-off {
+        padding-left: 2px;
+    }
+
+    .switch-label-on {
+        padding-right: 2px;
+    }
+
+
+    .switch-input {
+        display: none;
+    }
+
+        .switch-input:checked + .switch-label {
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.65);
+            text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+            -webkit-transition: 0.15s ease-out;
+            -moz-transition: 0.15s ease-out;
+            -ms-transition: 0.15s ease-out;
+            -o-transition: 0.15s ease-out;
+            transition: 0.15s ease-out;
+            -webkit-transition-property: color, text-shadow;
+            -moz-transition-property: color, text-shadow;
+            -ms-transition-property: color, text-shadow;
+            -o-transition-property: color, text-shadow;
+            transition-property: color, text-shadow;
+        }
+
+        .switch-input:checked + .switch-label-on ~ .switch-selection {
+            left: 60px;
+            /* Note: left: 50%; doesn't transition in WebKit */
+        }
+
+    .switch-selection {
+        position: absolute;
+        z-index: 1;
+        top: 2px;
+        left: 2px;
+        display: block;
+        width: 58px;
+        height: 22px;
+        border-radius: 3px;
+        background-color: #65bd63;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+        background-image: -webkit-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -moz-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -ms-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -o-linear-gradient(top, #9dd993, #65bd63);
+        background-image: linear-gradient(top, #9dd993, #65bd63);
+        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        -webkit-transition: left 0.15s ease-out;
+        -moz-transition: left 0.15s ease-out;
+        -ms-transition: left 0.15s ease-out;
+        -o-transition: left 0.15s ease-out;
+        transition: left 0.15s ease-out;
+    }
+
+    .switch-blue .switch-selection {
+        background-color: #3aa2d0;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4fc9ee), color-stop(100%, #3aa2d0));
+        background-image: -webkit-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -moz-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -ms-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -o-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: linear-gradient(top, #4fc9ee, #3aa2d0);
+    }
+
+    .switch-yellow .switch-selection {
+        background-color: #c4bb61;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e0dd94), color-stop(100%, #c4bb61));
+        background-image: -webkit-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -moz-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -ms-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -o-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: linear-gradient(top, #e0dd94, #c4bb61);
+    }
+
+
+    .avatar-upload .avatar-edit input {
+        display: none;
+    }
+
+    .avatar-upload .avatar-edit {
+        position: absolute;
+        right: 12px;
+        z-index: 1;
+    }
+
+
+
+    .avatar-upload {
+        position: relative;
+        max-width: 205px;
+        /*margin: 10px auto;*/
+    }
+
+        .avatar-upload .avatar-preview {
+            width: 192px;
+            height: 192px;
+            position: relative;
+            /*border-radius: 100%;*/
+            border: 6px solid #F8F8F8;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        }
+</style>
+<script>
+    function addmetric(cur) {
+        //alert(cur);
+        var cur_updated = cur + 1;
+        $("#met_add_btn_div_" + cur).hide();
+        var str = "<div class='form-group' id='metricDel-" + cur_updated + "' ><div class='col-md-2'><label class='control-label'></label></div> <div class='col-md-4'> <input type='text' class='form-control validate[required]' value='' placeholder='Type a Metric Value here' id='organisation-name' name='theme-metric" + cur_updated + "' /> </div> <div class='col-md-2' id='met_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addmetric(" + cur_updated + ")' ><i class='fa fa-plus-circle fa-lg' aria-hidden='true'></i></a> <a onclick='delmetric(" + cur_updated + ")'><i class='fa fa-times fa-lg' aria-hidden='true' style='color:red;'></i></a></label></div> <div class='col-md-4'> </div> </div>";
+
+        $("#metricdiv").append(str);
+        $("#metriccnt").html("");
+        $("#metriccnt").append("<input type='hidden' value='" + cur_updated + "' id='metriccount' name='metriccount' />");
+
+    }
+
+    function delmetric(cur) {
+        //alert(cur);
+        var cur_updated = cur - 1;
+        if (cur == 2) {
+            $("#met_add_btn_div_1").show();
+            $("#metricDel-" + cur).remove();
+            $("#metriccount").val(cur_updated);
+        }
+        else {
+            $("#metricDel-" + cur).remove();
+            $("#met_add_btn_div_" + cur_updated).show();
+            $("#metriccount").val(cur_updated);
+            //addmetric(cur_updated);
+        }
+    }
+    //---------------11/12/18--PR----------------------------------
+
+    function addleague(cur) {
+
+        var cur_updated = cur + 1;
+        $("#league_add_btn_div_" + cur).hide();
+        var str = "<div class='form-group' id='leaguDel-" + cur_updated + "'><div class='col-md-2'><label class='control-label'></label></div> <div class='col-md-4'> <input type='text' class='form-control validate[required]' value='' placeholder='Type a League Value level " + cur_updated + "' id='organisation-name' name='theme-league" + cur_updated + "' /></div><div class='col-md-3'><input type='text' class='form-control' readonly value='' placeholder='Logo Image' id='league-image" + cur_updated + "' name='league-image" + cur_updated + "' /><div class='fileUpload btn btn-primary' style='float:right;margin-top:-13%;'><span>Browse</span><input id='league-btn" + cur_updated + "' name='league-btn" + cur_updated + "' class='upload' type='file' accept='image/*' onchange='leaguUrl(this,\"league-btn" + cur_updated + "\", \"league-image" + cur_updated + "\", \"logo-text\"," + cur_updated + ")' /></div></div><div class='col-md-2'><div class='avatar-upload' ><div class='avatar-preview' style='width:50px;height:50px;margin-left:auto;margin-right:auto;'><img id='leaguimg" + cur_updated + "' style='display:none;width:40px;height:40px;padding:5%;'></div></div></div><div class='col-md-1' id='league_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addleague(" + cur_updated + ")' ><i class='fa fa-plus-circle fa-lg' aria-hidden='true'></i></a><a onclick='delleague(" + cur_updated + ")'><i class='fa fa-times fa-lg' aria-hidden='true' style='color:red;'></i></a></label></div></div>";
+
+        $("#leaguediv").append(str);
+        $("#leagueCoun").val(cur_updated);
+        //$("#leaguecnt").html("");
+        //$("#leaguecnt").append("<input type='hidden' id='leagueCoun' value='" + cur_updated + "' name='leaguecount' />");
+
+    }
+
+    function delleague(cur) {
+        var cur_updated = cur - 1;
+        if (cur == 2) {
+            $("#league_add_btn_div_1").show();
+            $("#leaguDel-" + cur).remove();
+            $("#leagueCoun").val(cur_updated);
+        }
+        else {
+            $("#leaguDel-" + cur).remove();
+            $("#league_add_btn_div_" + cur_updated).show();
+            $("#leagueCoun").val(cur_updated);
+            //addmetric(cur_updated);
+        }
+    }
+
+    //---------------11/12/18--PR----------------------------------
+
+
+    function addbadge(cur) {
+
+        var cur_updated = cur + 1;
+        $("#badge_add_btn_div_" + cur).hide();
+        var str = "<div class='form-group' id='badgeDel-" + cur_updated + "'><div class='col-md-2'><label class='control-label'></label></div> <div class='col-md-4'> <input type='text' class='form-control validate[required]' value='' placeholder='Type a Badge Value here' id='organisation-name' name='theme-badge" + cur_updated + "' /> </div><div class='col-md-3'><input type='text' class='form-control' readonly value='' placeholder='Logo Image' id='badge-image" + cur_updated + "' name='badge-image" + cur_updated + "' /><div class='fileUpload btn btn-primary' style='float:right;margin-top:-13%;'><span>Browse</span><input id='badge-btn" + cur_updated + "' name='badge-btn" + cur_updated + "' class='upload' type='file' accept='image/*' onchange='badgeUrl(this,\"badge-btn" + cur_updated + "\", \"badge-image" + cur_updated + "\", \"logo-text\"," + cur_updated + ")' /></div></div><div class='col-md-2'><div class='avatar-upload' ><div class='avatar-preview' style='width:50px;height:50px;margin-left:auto;margin-right:auto;'><img id='badgeimg" + cur_updated + "' style='display:none;width:40px;height:40px;padding:5%;'></div></div></div><div class='col-md-1' id='badge_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addbadge(" + cur_updated + ")' ><i class='fa fa-plus-circle fa-lg' aria-hidden='true'></i></a><a onclick='delbadge(" + cur_updated + ")'><i class='fa fa-times fa-lg' aria-hidden='true' style='color:red;'></i></a></label></div></div>";
+
+        $("#badgediv").append(str);
+        $("#badgecnt").html("");
+        $("#badgecnt").append("<input type='hidden' value='" + cur_updated + "' id='badgeCoun' name='badgecount' />");
+
+    }
+
+    function delbadge(cur) {
+        var cur_updated = cur - 1;
+        if (cur == 2) {
+            $("#badge_add_btn_div_1").show();
+            $("#badgeDel-" + cur).remove();
+            $("#badgeCoun").val(cur_updated);
+        }
+        else {
+            $("#badgeDel-" + cur).remove();
+            $("#badge_add_btn_div_" + cur_updated).show();
+            $("#badgeCoun").val(cur_updated);
+            //addmetric(cur_updated);
+        }
+    }
+
+    //---------------11/12/18--PR----------------------------------
+
+    function addcurrency(cur) {
+
+        var cur_updated = cur + 1;
+        $("#currency_add_btn_div_" + cur).hide();
+        var str = "<div class='form-group' id='CurrDel-" + cur_updated + "'><div class='col-md-2'><label class='control-label'></label></div> <div class='col-md-4'> <input type='text' class='form-control validate[required]' value='' placeholder='Type a Currency Value here' id='organisation-name' name='theme-currency" + cur_updated + "' /> </div><div class='col-md-3'><input type='text' class='form-control' readonly value='' placeholder='Logo Image' id='curr-image" + cur_updated + "' name='curr-image" + cur_updated + "' /><div class='fileUpload btn btn-primary' style='float:right;margin-top:-13%;'><span>Browse</span><input id='curr-btn" + cur_updated + "' name='curr-btn" + cur_updated + "' class='upload' type='file' accept='image/*' onchange='currUrl(this,\"curr-btn" + cur_updated + "\", \"curr-image" + cur_updated + "\", \"logo-text\"," + cur_updated + ")' /></div></div><div class='col-md-2'><div class='avatar-upload' ><div class='avatar-preview' style='width:50px;height:50px;margin-left:auto;margin-right:auto;'><img id='currimg" + cur_updated + "' style='display:none;width:40px;height:40px;padding:5%;'></div></div></div><div class='col-md-1' id='currency_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addcurrency(" + cur_updated + ")' ><i class='fa fa-plus-circle fa-lg' aria-hidden='true'></i></a><a onclick='delcurrency(" + cur_updated + ")'><i class='fa fa-times fa-lg' aria-hidden='true' style='color:red;'></i></a></label></div></div>";
+
+        $("#currencydiv").append(str);
+        $("#currencycnt").html("");
+        $("#currencycnt").append("<input type='hidden' value='" + cur_updated + "' id='currencycount' name='currencycount' />");
+
+    }
+
+    function delcurrency(cur) {
+        var cur_updated = cur - 1;
+        if (cur == 2) {
+            $("#currency_add_btn_div_1").show();
+            $("#CurrDel-" + cur).remove();
+            $("#currencycount").val(cur_updated);
+        }
+        else {
+            $("#CurrDel-" + cur).remove();
+            $("#currency_add_btn_div_" + cur_updated).show();
+            $("#currencycount").val(cur_updated);
+            //addmetric(cur_updated);
+        }
+    }
+
+
+    //---------------11/12/18--PR----------------------------------
+
+    function select_file(btn, imgf, ban) {
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        } else {
+        }
+        $("#" + imgf + "").val(filename);
+    }
+
+    //special points creation based on the theme created by sridhar
+    function GridValue(id) {
+        if (id == 2) {
+            $("#rangediv").show();
+            $("#rightanswerdiv").hide();
+
+        }
+        else if (id == 1) {
+            $("#rightanswerdiv").show();
+
+            $("#rangediv").hide();
+
+        }
+        else if (id == 3) {
+            $("#rightanswerdiv").hide();
+
+            $("#rangediv").hide();
+
+        }
+        else if (id == 4) {
+            $("#rightanswerdiv").hide();
+
+            $("#rangediv").hide();
+
+        }
+    }
+
+    function changeKpiGrid(id) {
+        if (id >= 1) { $('.drg1').show(); } else { $('.drg1').hide(); }
+        if (id >= 2) { $('.drg2').show(); } else { $('.drg2').hide(); }
+        if (id >= 3) { $('.drg3').show(); } else { $('.drg3').hide(); }
+        if (id >= 4) { $('.drg4').show(); } else { $('.drg4').hide(); }
+        if (id >= 5) { $('.drg5').show(); } else { $('.drg5').hide(); }
+        if (id >= 6) { $('.drg6').show(); } else { $('.drg6').hide(); }
+        if (id >= 7) { $('.drg7').show(); } else { $('.drg7').hide(); }
+        if (id >= 8) { $('.drg8').show(); } else { $('.drg8').hide(); }
+        if (id >= 9) { $('.drg9').show(); } else { $('.drg9').hide(); }
+        if (id == 10) { $('.drg10').show(); } else { $('.drg10').hide(); }
+
+    }
+
+    //image preview url
+    function leaguUrl(el, btn, imgf, ban, idVal) {
+        //console.log(idVal);
+        if (idVal == 1) {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#leaguimg").show();
+                    $("#leaguimg").attr("src", e.target.result);
+
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+        else {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#leaguimg" + idVal).show();
+                    $("#leaguimg" + idVal).attr("src", e.target.result);
+
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+
+    }
+
+    function badgeUrl(el, btn, imgf, ban, idVal) {
+        if (idVal == 1) {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#badgeimg").show();
+                    $("#badgeimg").attr("src", e.target.result);
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+        else {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#badgeimg" + idVal).show();
+                    $("#badgeimg" + idVal).attr("src", e.target.result);
+
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+
+    }
+
+    function currUrl(el, btn, imgf, ban, idVal) {
+        if (idVal == 1) {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#currimg").show();
+                    $("#currimg").attr("src", e.target.result);
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+        else {
+            var file = $("#" + btn + "")[0].files[0];
+            var filename = "";
+            if (file) {
+                filename = file.name;
+            } else {
+            }
+            $("#" + imgf + "").val(filename);
+            if (el.files && el.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                    $("#currimg" + idVal).show();
+                    $("#currimg" + idVal).attr("src", e.target.result);
+
+                };
+                FR.readAsDataURL(el.files[0]);
+            }
+        }
+
+    }
+
+
+    //image preview url
+    function readURL(el, btn, imgf, ban) {
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        } else {
+        }
+        $("#" + imgf + "").val(filename);
+        if (el.files && el.files[0]) {
+            var FR = new FileReader();
+            FR.onload = function (e) {
+                $("#imgBanner").show();
+                $("#imgBanner").attr("src", e.target.result);
+                console.log(e.target.result);
+            };
+            FR.readAsDataURL(el.files[0]);
+        }
+    }
+
+</script>
+
+
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Create Theme</h4>
+            </div>
+            <div class="panel-body">
+
+
+                @using (Html.BeginForm("AddThemeAction", "UniversityAdmin", FormMethod.Post, new { id = "form-add-organisation", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+
+
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Theme Name</label></div>
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="organisation-name" name="theme-name" />
+                            </div>
+
+                            <div class="col-md-2"><label class="control-label">Description</label></div>
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="organisation-desc" name="theme-desc" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Theme Logo</label></div>
+
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" readonly value="" placeholder="Theme Logo" id="Theme-Logo" name="Theme-Logo" />
+                            </div>
+                            <div class="col-md-2">
+                                <div class="fileUpload btn btn-primary" style="">
+                                    <span>Browse Image</span>
+                                    <input id="logo-btn" name="Theme-Logo-btn" class="upload" type="file" accept="image/*" onchange="readURL(this,'logo-btn', 'Theme-Logo', 'logo-text')" />
+                                </div>
+                            </div>
+                            @*<div class="col-md-2">
+                                    <div class="fileUpload btn btn-primary">
+                                        <span>Browse Image</span>
+                                        <input id="Theme-Logo-btn" name="Theme-Logo-btn" class="upload" type="file" accept="img/*" onchange="select_file('Theme-Logo-btn', 'Theme-Logo', 'welcome-text')" />
+                                    </div>
+                                </div>*@
+                            <div class="col-md-4">
+                                <h4>preview</h4>
+                                <div class="avatar-upload">
+                                    <div class="avatar-edit">
+                                        <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                        <label for="imageUpload"></label>
+                                    </div>
+                                    <div class="avatar-preview" style="width: 135px;height: 135px;">
+                                        <img id="imgBanner" style="display:none;width:123px;height:123px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Theme Metric</label></div>
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="Type a Metric Value here" id="organisation-name" name="theme-metric1" />
+                            </div>
+
+
+                            <div class="col-md-2" id="met_add_btn_div_1">
+                                <label class="control-label"><a onclick="addmetric(1)"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a> </label>
+                            </div>
+
+                            <div class="col-md-4">
+                            </div>
+                        </div>
+                        <div id="metricdiv"></div>
+                        <div id="metriccnt">
+                            <input type="hidden" value="1" name="metriccount" />
+                        </div>
+
+                        <hr />
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Theme League</label></div>
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="Type a League Value Level 1" id="organisation-name" name="theme-league1" />
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" readonly value="" placeholder="Logo Image" id="league-image" name="league-image1" />
+                                <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                    <span>Browse</span>
+                                    <input id="league-btn" name="league-btn1" class="upload" type="file" accept="image/*" onchange="leaguUrl(this, 'league-btn', 'league-image', 'logo-text',1)" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="avatar-upload">
+                                    <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                        <img id="leaguimg" style="display:none;width:40px;height:40px;padding:5%;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1" id="league_add_btn_div_1">
+                                <label class="control-label"><a onclick="addleague(1)"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a> </label>
+                            </div>
+                        </div>
+                        <div id="leaguediv"></div>
+                        <div id="leaguecnt">
+                            <input type="hidden" id="leagueCoun" value="1" name="leaguecount" />
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Theme Badge</label></div>
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="Type a Badge Value here" id="organisation-name" name="theme-badge1" />
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" readonly value="" placeholder="Logo Image" id="badge-image" name="badge-image1" />
+                                <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                    <span>Browse</span>
+                                    <input id="badge-btn" name="badge-btn1" class="upload" type="file" accept="image/*" onchange="badgeUrl(this, 'badge-btn', 'badge-image', 'logo-text',1)" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="avatar-upload">
+                                    <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                        <img id="badgeimg" style="display:none;width:40px;height:40px;padding:5%;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1" id="badge_add_btn_div_1"><label class="control-label"><a onclick="addbadge(1)"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a></label></div>
+                        </div>
+                        <div id="badgediv"></div>
+                        <div id="badgecnt">
+                            <input type="hidden" value="1" name="badgecount" />
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Theme Currency</label></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="Type a Currency Value here" id="organisation-name" name="theme-currency1" />
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" readonly value="" placeholder="Logo Image" id="curr-image" name="curr-image1" />
+                                <div class="fileUpload btn btn-primary" style="float:right;margin-top:-13%;">
+                                    <span>Browse</span>
+                                    <input id="curr-btn" name="curr-btn1" class="upload" type="file" accept="image/*" onchange="currUrl(this, 'curr-btn', 'curr-image', 'logo-text',1)" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="avatar-upload">
+                                    <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                        <img id="currimg" style="display:none;width:40px;height:40px;padding:5%;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1" id="currency_add_btn_div_1"><label class="control-label"><a onclick="addcurrency(1)"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></a> </label></div>
+                        </div>
+                        <div id="currencydiv"></div>
+                        <div id="currencycnt">
+                            <input type="hidden" value="1" name="currencycount" />
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Select Special Value Type</label></div>
+                            <div class="col-md-5">
+                                <select id="KPI-mode" name="SpMet-type" class="form-control" onchange="GridValue(this.value)">
+                                    <option value="1" selected>Right Answer KPI</option>
+                                    <option value="2">Assessment Score KPI</option>                                    
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                        @*<div class="row" id="rightanswerdiv">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-3"><label class="control-label">For 1 correct answer Special value is</label></div>
+                                    <div class="col-md-5">
+                                        <input style="color:black;" type="number" min="0.1" class="form-control select-control validate[required,custom[number]]" name="OneCorrect" value="" placeholder="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                        @*<div id="rangediv" style="display:none">
+                            <div id="kpi-grid" class="form-group">
+                                <div class="col-md-3"><label class="control-label">Select No of Grid</label></div>
+                                <div class="col-md-5">
+                                    <select id="grid-value" name="grid-value" class="form-control" onchange="changeKpiGrid(this.value)">
+                                        <option value="0">Select No. of Grid</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="div-kpi-data-grid">
+                                <table class="table" style="height:80px;width: 100%;">
+                                    <thead>
+                                        <tr style="background-color:#367fa9;color:white">
+                                            <th>Special Value Text</th>
+                                            <th>Start Range</th>
+                                            <th>End Range</th>
+                                            <th style="width: 10%;">Special Value</th>
+                                            <th>Special Metric</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="prog-table">
+                                        <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-1" name="SpText-1" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="SpMet-start-1" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-1" onchange="kpi_end(1)" name="SpMet-end-1" /></td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-1" /></td><td><select class="form-control" name="MetGridDrop-1"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg2" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-2" name="SpText-2" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-2" onchange="kpi_start(2)" name="SpMet-start-2" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-2" onchange="kpi_end(2)" name="SpMet-end-2" /> </td><td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-2" /></td><td><select class="form-control" name="MetGridDrop-2"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg3" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-3" name="SpText-3" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-3" onchange="kpi_start(3)" name="SpMet-start-3" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-3" onchange="kpi_end(3)" name="SpMet-end-3" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-3" /></td><td><select class="form-control" name="MetGridDrop-3"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg4" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-4" name="SpText-4" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-4" onchange="kpi_start(4)" name="SpMet-start-4" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-4" onchange="kpi_end(4)" name="SpMet-end-4" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-4" /></td><td><select class="form-control" name="MetGridDrop-4"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg5" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-5" name="SpText-5" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-5" onchange="kpi_start(5)" name="SpMet-start-5" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-5" onchange="kpi_end(5)" name="SpMet-end-5" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-5" /></td><td><select class="form-control" name="MetGridDrop-5"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg6" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-6" name="SpText-6" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-6" onchange="kpi_start(6)" name="SpMet-start-6" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-6" onchange="kpi_end(6)" name="SpMet-end-6" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-6" /></td><td><select class="form-control" name="MetGridDrop-6"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg7" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-7" name="SpText-7" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-7" onchange="kpi_start(7)" name="SpMet-start-7" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-7" onchange="kpi_end(7)" name="SpMet-end-7" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-7" /></td><td><select class="form-control" name="MetGridDrop-7"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg8" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-8" name="SpText-8" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-8" onchange="kpi_start(8)" name="SpMet-start-8" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-8" onchange="kpi_end(8)" name="SpMet-end-8" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-8" /></td><td><select class="form-control" name="MetGridDrop-8"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg9" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-9" name="SpText-9" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-9" onchange="kpi_start(9)" name="SpMet-start-9" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-9" onchange="kpi_end(9)" name="SpMet-end-9" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-9" /></td><td><select class="form-control" name="MetGridDrop-9"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                        <tr class="drg10" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-10" name="SpText-10" /></td><td><input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-10" onchange="kpi_start(10)" name="SpMet-start-10" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-10" onchange="kpi_end(10)" name="SpMet-end-10" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="SpMet-value-10" /></td><td><select class="form-control" name="MetGridDrop-10"><option value="">Select</option>@foreach (var item in spMet)
+                                        {<option value="@item.id_special_metric">@item.name</option>}</select></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>*@
+                        <hr />
+                        <div class="form-group">
+                            <div class="col-md-5"></div>
+
+                            <div class="col-md-2">
+                                <input type="submit" class="form-control validate[required]" value="Create" style="background: #3c8dbc; color: white; border-radius: 9px;" />
+                            </div>
+
+                            <div class="col-md-5">
+                            </div>
+
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        @*$("#Category").change(function () {
+            var acad  = $("#acad").val();
+            var categ = $("#Category").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("CategValidation", "UniversityKPI")',
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                data: { "acad": acad, "categ": categ },
+                success: function (data)
+                {
+                    if (data == "True") {
+                        alert("this category and academic tile is already inserted");
+                        $('#Category').prop('selectedIndex', 0);
+                    }
+                    //else
+                    //{
+                    //    console.log(data);
+                    //}
+                }
+            });
+        });*@
+
+        $("#grid-value").change(function () {
+            var gVal = $("#grid-value").val();
+
+            for (var i = 1; i < gVal; i++)
+            {
+                if (i == 1)
+                {
+
+                }
+                else
+                {
+                    $("#kpi-start-" + i).attr("disabled", true);
+                    $("#kpi-end-" + i).attr("disabled", true);
+                }
+                $("#kpi-start-" + gVal).attr("disabled", true);
+                $("#kpi-end-" + gVal).attr("disabled", true);
+            }
+
+        });
+
+    });
+
+
+    function kpi_start(e) {
+        var cur = e;
+        var startval = parseInt($("#kpi-start-" + e).val());
+        var endval = parseInt($("#kpi-end-" + e).val());
+        var inputbox = e + 1;
+        var gVal = $("#grid-value").val();
+        //if (startval) {
+        for (var z = 1; z <= gVal; z++) {
+            if (z != e) {
+                if ($("#kpi-start-" + z).val() != '' || $("#kpi-end-" + z).val() != '') { //|| isNaN($("#kpi-start-" + z).val()) || isNaN($("#kpi-end-" + z).val())
+                    if (startval >= parseInt($("#kpi-start-" + z).val()) && startval <= parseInt($("#kpi-end-" + z).val())) {
+                        alert('value available');
+                        $("#kpi-end-" + cur).attr("disabled", true);
+                        //for (var x = e + 1; x <= gVal; x++) {
+                        //    $("#kpi-start-" + x).attr("disabled", true);
+                        //    $("#kpi-end-" + x).attr("disabled", true);
+                    }
+                    else {
+                        $("#kpi-end-" + cur).attr("disabled", false);
+                    }
+                }
+            }
+            else {
+                if (startval == '' || endval == '' || isNaN(startval) || isNaN(endval)) {
+                    for (var i = e + 1; i <= gVal; i++) {
+                        $("#kpi-start-" + i).attr("disabled", true);
+                        $("#kpi-end-" + i).attr("disabled", true);
+                    }
+                }
+                else if (startval > endval) {
+                    for (var j = e + 1; j <= gVal; j++) {
+                        $("#kpi-start-" + j).attr("disabled", true);
+                        $("#kpi-end-" + j).attr("disabled", true);
+                    }
+                }
+                else if (startval < endval) {
+                    $("#kpi-end-" + e).attr("disabled", false);
+                    $("#kpi-start-" + inputbox).attr("disabled", false);
+                    $("#kpi-end-" + inputbox).attr("disabled", false);
+                }
+            }
+        }
+    }
+
+    function kpi_end(e) {
+        var cur = e;
+        var startval = parseInt($("#kpi-start-" + e).val());
+        var endval = parseInt($("#kpi-end-" + e).val());
+        var inputbox = e + 1;
+        var gVal = $("#grid-value").val();
+        //if (endval) {
+        for (var z = 1; z <= gVal; z++) {
+            if (z != e) {
+                if ($("#kpi-start-" + z).val() != '' || $("#kpi-end-" + z).val() != '') {
+                    if (endval >= parseInt($("#kpi-start-" + z).val()) && endval <= parseInt($("#kpi-end-" + z).val())) {
+                        alert('value available');
+                        $("#kpi-start-" + cur).attr("disabled", true);
+                        //for (var x = e + 1; x <= gVal; x++) {
+                        //    $("#kpi-start-" + x).attr("disabled", true);
+                        //    $("#kpi-end-" + x).attr("disabled", true);
+                    }
+                    else {
+                        $("#kpi-start-" + cur).attr("disabled", false);
+                    }
+                }
+
+            }
+            else {
+                if (startval == '' || endval == '' || isNaN(startval) || isNaN(endval)) {
+                    for (var i = e + 1; i <= gVal; i++) {
+                        $("#kpi-start-" + i).attr("disabled", true);
+                        $("#kpi-end-" + i).attr("disabled", true);
+                    }
+                }
+                else if (startval > endval) {
+                    for (var j = e + 1; j <= gVal; j++) {
+                        $("#kpi-start-" + j).attr("disabled", true);
+                        $("#kpi-end-" + j).attr("disabled", true);
+                    }
+                }
+                else if (startval < endval) {
+                    /// $("#kpi-start-" + cur).attr("disabled", false);
+                    $("#kpi-start-" + inputbox).attr("disabled", false);
+                    $("#kpi-end-" + inputbox).attr("disabled", false);
+                }
+            }
+        }
+
+    }
+    //}
+
+
+    function between(x, min, max) {
+        return x >= min && x <= max;
+    }
+</script>

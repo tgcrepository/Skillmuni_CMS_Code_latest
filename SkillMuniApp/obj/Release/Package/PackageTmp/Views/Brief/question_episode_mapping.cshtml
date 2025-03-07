@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "question_episode_mapping";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_brief_category> briefCat = (List<tbl_brief_category>)ViewData["briefCat"];
+    List<tbl_brief_master> briefMas = (List<tbl_brief_master>)ViewData["briefMas"];
+}
+
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default custom-panel">
+            <div class="panel-heading custom-panel-heading">
+                <div class="panel-title">Episode Question Mapping</div>
+            </div>
+            <div class="panel-body custom-panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Select Episode</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="brief" name="brief" onchange="briefChange()" class="form-control">
+                                            <option value="0">select</option>
+                                            @foreach (var item in briefMas)
+                                            {
+                                                <option value="@item.id_brief_master">@item.brief_title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Select Category</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="brief-category" name="brief-category" onchange="briefCat()" class="form-control">
+                                            <option value="">select</option>
+                                            @foreach (var item in briefCat)
+                                            {
+                                                <option value="@item.id_brief_category">@item.brief_category</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        @*testing code*@
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Select Sub-Category</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="brief-Sub-category" name="brief-Sub-category" onchange="briefSubCat()" class="form-control"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*end code*@
+
+                        <br />
+                        @*testing code*@
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <div id="div-kpi-data-grid">
+                                            <table class="table" id="table_question" style="height:80px;width: 100%;display:none;">
+                                                <thead>
+                                                    <tr style="background-color:#367fa9;color:white">
+                                                        <th>Questions</th>
+                                                        <th style="text-align:center;">Mapping Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="prog-table" id="mapTbody"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                        @*end code*@
+
+                    </div>
+
+
+
+                </div>
+
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function briefChange() {
+        var id = $("#brief-category").val();            
+        var subid = $("#brief-Sub-category").val();
+
+        if (id != null && id != "" && subid != null && subid != "")
+        {
+            briefSubCat();
+        }
+    }
+
+    function briefCat() {
+        var id = $("#brief-category").val(); 
+        var subid = $("#brief-Sub-category").val();
+        var briefId = $("#brief").val();
+        if (id == "" || id == null && subid != "" || subid != null) {
+            // alert('brief');
+            $("#table_question").hide();
+            $("#mapTbody").html("");
+        }
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("getSubcategory", "Brief")',
+                //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            data: { "categ": id },
+                success: function (data)
+                {
+                    //console.log(data);
+                    $("#brief-Sub-category").html(data);
+                }
+            });
+        }
+
+    function briefSubCat() {        
+        var id = $("#brief-category").val();
+        var subid = $("#brief-Sub-category").val();
+        var briefId = $("#brief").val();
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("getBriefQuestionList", "Brief")',
+                //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            data: { "categ": id, "subCat": subid, "briefId": briefId },
+                success: function (data)
+                {
+                    // console.log(data);
+                    $("#table_question").show();
+                    $("#mapTbody").html(data);
+                }
+            });
+        }
+
+    function questionAdd(e) {
+        var id = $("#brief-category").val();
+        var subid = $("#brief-Sub-category").val();
+        var briefId = $("#brief").val();
+        var queId = e;
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("postEpisodeMapping", "Brief")',                
+            data: { "categ": id, "subCat": subid, "briefId": briefId, "QueId": queId },
+                success: function (data)
+                {
+                   // console.log(data);
+                    briefSubCat()
+                }
+            });
+    }
+</script>

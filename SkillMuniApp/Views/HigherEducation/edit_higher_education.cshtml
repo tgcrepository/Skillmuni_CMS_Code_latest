@@ -1,0 +1,275 @@
+﻿@model m2ostnext.Models.tbl_sul_higher_education_master
+@{
+    ViewBag.Title = "edit_higher_education";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    m2ostnext.Models.tbl_sul_higher_education_timeslot slot = (m2ostnext.Models.tbl_sul_higher_education_timeslot)ViewData["slot"];
+}
+
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Create Higher Education</h4>
+            </div>
+            <div class="panel-body">
+
+
+                @using (Html.BeginForm("edit_higher_education_action", "HigherEducation", FormMethod.Post, new { id = "form-add-notification", enctype = "multipart/form-data" }))
+                {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id_higher_education" value="@Model.id_higher_education" />
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <div class="col-md-3"><label class="control-label">Message To Display</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                        <div class="col-md-9">
+                            <textarea name="message-to-display" class="form-control validate[required]" placeholder="message to display" rows="3">@Model.message_to_display</textarea>
+                            <div class="tooltip1">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <span class="tooltiptext1">Maximum 500 characters</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3"><label class="control-label">Redirect_URL</label></div>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control " value="@Model.redirect_url" placeholder="" id="redirect-url" name="redirect-url" />
+                            <div class="tooltip1">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                <span class="tooltiptext1">Maximum 200 characters</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3"><label class="control-label">Event Name</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control validate[required]" value="@Model.event_name" placeholder="" id="event-name" name="event-name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="" id="semi_strt">
+                        <div class="col-md-3"><label class="control-label">Higher Education Start Date</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                        <div class="col-md-5">
+                            <div class='input-group date'>
+                                <input type='text' class="form-control validate[required]" value="@Model.higher_education_start_time" id='datetimepicker1' name="higher-start" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="" id="semi_end">
+                        <div class="col-md-3"><label class="control-label">Higher Education End Date</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                        <div class="col-md-5">
+                            <div class='input-group date'>
+                                <input type='text' class="form-control validate[required]" value="@Model.higher_education_end_time" id='datetimepicker2' name="higher-end" onchange="durationcalc()" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3"><label class="control-label">Time Interval</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                        <div class="col-md-9">
+                            <input type="number" min="5" max="60" class="form-control validate[required]" value="@Model.time_interval" placeholder="" id="time-interval" name="time-interval" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3"><label class="control-label">Time Slot Start Time</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control validate[required]" value="@slot.time_slot_start_time_hour" placeholder="hour" id="hourstart" name="hourstart" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control validate[required]" value="@slot.time_slot_start_time_minute" placeholder="minute" id="minutestart" name="minutestart" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <select id="sessionstart" name="sessionstart" class="form-control validate[required]">
+                                <option value=""></option>
+                                <option value="1" @if (slot.session_start_time=="AM" ) { @("selected") }>AM</option>
+                                <option value="2" @if (slot.session_start_time=="PM" ) { @("selected") }>PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3"><label class="control-label">Time Slot End Time</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control validate[required]" value="@slot.time_slot_end_time_hour" placeholder="hour" id="hourend" name="hourend" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control validate[required]" value="@slot.time_slot_end_time_minute" placeholder="minute" id="minuteend" name="minuteend" />
+                        </div>
+                        <div class="col-md-2">
+                            <select id="sessionend" name="sessionend" class="form-control validate[required]">
+                                <option value=""></option>
+                                <option value="1" @if (slot.session_end_time=="AM" ) { @("selected") }>AM</option>
+                                <option value="2" @if (slot.session_end_time=="PM" ) { @("selected") }>PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3"><label class="control-label">Location</label><span style="color:red;font-weight:bold;">&nbsp;*</span></div>
+                        <div class="col-md-9">
+                            <textarea name="location" class="form-control validate[required]" placeholder="Location" rows="3">@Model.location</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4">
+                            <input style="background: #018ccf; color: white;margin-left: -268px;
+    margin-top: 89px;" type="submit" value="Submit" name="btn_submit" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+
+        $("#form-add-notification").validationEngine();
+
+        $("#datetimepicker1").datetimepicker(
+            { dateFormat: "dd-mm-yy" }
+        );
+        $("#datetimepicker2").datetimepicker(
+            { dateFormat: "dd-mm-yy" }
+        );
+
+    });
+    $(".chosen-select").chosen({
+        no_results_text: "Oops, nothing found!"
+    })
+
+    function seminarBlock(flg) {
+        if (flg == 1) {
+            $("#semi_strt").show();
+            $("#semi_end").show();
+
+
+        }
+        else {
+            $("#semi_strt").hide();
+            $("#semi_end").hide();
+
+        }
+
+    }
+    function prtneeded(flg) {
+        if (flg == 1) {
+            $("#prt_count").show();
+
+
+
+        }
+        else {
+            $("#prt_count").hide();
+
+
+        }
+
+    }
+
+
+    function durationcalc() {
+        var start = $('#datetimepicker1').val();
+        var end = $('#datetimepicker2').val();
+
+        var start_day = start.slice(0, 2);
+        var start_month = start.slice(3, 5);
+        var start_year = start.slice(6, 10);
+        var start_time = start.slice(11, 16);
+
+        var end_day = end.slice(0, 2);
+        var end_month = end.slice(3, 5);
+        var end_year = end.slice(6, 10);
+        var end_time = end.slice(11, 16);
+
+
+        var start_actual_time = start_month + "/" + start_day + "/" + start_year + " " + start_time;
+
+        var end_actual_time = end_month + "/" + end_day + "/" + end_year + " " + end_time;
+
+
+
+        start_actual_time = new Date(start_actual_time);
+        end_actual_time = new Date(end_actual_time);
+
+        var diff = end_actual_time - start_actual_time;
+
+        var diffSeconds = diff / 1000;
+        var HH = Math.floor(diffSeconds / 3600);
+        var MM = Math.floor(diffSeconds % 3600) / 60;
+
+        var formatted = ((HH < 10) ? ("0" + HH) : HH) + ":" + ((MM < 10) ? ("0" + MM) : MM)
+        var finday = HH / 24;
+
+        var dy = Math.ceil(finday).toFixed(1);
+        dy = dy + " " + "Days";
+
+        $('#seminar-duration').val(dy);
+
+    }
+
+</script>
+
+<style>
+    .tooltip1 {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltip1 .tooltiptext1 {
+            visibility: hidden;
+            width: 170px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltip1 .tooltiptext1::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltip1:hover .tooltiptext1 {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>
+
+

@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewBag.Title = "GameMapping";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_game_master> game = (List<tbl_game_master>)ViewData["game"];
+
+}
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>Game Mapping to Academic Tile</span>
+            </div>
+            <div class="panel-body">
+
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Select Game</label></div>
+                        <div class="col-md-4">
+                            <select id="idgame" name="idgame" class="form-control" onchange="getAcademicTiles()">
+                                <option value="0">select</option>
+                                @foreach (var item in game)
+                                {
+                                    <option value="@item.id_game">@item.name</option>
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="academictiles_bind" style="padding:3%">
+
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getAcademicTiles()
+    {
+        var id_game = $("#idgame").val();
+        //alert(id_game);
+          var url = '@Url.Action("getAcademicTilesforGame", "UniversityAdmin")';
+         
+
+
+
+        if (id_game > 0) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { id_game: id_game },
+
+                success: function (data) {
+                   
+                    $("#academictiles_bind").empty().append(data);
+                  
+                }
+            });
+        } else {
+            $("#academictiles_bind").empty();
+        }
+    }
+
+
+    function addAcademyToGame(value) {
+        var id_game = $("#idgame").val();
+        if (id_game > 0) {
+            var url = '@Url.Action("addAcademyToGame", "UniversityAdmin")';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { id_game: id_game, id_academic_tile: value },
+                success: function (data) {
+                    if (data == "1") {
+                        alert("Academy added successfully");
+                        location.reload();
+                    } 
+                }
+            });
+        } else {
+            alert("Please select Game from dropdown")
+        }
+    }
+
+
+    function removeAcademyfromGame(value) {
+      
+        var id_game = $("#idgame").val();
+        if (id_game > 0) {
+            var url = '@Url.Action("removeAcademyfromGame", "UniversityAdmin")';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { id_game: id_game, id_academic_tile: value },
+                success: function (data) {
+                    if (data == "1") {
+                        alert("Academy removed successfully");
+                        location.reload();
+                    }
+                }
+            });
+        }
+        else { alert("Please select game from dropdown")}
+    }
+
+
+
+</script>

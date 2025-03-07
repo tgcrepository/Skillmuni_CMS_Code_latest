@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "academic_level_dashboard";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+    List<m2ostnext.Models.tbl_academy_level_brief_restriction_count> tblacadash = (List<m2ostnext.Models.tbl_academy_level_brief_restriction_count>)ViewData["tblacaDash"];
+}
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default custom-panel">
+            <div class="panel-heading custom-panel-heading">
+                <div class="panel-title">Academic Level Restriction Dashboard</div>
+            </div>
+            <div class="panel-body custom-panel-body">
+                <div class="form-group">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Academic Tile</th>
+                                    <th>Brief Count</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in tblacadash)
+                                {
+                                <tr>
+                                    <td>@item.tile_name</td>
+                                    <td>@item.brief_count</td>
+                                    <td><a href="@Url.Action("delete_academy_res", "universityKPI", new { idacad = item.id_academic_tile})"  class="btn btn-primary"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</a></td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

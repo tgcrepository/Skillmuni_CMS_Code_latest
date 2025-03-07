@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+@{
+    List<m2ostnext.Models.briefView> briefList = (List<m2ostnext.Models.briefView>)ViewData["briefmaster"];
+    m2ostnext.Models.UserSession Sessions = (m2ostnext.Models.UserSession)HttpContext.Current.Session["UserSession"];
+	List<tbl_brief_question> quelist = (List<tbl_brief_question>)ViewData["qList"];
+    bool access = true;
+}
+<link rel="stylesheet" href="~/Content/modal/reset.css" />
+<link rel="stylesheet" href="~/Content/modal/style.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable({"aLengthMenu": [[25, 50, 75,100, -1], [25, 50, 75, 100,"All"]],});
+    });
+</script>
+
+
+@{ 
+    string qList = (string)ViewData["questions"];
+
+}
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">Brief Questions Dashboard</h6>
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-12">
+                    <div class="color-box space">
+                        <div class="shadow">
+                            <div class="info-tab tip-icon" title="Useful Tips">&nbsp;</div>
+                           <div class="tip-box">
+                                <p><strong>Note:</strong>If image only question show the default name only ("image question"). You can preview that question.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-primary btn-default pull-right" href="@Url.Action("question", "Brief")"> Create Question  </a>
+                        <br /><hr />
+                        <!-- @Html.Raw(qList) -->
+						<table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                                  <thead>
+                                      <tr>
+                                          <th>Question/Expiry date</th>                                          
+                                          <th>Category</th>
+                                          <th>Sub-Category</th>
+                                          <th>Complexity</th>
+                                          <th>Preview</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      @foreach (var item in quelist)
+                                      {
+                                        <tr id="row-qtn-brief-">
+                                            <td id="row-td-@item.id_brief_question">@item.brief_question+(@item.expiry_date.Value.ToShortDateString()) </td>
+                                            <td>@item.brief_category_name</td>
+                                            <td>@item.brief_subcategory_name</td>
+                                            <td>@item.complexity_name</td>
+                                            <td><a href="/sulcmsproduction/Brief/EditQuestion?idQue=@item.id_brief_question"><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>
+                                            <a href='#modal-1' onclick="question_prev(@item.id_brief_question)"><i class='fa fa-eye' aria-hidden='true'></i></a>
+											                                                <a href="@Url.Action("DeleteQuestion","Brief", new { id_qtn=item.id_brief_question})"><i class='fa fa-trash' aria-hidden='true'></i></a>
+
+											</td>
+                                        </tr>
+                                      }
+                                  </tbody>
+                              </table>
+                    </div>                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+    <div class="diamond-transition">
+        <div class="cd-modal" id="modal-1" style="position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;z-index: 9999;">
+            <div class="modal-content" style="background: #2e253f;">
+                <div class="form-group">
+                    <div class="col-md-12" id="quesPart">
+
+                    </div>
+                </div>
+                <div class="form-group" id="answerForm" style="margin-top:15%;">
+                    <div class="col-md-12" id="answPart">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12" id="metaPart" style="margin-top:2%;">
+
+                    </div>
+                </div>
+            </div> 
+            <a href="#0" class="modal-close">Close</a>
+        </div> 
+
+
+        <div class="cd-transition-layer" id="transLay" data-frame="20">
+            <div class="bg-layer"></div>
+        </div> 
+    </div>
+
+<!--added by sridhar 8/3/2019 -->
+
+<script>
+    if (!window.jQuery) document.write('<script src="js/jquery-2.2.1-min.js"><\/script>');
+    function question_prev(e) {
+        //alert(e);       
+        $("#transLay").removeClass("closing");
+        $("#modal-1").addClass("visible");
+        $("#transLay").addClass("visible opening");
+        var id = e;                
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("question_preview", "Brief")',
+                //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            data: { "Qid": id},
+                success: function (data)
+                {                                        
+                   //console.log(data);
+                     if (data[0].question_theme_type == 2) {
+                        if (data[0].question_choice_type == 1)
+                        {
+                            var str = "<div class='row'><div class='col-md-2'><label>Question :</label></div><div class='col-md-8'><label>" + data[0].brief_question + "</label></div><div class='col-md-2'></div></div>";
+                            $("#quesPart").html(str);                            
+                        }
+                        else if (data[0].question_choice_type == 2)
+                        {                            
+                            //var urlimg = "http://180.149.241.40/sulcmsbeta/Content/SKILLMUNI_DATA/briefQuesion/";
+                            var urlimg = "http://180.149.241.40/sulcmsproduction/Content/SKILLMUNI_DATA/briefQuesion/";
+                            var str = "<div class='row'><div class='col-md-2'><label>Question :</label></div><div class='col-md-8'><img src='" + urlimg + "" + data[0].id_organization + "/question/" + data[0].question_image + "' style='width: 140px; height: 100px;'></div><div class='col-md-2'></div></div>";
+                            $("#quesPart").html(str);
+                        }
+                        else if (data[0].question_choice_type == 3)
+                        {
+                            var urlimg = "http://180.149.241.40/sulcmsproduction/Content/SKILLMUNI_DATA/briefQuesion/";
+                            var str = "<div class='row'><div class='col-md-2'><label>Question :</label></div><div class='col-md-4'><label>" + data[0].brief_question + "</label></div><div class='col-md-4'><img src='" + urlimg + "" + data[0].id_organization + "/question/" + data[0].question_image + "' style='width: 140px; height: 100px;'></div><div class='col-md-2'></div></div>";
+                            $("#quesPart").html(str);
+                            //$("#quesPart").html(str2);
+                        }
+                        
+                    }
+                    else
+                    {                                              
+                        var str = "<div class='row'><div class='col-md-2'><label>Question :</label></div><div class='col-md-8'><label>" + data[0].brief_question + "</label></div><div class='col-md-2'></div></div>";
+                        $("#quesPart").html(str);
+                    }
+
+                    choiceView(e, data[0].id_organization, data[0].question_theme_type);
+                    $("#transLay").removeClass("opening");
+                }
+        });
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("briefMetadaQues", "Brief")',
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+            data: { "Qid": id},
+            success: function (data)
+            {
+                //console.log(data);
+                var Metastr = '';
+                for (var i = 0; i < data.length; i++)
+                {
+                    Metastr += '<div class="row"><div class="col-md-2"><label>Metadata :</label></div><div class="col-md-8"><span>' + data[i].brief_question_metadata + '</span></div></div>';                    
+                }
+                $("#metaPart").html(Metastr);
+            }
+            });
+            
+    }
+
+    function choiceView(Qid, org, qThemTyp)
+    {
+        //console.log(Qid);console.log(org);console.log(qThemTyp);
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("briefAnsChoic", "Brief")',
+                //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            data: { "Qid": Qid},
+                success: function (data)
+                {
+                    //console.log(data);
+                    if (qThemTyp == 2) {
+                        var str = "";
+                        var urlimg = "http://180.149.241.40/sulcmsproduction/Content/SKILLMUNI_DATA/briefQuesion/";
+                        for (var i = 0; i < data.length; i++)
+                        {
+                            var iInc = i + 1;
+                            var colorSt = "";
+                            if (data[i].is_correct_answer == 0) {
+                                colorSt = "#FFFFCC";
+                            }
+                            else if (data[i].is_correct_answer == 1)
+                            {
+                                colorSt = "#028482";
+                            }
+                            
+                            if (data[i].choice_type == 1) {
+                                $('#answerForm').css('margin-top', "5%");
+                                str = str + '<div class="row" style="padding: 1%;border: 2px solid '+colorSt+';margin-top: 1%;"><div class="col-md-2"><label>Choice ' + iInc + '</label></div><div class="col-md-8"><span>' + data[i].brief_answer + '</span></div><div class="col-md-2"></div></div>';                                
+                            }
+                            else if (data[i].choice_type == 2) {
+                                str = str + '<div class="row" style="padding: 1%;border: 2px solid ' + colorSt +';margin-top: 1%;"><div class="col-md-2"><label>Choice ' + iInc + '</label></div><div class="col-md-8"><img src="' + urlimg + '' + data[i].id_organization + '/choice/' + data[i].choice_image + '" style="width:100px;height:80px;"></div><div class="col-md-2"></div></div>';                                
+                            }
+                            else if (data[i].choice_type == 3) {
+                                str = str + '<div class="row" style="padding: 1%;border: 2px solid ' + colorSt + ';margin-top: 1%;"><div class="col-md-2"><label>Choice ' + iInc + '</label></div><div class="col-md-4"><span>' + data[i].brief_answer + '</span></div><div class="col-md-4"><img src="' + urlimg + '' + data[i].id_organization + '/choice/' + data[i].choice_image + '" style="width:100px;height:80px;"></div><div class="col-md-2"></div></div>';
+                            }                            
+                        }
+                        $("#answPart").html(str);
+                    }
+                    else
+                    {
+                        var str = "";
+                        $('#answerForm').css('margin-top', "5%");
+                        for (var i = 0; i < data.length; i++) {
+                            var iInc = i + 1;
+                            var colorSt = "";
+                            if (data[i].is_correct_answer == 0) {
+                                colorSt = "#FFFFCC";
+                            }
+                            else if (data[i].is_correct_answer == 1) {
+                                colorSt = "#028482";
+                            }
+                            str = str + '<div class="row" style="padding: 1%;border: 2px solid ' + colorSt +';margin-top: 1%;"><div class="col-md-2"><label>Choice ' + iInc + '</label></div><div class="col-md-8"><span>' + data[i].brief_answer + '</span></div><div class="col-md-2"></div></div>';                            
+                        }
+                        $("#answPart").html(str);
+                    }
+                    
+                }
+        });
+    }
+</script>
+
+<script type="text/javascript" src="~/Content/modal/modernizr.js"></script>
+<script type="text/javascript" src="~/Content/modal/main.js"></script>

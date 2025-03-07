@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "contentCreationRichText";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-note-ans {
+        background-color: #f5fbff;
+        border-left: 6px solid #a2c6f3;
+        margin-left: 30px;
+    }
+
+    .brief-note-wans {
+        background-color: #dcfbcf;
+        border-right: 6px solid #00cca3;
+        margin-left: 30px;
+        text-align: right;
+    }
+
+    .brief-note-result {
+        background-color: #f5fbff;
+        border-left: 6px solid #ea001d;
+        border-right: 6px solid #ea001d;
+        margin-left: 30px;
+        text-align: center;
+        font-weight:800;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+        padding: 6px;
+    }
+
+    .left-space {
+        padding-left: 20px;
+        font-weight: 800;
+    }
+</style>
+
+@{
+    tbl_brief_master brief = (tbl_brief_master)ViewData["briefMaster"];
+    m2ostnext.Models.BriefReturnResponse response = (m2ostnext.Models.BriefReturnResponse)ViewData["response"];
+    tbl_brief_category category = (tbl_brief_category)ViewData["category"];
+    tbl_brief_subcategory subcategory = (tbl_brief_subcategory)ViewData["subcategory"];
+}
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">skillmuni brief</div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <span class="">category</span><br />
+                                            <span class="control-label left-space"> @category.brief_category</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="control-label">sub-category</span><br />
+                                            <span class="control-label left-space">@subcategory.brief_subcategory</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="control-label ">Expiry Date</span><br />
+                                            <strong> <span class="control-label left-space">@brief.scheduled_timestamp.Value.ToString("dd-MM-yyyy HH:mm")</span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="">brief title</span><br />
+                                        <label class="left-space">@brief.brief_title</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="">brief content</span>
+                                        @Html.Raw(brief.brief_description)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="col-md-12">
+                        <div class="panel panel-default custom-panel">
+                            <div class="panel-heading custom-panel-heading">
+                                <div class="panel-title">brief assessment result</div>
+                            </div>
+                            <div class="panel-body custom-panel-body">
+                                <div class="brief-panel brief-note-result">@response.returnStat</div>
+
+                                @foreach (m2ostnext.Models.BriefUserInput row in response.briefReturn)
+                                {
+                                    <div class="brief-panel brief-note">@row.Question</div>
+                                    <div class="brief-panel brief-note-ans">@row.Answer</div>
+                                    <div class="brief-panel brief-note-wans">@row.WANS</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+
+}

@@ -1,0 +1,193 @@
+﻿@{
+    ViewBag.Title = "add_banner";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    int flagmsg = (int)ViewData["flag"];
+
+}
+<style>
+    .wrapper{
+        overflow-y:scroll !important;
+    }
+</style>
+<script>
+    $(function () {
+        $("#form-add-banner").validationEngine();
+    });
+
+    function select_file(btn, imgf, ban) {
+        var file = $("#" + btn + "")[0].files[0];
+        var filesiz = file.size;
+        console.log(filesiz);
+        var filename = "";
+        if (file) {
+            if (filesiz < 1024 * 1024) {
+                filename = file.name;
+                $("#" + imgf + "").val(filename);
+            }
+            else {
+                alert("file is not below 1Mb");
+            }
+        } else {
+        }        
+    }
+</script>
+<script type="text/javascript">
+    $(window).load(function () {
+
+        if (@flagmsg == 1) {
+            $('#content-dialog').modal('show');
+        }
+    });
+</script>
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Add Floating Banner</h4>
+            </div>
+            <div class="panel-body">
+
+
+                @using (Html.BeginForm("add_banner_action", "dashboard", FormMethod.Post, new { id = "form-add-banner" , enctype = "multipart/form-data"  }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Banner Name</label></div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-name" name="banner-name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Banner Location</label></div>
+                        <div class="col-md-6">
+                            <select class="form-control" id="banner-location" name="banner-location" required>
+                                <option value="">Select</option>
+                                <option value="1">Apply For Your Dream Job</option>
+                                <option value="2">Evaluate Yourself</option>
+                                <option value="3">Study Abroad</option>
+                                <option value="4">Academy Tile</option>
+                                <option value="6" disabled>Start Your Own Business</option>
+                                <option value="7">View all jobs page</option>
+                                <option value="8">Industry Based Jobs</option>
+                                <option value="9">CE Dashboard page</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Banner Position</label></div>
+                        <div class="col-md-4">
+                            <select class="form-control" id="banner-Position" name="banner-Position" required>
+                                <option value="">Select</option>
+                                <option value="1" disabled>Top</option>
+                                <option value="2" selected>Bottom</option>                                
+                            </select>
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Banner Url</label></div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-url" name="banner-url" />
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        @*<div class="col-md-2">
+                            <label for="FirstName" class="control-label col-md-1">Image:</label>
+                        </div>*@
+                        <input type="hidden" name="countBanr" id="countBanr" value="1" />
+                        <div class="col-md-12" id="imgPart">
+                            <div class="form-group">
+                                <div class="col-md-2"><label class="control-label">Banner Url 1</label></div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-url-1" name="banner-url-1" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <label for="FirstName" class="control-label">Image 1:</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="col-md-10">
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control validate[required]" readonly value="" placeholder="banner image 1" id="banner-image" name="banner-image" required />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="fileUpload btn btn-primary">
+                                                <span>Browse Image</span>
+                                                <input id="banner-btn" name="banner-image-1" class="upload" type="file" accept="image/*" onchange="select_file('banner-btn', 'banner-image', 'banner-text')" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="addClass"><i class="fa fa-plus-circle fa-2x" id="plusImg-1" onclick="addImgClk(1)" aria-hidden="true"></i></div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" name="btn_submit" class="btn btn-default" />
+                            <input type="submit" value="Save and Exit" name="btn_submit" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="content-dialog" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Banner  Status</h3>
+            </div>
+            <div class="modal-body" id="msg-txt">
+                <p style="text-align:center">Banner  Added successfully</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function addImgClk(e) {
+        var clkCons = parseInt(e);
+        var nextClk = clkCons + 1;
+        if (clkCons < 10) {
+            $("#plusImg-" + e).hide();
+            $("#minusImg-" + e).hide();             
+            //str += $("#imgPart").html();            
+            var str = '<div class="form-group" id="imagBindP-' + nextClk + '"><div class="col-md-2"><label class="control-label">Banner Url ' + nextClk + '</label></div><div class="col-md-10"><input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-url-' + nextClk + '" name="banner-url-' + nextClk + '" /></div></div><div class="form-group" id="imagBindP1-' + nextClk + '"><div class="col-md-2"><label for="FirstName" class="control-label"> Image ' + nextClk + ':</label></div><div class="col-md-10"><div class="col-md-10"><div class="col-md-8"><input type="text" class="form-control validate[required]" readonly value="" placeholder="banner image ' + nextClk + '" id="banner-image-' + nextClk + '" name="banner-image" required /></div><div class="col-md-4"><div class="fileUpload btn btn-primary"><span>Browse Image</span><input id="banner-btn-' + nextClk + '" name="banner-image-' + nextClk + '" class="upload" type="file" accept="image/*" onchange="select_file(\'banner-btn-' + nextClk + '\', \'banner-image-' + nextClk + '\', \'banner-text\')" /></div></div></div><div class="col-md-2"><div class="addClass"><i class="fa fa-plus-circle fa-2x" id="plusImg-' + nextClk + '" onclick="addImgClk(' + nextClk + ')" aria-hidden="true"></i><i class="fa fa-minus-circle fa-2x" id="minusImg-' + nextClk + '" onclick="minusImgClk(' + nextClk + ')" aria-hidden="true"></i></div></div></div></div>';
+            //$("#imgPart").html("");
+            $("#imgPart").append(str);
+            $("#countBanr").val(nextClk);
+        }
+    }
+
+    function minusImgClk(e) {
+        var clkCons = parseInt(e);
+        var nextClk = clkCons - 1;
+        $("#imagBindP-" + e).remove();
+        $("#imagBindP1-" + e).remove();
+        $("#plusImg-" + nextClk).show();
+        $("#minusImg-" + nextClk).show();
+        $("#countBanr").val(nextClk);
+    }
+</script>

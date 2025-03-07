@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewBag.Title = "contentCreationRichText";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .left-space {
+        padding-left: 20px;
+        font-weight: 800;
+    }
+</style>
+
+
+@{
+    tbl_brief_master brief = (tbl_brief_master)ViewData["briefmaster"];
+    tbl_brief_category category = (tbl_brief_category)ViewData["category"];
+    tbl_brief_subcategory subcategory = (tbl_brief_subcategory)ViewData["subcategory"];
+    List<tbl_brief_question> questions = (List<tbl_brief_question>)ViewData["questions"];
+    List<tbl_brief_metadata> metadata = (List<tbl_brief_metadata>)ViewData["metadata"];
+
+
+}
+
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">Brief Approval</div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a style="margin-left:5px;" href="@Url.Action("Index", "dashboard")" class="btn btn-info  pull-right">Cancel&nbsp;<i class="glyphicon glyphicon-folder-close"></i></a>
+                            <a style="margin-left:5px;" href="@Url.Action("approveBriefAction", "Brief" , new { brf=brief.brief_code })" class="btn btn-info  pull-right">Approve Brief&nbsp;<i class="glyphicon glyphicon-folder-close"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                            <span class="">Category</span><br />
+                                            <span class="control-label left-space"> @category.brief_category</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="control-label">Sub Category</span><br />
+                                            <span class="control-label left-space">@subcategory.brief_subcategory</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="control-label ">Expiry Date</span><br />
+                                            <strong> <span class="control-label left-space">@brief.scheduled_timestamp.Value.ToString("dd-MM-yyyy HH:mm")</span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <span class="">Brief Title</span><br />
+                                            <label class="left-space">@brief.brief_title</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span class="">Brief Content</span>
+                                            @Html.Raw(brief.brief_description)
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="row">
+                                        <div class="col-md-12">
+                                            <span class="">Brief Content</span>
+                                            @Html.Raw(brief.brief_description)
+                                        </div>
+                                    </div>*@
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">metadata</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label class="left-space">
+                                            @{
+                                                foreach (tbl_brief_metadata item in metadata)
+                                                {
+                                                    @(item.brief_metadata + "  ")
+                                                }
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Overide DND ...?</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="left-space">
+                                            @if (brief.override_dnd == 0)
+                                            {
+                                                @("No")
+                                            }
+                                            @if (brief.override_dnd == 1)
+                                            {
+                                                @("Yes")
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Distribution method</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="left-space">
+                                            @if (brief.brief_type == 0)
+                                            {
+                                                @("Normal Distribution of Briefs")
+                                            }
+                                            @if (brief.brief_type == 1)
+                                            {
+                                                @("Leitner Distribution of Briefs")
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="col-md-12">
+                        <div class="panel panel-default custom-panel">
+                            <div class="panel-heading custom-panel-heading">
+                                <div class="panel-title">Questions Associated to Brief </div>
+                            </div>
+                            <div class="panel-body custom-panel-body">
+                                @foreach (tbl_brief_question item in questions)
+                                {
+                                    <div class="brief-panel brief-note"> <p style="padding:6px;">@item.brief_question   </p></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+
+}

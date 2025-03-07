@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "industryroleview";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+
+<script>
+    $(function () {
+        $("#form_add_category").validationEngine();
+    });
+</script>
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Add Job Role</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm("add_job_role_action", "CEJobRole", FormMethod.Post, new { id = "form_add_category", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label col-md-2 regLabel">Industry Role :</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control validate[required]" value="" placeholder="Industry Role" id="Industryrole" name="Industryrole" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label col-md-2 regLabel">Industry Role Code :</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control validate[required]" value="" placeholder="Industry code" id="rolecode" name="rolecode" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label col-md-2 regLabel">Description:</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control validate[required]" placeholder="Description" id="Description" name="Description" rows="6"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Save" class="btn btn-default" style="background: #018ccf; color: white; width: 58px; height: 29px;"/>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <hr />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "delete";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+@{
+
+    m2ostnext.Models.tbl_ce_evaluation_jobindustry industry = (m2ostnext.Models.tbl_ce_evaluation_jobindustry)ViewData["industry"];
+    
+
+}
+<div id="pagecontent_dashboard" class="container">
+    <div class="panel panel-default ">
+        <div class="panel-heading">
+            <h4 class="panel-title">Are you realy want to delete this..?</h4>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>
+                    Industry Name
+                </dt>
+
+                <dd>
+                    @industry.ce_job_industry
+                </dd>
+
+                <dt>
+                    Industry Code
+                </dt>
+
+                <dd>
+                    @industry.ce_industry_code
+                </dd>
+
+                <dt>
+                    Description
+                </dt>
+
+                <dd>
+                    @industry.description
+                </dd>
+
+                <dt>
+                    Updated Time
+                </dt>
+
+                <dd>
+                    @industry.updated_date_time
+                </dd>
+                
+                <dt>
+                    Tile Image
+                </dt>
+
+                <dd>
+                    @industry.tile_image
+                </dd>
+                <dt>
+                    Tile Position
+                </dt>
+
+                <dd>
+                    @industry.tile_position
+                </dd>
+                <dt>
+                    Button text
+                </dt>
+
+                <dd>
+                    @industry.buttontext
+                </dd>
+
+            </dl>
+            @using (Html.BeginForm("delete_industry_job_action", "industryjob", FormMethod.Post, new { id = "form_delete_category" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="id_evalution" value="@industry.id_ce_evaluation_jobindustry" />
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-default" /> |
+                    @Html.ActionLink("Back To List", "industryDetail", "industryjob")
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

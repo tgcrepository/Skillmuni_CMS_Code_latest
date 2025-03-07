@@ -1,0 +1,332 @@
+﻿
+@{
+    ViewBag.Title = "career_evaluation_preview";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    m2ostnext.Models.tbl_ce_career_evaluation_master tcem = (m2ostnext.Models.tbl_ce_career_evaluation_master)ViewData["tcem"];
+    List<tbl_brief_category> tbc = (List<tbl_brief_category>)ViewData["tbc"];
+    List<tbl_brief_question_ce> tblBQ = (List<tbl_brief_question_ce>)ViewData["tblBQ"];
+    string evaluation = ViewData["evaluationTy"].ToString();
+}
+
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">Career Evaluation Preview</div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-10"></div>
+                        <div class="col-md-2">
+                            <a class="btn btn-info" href="@Url.Action("edit_career_evaluation","career",new { v = tcem.career_evaluation_code})">Edit Career Evaluation</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Name : </label>
+                            <span>@tcem.career_evaluation_title</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Description : </label>
+                            <span>@tcem.ce_description</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Logo : </label>
+                            <div class="ce_logo" style="padding:1%;">
+                                <img src="~/Content/SKILLMUNI_DATA/career/@tcem.id_organization/@tcem.ce_image" style="width:100px;height:auto;" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Evaluation Type : </label>
+                            <span>@evaluation</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>should time rule enforced? : </label>
+                            @if (tcem.is_time_enforced == 1)
+                            {
+                                <span>Yes</span>
+                            }
+                            else
+                            {
+                                <span>No</span>
+                            }
+                        </div>
+                        <div class="col-md-6">
+                            @if (tcem.is_time_enforced == 1)
+                            {
+                                <span>@tcem.time_enforced </span><label>(time in minutes)</label>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Assessment Type : </label>
+                            @if (tcem.ce_assessment_type == 1)
+                            {
+                                <span>SUL MCA</span>
+                            }
+                            else if (tcem.ce_assessment_type == 2)
+                            {
+                                <span>SUL Psychometric</span>
+                            }
+                        </div>
+                        <div class="col-md-6">
+                            <label>Ordering Sequence Number : </label>
+                            <span>@tcem.ordering_sequence_number</span>
+                        </div>
+                    </div>
+                    <hr />
+                    @if (tcem.ce_assessment_type == 1)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Number of Questions : </label>
+                                <span>@tcem.no_of_question</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Job points for each right answer : </label>
+                                <span>@tcem.job_points_for_ra</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Category List : </label>
+                                <ul>
+                                    @foreach (var item in tbc)
+                                    {
+                                        <li>
+                                            @item.brief_category
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                    else if (tcem.ce_assessment_type == 2)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Category : </label>
+                                <ul>
+                                    @foreach (var item in tbc)
+                                    {
+                                        <li>
+                                            @item.brief_category
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                        <hr />
+                        foreach (var item in tblBQ)
+                        {
+                            if (item.question_theme_type == 1)
+                            {
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <label>@item.brief_question</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>order : </label><span> @item.ordering_sequence</span>
+                                    </div>
+                                </div>
+                                foreach (var ansItem in item.answer)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-8">
+                                            <label>@ansItem.brief_answer</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>answer key : </label><span> @ansItem.answer_key</span>
+                                        </div>
+                                    </div>
+                                }
+                                <hr />
+                            }
+                            else if (item.question_theme_type == 2)
+                            {
+                                if (item.question_choice_type == 1)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <label>@item.brief_question</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>order : </label><span> @item.ordering_sequence</span>
+                                        </div>
+                                    </div>
+                                    foreach (var ansItem in item.answer)
+                                    {
+                                        if (ansItem.choice_type == 1)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <label>@ansItem.brief_answer</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (ansItem.choice_type == 2)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@ansItem.id_organization/choice/@ansItem.choice_image" style="width:50px;height:auto;" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (ansItem.choice_type == 3)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <label>@ansItem.brief_answer</label>
+                                                    <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@ansItem.id_organization/choice/@ansItem.choice_image" style="width:50px;height:auto;" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+                                    <hr />
+                                }
+                                else if (item.question_choice_type == 2)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@item.id_organization/question/@item.question_image" style="width:75px;height:auto;" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>order : </label><span> @item.ordering_sequence</span>
+                                        </div>
+                                    </div>
+                                    foreach (var ansItem in item.answer)
+                                    {
+                                        if (ansItem.choice_type == 1)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <label>@ansItem.brief_answer</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (ansItem.choice_type == 2)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@ansItem.id_organization/choice/@ansItem.choice_image" style="width:50px;height:auto;" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (ansItem.choice_type == 3)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <label>@ansItem.brief_answer</label>
+                                                    <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@ansItem.id_organization/choice/@ansItem.choice_image" style="width:50px;height:auto;" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+                                    <hr />
+                                }
+                                else if (item.question_choice_type == 3)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <label>@item.brief_question</label>
+                                            <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@item.id_organization/question/@item.question_image" style="width:75px;height:auto;" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>order : </label><span> @item.ordering_sequence</span>
+                                        </div>
+                                    </div>
+                                    foreach (var ansItem in item.answer)
+                                    {
+                                        if (ansItem.choice_type == 1)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <label>@ansItem.brief_answer</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (ansItem.choice_type == 2)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@ansItem.id_organization/choice/@ansItem.choice_image" style="width:50px;height:auto;" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (ansItem.choice_type == 3)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-8">
+                                                    <label>@ansItem.brief_answer</label>
+                                                    <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@ansItem.id_organization/choice/@ansItem.choice_image" style="width:50px;height:auto;" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>answer key : </label><span> @ansItem.answer_key</span>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+                                    <hr />
+                                }
+                            }
+                        }
+                    }
+                    <div class="row">
+                        <div class="col-md-10">
+                        </div>
+                        <div class="col-md-2">
+                            @if (tcem.status == "D")
+                            {
+                                <a href="@Url.Action("publish_career_evaluation","career",new {id_cem = tcem.id_ce_career_evaluation_master})"><input type="button" class="btn btn-primary" value="Publish" /></a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

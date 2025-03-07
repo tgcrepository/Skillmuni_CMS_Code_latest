@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "ad_banner_dashboard";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_banner_config_master> tbcmli = (List<tbl_banner_config_master>)ViewData["tbcmli"];
+}
+
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable();
+    });
+</script>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div id="success-message" class="alert alert-success" role="alert" style="display:none;">
+            <strong>Success : </strong> Banner is Deactivated ...
+        </div>
+        <div id="success-delete" class="alert alert-success" role="alert" style="display:none;">
+            <strong>Success : </strong> Banner is Activated ...
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <h6 class="panel-title">Banner Dashboard</h6>
+
+            </div>
+            <div class="panel-body">
+                <a href="@Url.Action("Ad_banner_form","dashboard")" class="btn btn-default btn-info pull-right">create Ad banner</a>
+                <br />
+                <hr />
+                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Banner Name
+                            </th>
+                            <th>Banner Image</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itm in tbcmli)
+                        {
+                            <tr>
+                                <td>@itm.banner_name</td>
+                                @foreach (var imt in itm.body_value)
+                                {
+                                    <td><img src="~/Content/SKILLMUNI_DATA/BannerImage/@imt.banner_image" style="width:50px;height:auto;" /></td>
+                                }
+                                <td>
+                                    @if (itm.status == "A")
+                                    {                                        
+                                        <a href="@Url.Action("deactivate_Ad_Banner", "dashboard", new { id = itm.id_banner_config })"><i class="glyphicon glyphicon-remove-circle"></i>Deactivate</a>
+                                    }
+                                    else
+                                    {
+										<a href="@Url.Action("edit_page_ad_banner", "dashboard", new { id = itm.id_banner_config })"><i class="glyphicon glyphicon-edit"></i></a>
+                                        <a href="@Url.Action("activate_Ad_Banner", "dashboard", new { id = itm.id_banner_config })"><i class="glyphicon glyphicon-play-circle"></i>Activate</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

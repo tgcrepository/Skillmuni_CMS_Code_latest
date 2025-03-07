@@ -1,0 +1,1432 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Skillmuni University</title>
+    <link href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="~/Content/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- Timeline CSS -->
+    <link href="~/Content/dist/css/timeline.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    @*
+        <link href="~/Content/dist/css/sb-admin-2.css" rel="stylesheet">*@
+    <link href="~/Content/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link href="~/Content/jquery-ui/jquery-ui-timepicker-addon.css" rel="stylesheet">
+    @*
+        <link href="~/Content/jquery-ui/jquery-ui-timepicker-addon.css" rel="stylesheet">*@
+    <link href="~/Content/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    @*
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/ionic/1.3.2/css/ionic.min.css" rel="stylesheet" type="text/css">*@
+
+    <link rel="stylesheet" href="~/Content/dist/AdminLTE.min.css">
+    <link rel="stylesheet" href="~/Content/dist/skins/_all-skins.min.css">
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <link href="~/Content/bootstrap-override.css" rel="stylesheet" type="text/css">
+    @*
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">*@
+    <link rel="stylesheet" href="~/Content/googleapis.css">
+    <script src="~/Content/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Compiled and minified CSS -->
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">*@
+
+    <!-- Compiled and minified JavaScript -->
+    @*<link href="~/Content/materialize/materialize.css" rel="stylesheet" type="text/css">*@
+    <script src="~/Content/materialize/materialize.min.js"></script>
+
+    <!-- Resources -->
+    <script src="~/Content/amcharts_3.21.14.free/amcharts/amcharts.js"></script>
+    <script src="~/Content/amcharts_3.21.14.free/amcharts/serial.js"></script>
+    <script src="~/Content/amcharts_3.21.14.free/amcharts/themes/light.js"></script>
+
+    <!-- Add jQuery library -->
+    <link rel="stylesheet" href="~/Content/js_validation/css/validationEngine.jquery.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="~/Content/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+    @*
+        <link href="~/Content/style.css" rel="stylesheet">*@
+    <link href="~/Content/bootstrap-switch.css" rel="stylesheet">
+    <script src="~/Content/jquery.cookie.js"></script>
+    <link rel="stylesheet" href="~/Content/bootstrap-select.css">
+    <script src="~/Content/bootstrap-select.js" defer></script>
+    <script src="~/Content/jquery.serializeToJSON.js"></script>
+
+    <style>
+        body {
+            font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+            font-weight: 400;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .wrapper {
+            overflow-y: hidden;
+        }
+    </style>
+    <style>
+        #countdown_box {
+            position: absolute;
+            text-align: center;
+            top: 200px;
+            width: 100%;
+            padding: 10px;
+            color: white;
+            text-overflow: ellipsis;
+            z-index: 1000000;
+        }
+
+        #countdown_title {
+            font-family: 'Open Sans', sans-serif;
+            color: white;
+            font-size: 28px;
+        }
+
+        #countdown_div {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 28px;
+            color: white;
+        }
+    </style>
+    <style>
+        .table-striped > thead {
+            /*background: #6c7ae0;*/
+            background: #018ccf;
+            color: white;
+        }
+
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #f8f6ff;
+        }
+
+        #report-table_filter input {
+            border: 1px solid #ccc;
+        }
+    </style>
+    <style>
+        .custom-panel {
+            border-top: 2px solid cornflowerblue;
+        }
+        /*#report-table_length {
+            display: none;
+        }*/
+    </style>
+</head>
+@{
+    m2ostnext.Models.UserSession Sessions = (m2ostnext.Models.UserSession)HttpContext.Current.Session["UserSession"];
+    db_m2ostEntities db = new db_m2ostEntities();
+    tbl_organization org = new tbl_organization();
+    bool catAcc = false;
+    bool cppAcc = false;
+    bool conAcc = false;
+    bool assAcc = false;
+    bool appUser = false;
+    bool appNotif = false;
+    bool cmsUser = false;
+    bool cmsRole = false;
+    bool appupload = false;
+    bool ticker = false;
+    bool disclosure = false;
+    bool GameTile = false;
+    bool appKpi = false;
+    bool skillmuniUniv = false;
+	bool skillmunibc = false;
+
+    if (Session == null)
+    {
+        Response.Redirect("~/dashboard/Index");
+    }
+    else
+    {
+        if (Sessions.id_ORGANIZATION != "")
+        {
+            int ids = Convert.ToInt32(Sessions.id_ORGANIZATION);
+            org = db.tbl_organization.Find(ids);
+        }
+        foreach (tbl_cms_role_action_mapping item in Sessions.action)
+        {
+            if (item.id_cms_role_action == 3)
+            {
+                catAcc = true;
+            }
+            if (item.id_cms_role_action == 6)
+            {
+                conAcc = true;
+            }
+            if (item.id_cms_role_action == 7)
+            {
+                cppAcc = true;
+            }
+            if (item.id_cms_role_action == 8)
+            {
+                assAcc = true;
+            }
+            if (item.id_cms_role_action == 10)
+            {
+                cmsRole = true;
+            }
+            if (item.id_cms_role_action == 11)
+            {
+                cmsUser = true;
+            }
+            if (item.id_cms_role_action == 13)
+            {
+                appUser = true;
+            }
+            if (item.id_cms_role_action == 16)
+            {
+                appNotif = true;
+            }
+            if (item.id_cms_role_action == 17)
+            {
+                appupload = true;
+            }
+            if (item.id_cms_role_action == 18)
+            {
+                ticker = true;
+            }
+            if (item.id_cms_role_action == 19)
+            {
+                disclosure = true;
+            }
+            if (item.id_cms_role_action == 20)
+            {
+                GameTile = true;
+            }
+            if (item.id_cms_role_action == 22)
+            {
+                appKpi = true;
+            }
+            if(item.id_cms_role_action == 23)
+            {
+                skillmuniUniv = true;
+            }
+			if(item.id_cms_role_action == 24)
+            {
+
+                skillmunibc = true;
+            }
+        }
+    }
+}
+
+<body class="hold-transition skin-blue sidebar-mini" id="bodyStyle">
+    <div class="wrapper" style="background-color:#ecf0f5;">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="@Url.Action("index","Dashboard")" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>S</b>U</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>Skillmuni</b> University</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/Content/SKILLMUNI_DATA/ORGLOGO/@Sessions.org_logo" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@Sessions.Username</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/Content/SKILLMUNI_DATA/ORGLOGO/@Sessions.org_logo" class="img-circle" alt="User Image">
+                                    <p>
+                                        @Sessions.Username <br />@Sessions.org_name
+                                        @*<small>Member since Nov. 2012</small>*@
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <!-- Menu Footer-->
+                                <li class="user-footer" style="background-color:#808080">
+                                    <div class="pull-left" style="color:white">
+                                        v1.0
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("Logout", "Login" )" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    @if (Sessions.USER.cmd_user_type == 0 || cmsRole || cmsUser || appUser)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-cog"></i><span>Setup</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                @if (Sessions.USER.cmd_user_type == 0)
+                                {
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-circle-o"></i>
+                                            Organisation<span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="@Url.Action("DisplayOrganization", "Administrator")"><i class="fa fa-circle-o"></i> Display Organisation</a>
+                                                @*<a href="@Url.Action("ContentMapping", "Administrator" )"><i class="fa fa-circle-o"></i> Display Organisation</a>*@
+                                            </li>
+
+                                            <li>
+                                                <a href="@Url.Action("createOrganization", "Administrator")"><i class="fa fa-circle-o"></i> Create Organisation </a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("addtheme", "universityadmin")"><i class="fa fa-circle-o"></i>Add Theme</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("themedashboard", "universityadmin")"><i class="fa fa-circle-o"></i>Theme Dashboard</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("mappingthemes", "universityadmin")"><i class="fa fa-circle-o"></i>Theme assign</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("themeapprovaldashboard", "universityadmin")"><i class="fa fa-circle-o"></i>Theme Approval</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("DisplayFeedback", "universityadmin")"><i class="fa fa-circle-o"></i>Display Feedback</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                                @if (cmsRole)
+                                {
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-circle-o"></i>
+                                            CMS Role<span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="@Url.Action("display_cms_role", "Administrator")"><i class="fa fa-circle-o"></i> CMS Role List</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("add_cms_role", "Administrator")"><i class="fa fa-circle-o"></i> Create CMS Role</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                                @if (cmsUser)
+                                {
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-circle-o"></i>
+                                            CMS User<span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="@Url.Action("cms_display", "Administrator")"><i class="fa fa-circle-o"></i> CMS User List</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("cms_user_create", "Administrator")"><i class="fa fa-circle-o"></i> Create CMS User</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                                @if (appUser)
+                                {
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-circle-o"></i>
+                                            Mobile App User Role<span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="@Url.Action("Index", "csst_role")"><i class="fa fa-circle-o"></i> App Role List</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-circle-o"></i>
+                                            Mobile App User<span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="@Url.Action("app_user_display", "Administrator")"><i class="fa fa-circle-o"></i> App User List</a>
+                                            </li>
+
+                                            <li>
+                                                <a href="@Url.Action("add_app_user", "Administrator")"><i class="fa fa-circle-o"></i> Create App User</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                                @if (appupload == true)
+                                {
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-circle-o"></i>
+                                            Mobile App Bulk Upload<span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="@Url.Action("AppUserUpload", "UploadUtility")"><i class="fa fa-circle-o"></i> Upload bulk App User</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                                @if (catAcc)
+                                {
+                                    <li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-circle-o"></i>
+                                            RTU Association<span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li>
+                                                <a href="@Url.Action("content_association", "Administrator")"><i class="fa fa-circle-o"></i>Content Association</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("data_association", "Administrator")"><i class="fa fa-circle-o"></i>Category Association</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        Master Setup<span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li>
+                                            <a href="@Url.Action("CollegeDasboard", "collegelist")"><i class="fa fa-circle-o"></i>Add College details</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("referral_code_dashboard", "collegelist")"><i class="fa fa-circle-o"></i>Add Referral Code</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (skillmuniUniv)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-calendar"></i><span>Skillmuni University</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a href="@Url.Action("game_creation", "universityKPI")"><i class="fa fa-circle-o"></i> Create Game</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("GameDashboard", "UniversityAdmin")"><i class="fa fa-circle-o"></i> Game Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("gameMapping", "UniversityAdmin")"><i class="fa fa-circle-o"></i> Game Assignment</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("AddKPI", "universityKPI")"><i class="fa fa-circle-o"></i> Create Game KPI</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Kpi_dashboard", "universityKPI")"><i class="fa fa-circle-o"></i> KPI Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Metric_Config", "universityKPI")"><i class="fa fa-circle-o"></i>Special metric Dashboard</a>
+                                </li>
+								 <li>
+                                    <a href="@Url.Action("Index", "referral_points")"><i class="fa fa-circle-o"></i>Referral Points Dashboard</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (GameTile)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-calendar"></i><span>Academy Tile</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a href="@Url.Action("GameTilesDashboard", "RoadMap")"><i class="fa fa-circle-o"></i>Academy Tiles Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("JourneyTileMapping", "RoadMap")"><i class="fa fa-circle-o"></i>Academy Mapping</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (skillmuniUniv == true)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-calendar"></i><span>Skill LAb Event</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a href="@Url.Action("index", "Scheduling")"><i class="fa fa-circle-o"></i>Events Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("createEvent", "Scheduling")"><i class="fa fa-circle-o"></i>Add Event</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }   
+                    @if (catAcc == true)
+                    {
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-cog"></i><span>Category Setup</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-circle-o"></i>
+                                    Landing Page Tiles<span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("display_category_tiles", "csst_category")"><i class="fa fa-circle-o"></i>List Landing Page Tiles</a>
+                                    </li>
+                                    @if (catAcc)
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("add_category_tiles", "csst_category")"><i class="fa fa-circle-o"></i>Add Landing Page Tiles</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-circle-o"></i>
+                                    Category Heading<span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("display_category_heading", "csst_category")"><i class="fa fa-circle-o"></i>List Category Heading</a>
+                                    </li>
+                                    @if (catAcc)
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("add_category_headers", "csst_category")"><i class="fa fa-circle-o"></i>Add Category Heading</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-circle-o"></i>
+                                    Category<span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("display_category", "csst_category")"><i class="fa fa-circle-o"></i>List Category </a>
+                                    </li>
+                                    @if (catAcc)
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("add_category", "csst_category")"><i class="fa fa-circle-o"></i>Add Category </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-circle-o"></i>
+                                    KPI<span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("Index", "KPI")"><i class="fa fa-circle-o"></i>List KPI </a>
+                                    </li>
+                                    @if (catAcc)
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("AddKPI", "KPI")"><i class="fa fa-circle-o"></i>Add KPI </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-circle-o"></i>
+                                    Program Scoring<span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("ScoringDashboard", "KPI")"><i class="fa fa-circle-o"></i> Category </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("KPIDataUpload", "KPI")"><i class="fa fa-circle-o"></i>Upload KPI Score </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-circle-o"></i>
+                                    Sorting<span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("SortCategoryTiles", "csst_category")"><i class="fa fa-circle-o"></i>Sort Landing Page Tile </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("SortCategoryHeading", "csst_category")"><i class="fa fa-circle-o"></i>Sort Category Heading </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("SortCategory", "csst_category")"><i class="fa fa-circle-o"></i>Sort Category  </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                        </li>
+                    }
+                        @*<li class="treeview">
+            <a href="#">
+                <i class="fa fa-share"></i> <span> Content /Activity </span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("display_content", "dashboard")"><i class="fa fa-circle-o"></i>Display All</a>
+                            </li>
+                            @if (conAcc)
+                            {
+                                if (Sessions.org_status == "S" || Sessions.org_status == "F" || Sessions.org_status == "H")
+                                {
+                                    <li>
+                                        <a href="@Url.Action("contentCreationTrial", "contentDashboard")"><i class="fa fa-circle-o"></i>Add Content</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="@Url.Action("contentCreation", "contentDashboard")"><i class="fa fa-circle-o"></i>Add Content</a>
+                                    </li>
+
+                                }
+
+                                if (Sessions.org_status == "S" || Sessions.org_status == "F" || Sessions.org_status == "H")
+                                {
+                                    <li>
+                                        <a href="@Url.Action("contentCreationRichTextTrial", "contentDashboard")"><i class="fa fa-circle-o"></i>Add Content with Rich Text</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="@Url.Action("contentCreationRichText", "contentDashboard")"><i class="fa fa-circle-o"></i>Add Content with Rich Text</a>
+                                    </li>
+
+                                }
+                                <li>
+                                    <a href="@Url.Action("display_approval_content", "dashboard")"><i class="fa fa-circle-o"></i>Content Approval And Role<br /> Based Access</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("DisplayContentLink", "dashboard")"><i class="fa fa-circle-o"></i>Manage Linked Content </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("data_display_association", "Administrator")"><i class="fa fa-circle-o"></i>Associated Content List</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>*@
+                    
+
+                    @*<li class="treeview">
+        <a href="#">
+            <i class="fa fa-check-square-o"></i> <span>Content Assignment</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="@Url.Action("ProgramAssignment", "contentDashboard" )"><i class="fa fa-circle-o"></i>Program Assignment</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("UserBasedContentAssignment", "contentDashboard" )"><i class="fa fa-circle-o"></i> Content Assignment</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("UserBasedAssessmentAssignment", "contentDashboard" )"><i class="fa fa-circle-o"></i>Assessment Assignment</a>
+                        </li>
+                    </ul>
+                    </li>*@
+
+                    @*<li class="treeview">
+        <a href="#">
+            <i class="fa fa-book"></i> <span>Assessment</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="@Url.Action("Index", "Assessment" )"><i class="fa fa-circle-o"></i> Assessment Dashboard </a>
+                        </li>
+                        @if (assAcc)
+                        {
+                            <li>
+                                <a href="@Url.Action("createAssessment", "Assessment" )"><i class="fa fa-circle-o"></i> Create Assessment  </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("CategoryToAssessment", "Assessment" )"><i class="fa fa-circle-o"></i>  Assessment To Category  </a>
+                            </li>
+                        }
+                    </ul>
+                    </li>*@
+
+                    @*<li class="treeview">
+        <a href="#">
+            <i class="fa fa-trello"></i> <span>Banners</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="@Url.Action("display_banner", "dashboard" )"><i class="fa fa-circle-o"></i> Banner Display </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("add_banner", "dashboard" )"><i class="fa fa-circle-o"></i> Add New Banner</a>
+                        </li>
+                    </ul>
+                    </li>*@
+                    @*<li class="treeview">
+        <a href="#">
+            <i class="fa fa-bell"></i> <span>Notification</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="@Url.Action("Index", "Notification" )"><i class="fa fa-circle-o"></i> Notification Dashboard </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("createNotification", "Notification" )"><i class="fa fa-circle-o"></i> Add Notification  </a>
+                        </li>
+                    </ul>
+                    </li>*@
+                    @*<li class="treeview">
+        <a href="#">
+            <i class="fa fa-calendar"></i><span>Scheduling</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>*@
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="@Url.Action("Index", "Scheduling" )"><i class="fa fa-circle-o"></i> Scheduling Dashboard </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ApprovalIndex", "Scheduling" )"><i class="fa fa-circle-o"></i> Approval Dashboard  </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("createEvent", "Scheduling" )"><i class="fa fa-circle-o"></i> Add Event  </a>
+                        </li>
+                    </ul>
+                    </li>
+
+                    @*<li class="treeview">
+        <a href="#">
+            <i class="fa fa-bar-chart-o fa-fw"></i> <span>Reports</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>*@
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="@Url.Action("ContentAccess", "Reporting" )"><i class="fa fa-circle-o"></i> Content Access Report  </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Likes", "Reporting" )"><i class="fa fa-circle-o"></i> Content Like Report  </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("LocationReport", "Reporting" )"><i class="fa fa-circle-o"></i> Content Access Report - <br /> By Location  </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("GenderReport", "Reporting" )"><i class="fa fa-circle-o"></i>Content Access Report - <br /> By Gender  </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("DesignationReport", "Reporting" )"><i class="fa fa-circle-o"></i>Content Access Report - <br /> By Designation   </a>
+                        </li>
+						
+                    </ul>
+                    </li>
+
+                    @*<li class="treeview">
+        <a href="#">
+            <i class="fa fa-gamepad"></i> <span>Gamification</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span></a>
+
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="@Url.Action("dashboard", "Gamification" )"><i class="fa fa-circle-o"></i> Game Dashboard </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("m2ost_add_game", "Gamification" )"><i class="fa fa-circle-o"></i> Configure Game </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("group_dashboard", "Gamification" )"><i class="fa fa-circle-o"></i> Group Dashboard  </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("add_group", "Gamification" )"><i class="fa fa-circle-o"></i> Configure Group  </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Scoring" )"><i class="fa fa-circle-o"></i> Game Scoring Report  </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ProgramResultDownload", "Scoring" )"><i class="fa fa-circle-o"></i> Program Result    </a>
+                        </li>
+                    </ul>
+                    </li>
+                        *@
+						 @if (!skillmunibc)
+                    {
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-gamepad"></i> <span>Brief</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+
+                        <ul class="treeview-menu">
+                            @if (conAcc == true)
+                            {
+                                <li>
+                                    <a href="@Url.Action("dashboard", "Brief")"><i class="fa fa-circle-o"></i> Brief Dashboard </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("briefDraft", "Brief")"><i class="fa fa-circle-o"></i> Create Brief </a>
+                                </li>
+
+                                <li>
+                                    <a href="@Url.Action("questionDashboard", "Brief")"><i class="fa fa-circle-o"></i> Question Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("question", "Brief")"><i class="fa fa-circle-o"></i> Add Questions  </a>
+                                </li>
+                            }
+                            @if (cppAcc == true)
+                            {
+                                <li>
+                                    <a href="@Url.Action("approvalDashboard", "Brief")"><i class="fa fa-circle-o"></i> Approval Dashboard  </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("viewBrief", "Brief")"><i class="fa fa-circle-o"></i> View Brief Summary  </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("userAssignment", "Brief" )"><i class="fa fa-circle-o"></i> User Assignment  </a>
+                                </li>
+								<li>
+                                    <a href="@Url.Action("jobcategoryTile_dashboard", "Brief" )"><i class="fa fa-circle-o"></i> Job Category Tile Dashboard </a>
+                                </li>
+                            }
+
+                            @*<li>
+            <a href="@Url.Action("briefTesting", "Brief" )"><i class="fa fa-circle-o"></i> Brief Testing  </a>
+        </li>*@
+                        </ul>
+                    </li>
+					    }
+						 @if (skillmunibc)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-gamepad"></i> <span>Brief</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+
+                            <ul class="treeview-menu">
+
+                                <li>
+                                    <a href="@Url.Action("dashboardContent", "Brief")"><i class="fa fa-circle-o"></i> Brief Dashboard </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("briefDraftContent", "Brief")"><i class="fa fa-circle-o"></i> Create Brief </a>
+                                </li>
+
+                                <li>
+                                    <a href="@Url.Action("questionDashboardContent", "Brief")"><i class="fa fa-circle-o"></i> Question Dashboard</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (appNotif == true  && !skillmunibc)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-bell"></i> <span>Notification</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a href="@Url.Action("content_notification", "UniversityKPI")"><i class="fa fa-circle-o"></i> Content Notification </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("badge_won_messgage", "UniversityKPI")"><i class="fa fa-circle-o"></i> Badge Won Message </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("level_up_message", "UniversityKPI")"><i class="fa fa-circle-o"></i> Level Up Message </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("url_notification", "UniversityKPI")"><i class="fa fa-circle-o"></i> URL Notification </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (skillmuniUniv == true  && !skillmunibc)
+                    {
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-check-square-o"></i> <span>Academy Level Restriction</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("academic_level_dashboard", "universityKPI")"><i class="fa fa-circle-o"></i> Academy Level Dashboard </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("brief_level_dashboard", "universityKPI")"><i class="fa fa-circle-o"></i> Brief Level Dashboard </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Academic_level_restriction", "universityKPI")"><i class="fa fa-circle-o"></i> Tile Level Configuration </a>
+                            </li>
+                        </ul>
+                    </li>
+                    }
+                    @if (skillmuniUniv == true  && !skillmunibc)
+                    {
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-tint"></i> <span>Brief Tile</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("Tiles", "Brief")"><i class="fa fa-circle-o"></i> Tile Dashboard </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("createTile", "Brief")"><i class="fa fa-circle-o"></i> Add a Tile  </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Brief" )"><i class="fa fa-circle-o"></i> Brief Category  </a>
+                            </li>
+                        </ul>
+                    </li>
+                    }
+                    @if (ticker  && !skillmunibc)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-play-circle"></i> <span>Ticker</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a href="@Url.Action("ticker_action", "dashboard")"><i class="fa fa-circle-o"></i> Ticker</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (disclosure  && !skillmunibc)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-share"></i> <span>Non Disclosure Clause</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a href="@Url.Action("NonDisclosureContent", "dashboard")"><i class="fa fa-circle-o"></i>NDC Dashboard</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (cppAcc == true  && !skillmunibc)
+                    {
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="glyphicon glyphicon-play-circle"></i> <span>Career</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+						   <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-circle-o"></i>
+                                        Setup<span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li>
+                                            <a href="@Url.Action("index", "industryjob")"><i class="fa fa-circle-o"></i>Industry Setup</a>
+                                        </li>
+                                        @if (catAcc)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("index", "CEJobRole")"><i class="fa fa-circle-o"></i>Job Role Setup</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            <li>
+                                <a href="@Url.Action("career_evaluation_dashboard", "career")"><i class="fa fa-circle-o"></i>Career Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("career_evaluation", "career")"><i class="fa fa-circle-o"></i>Career Evaluation</a>
+                            </li>
+                        </ul>
+                    </li>
+                    }
+					 @if (conAcc  && !skillmunibc)
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa  fa-trello"></i> <span>Banners</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a href="@Url.Action("display_banner", "dashboard" )"><i class="fa fa-circle-o"></i>Banner Display</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("add_banner", "dashboard" )"><i class="fa fa-circle-o"></i>Add New Banner</a>
+                                </li>
+                            </ul>
+                        </li>                     
+                    }
+                    @*finished yesterday*@
+					 @if (!skillmunibc)
+                    {
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="glyphicon glyphicon-play-circle"></i> <span>Reports</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("Registerdlistview", "RegisteredUserList")"><i class="fa fa-circle-o"></i>Registerd Users</a>
+                            </li>
+							 <li>
+                                <a href="@Url.Action("Studentlistview", "RegisteredUserList")"><i class="fa fa-circle-o"></i>Enquiry Form List</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Studentjoblistview", "RegisteredUserList")"><i class="fa fa-circle-o"></i>Student applied job</a>
+                            </li>
+							<li>
+                                <a href="@Url.Action("ScoreLog", "RegisteredUserList")"><i class="fa fa-circle-o"></i>Student Score</a>
+                            </li>
+							<li>
+                                <a href="@Url.Action("Feedbacklistview", "Feedbackdashboard")"><i class="fa fa-circle-o"></i>Brief Feedback Dashboard</a>
+                            </li>
+							
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="glyphicon glyphicon-play-circle"></i> <span>Reports Feedback</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("Reportfeed", "ReportFeedback")"><i class="fa fa-circle-o"></i>Report feedback</a>
+                            </li>
+                        </ul>
+                    </li>
+					 <li class="treeview">
+                        <a href="#">
+                            <i class="fa  fa-trello"></i> <span>Ad Banner</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("ad_banner_dashboard", "Dashboard")"><i class="fa fa-circle-o"></i>Ad Banner Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Ad_banner_form", "Dashboard")"><i class="fa fa-circle-o"></i>Add Ad Banner</a>
+                            </li>
+                        </ul>
+                    </li>
+					   <li class="treeview">
+                        <a href="#">
+                            <i class="fa  fa-trello"></i> <span>CV Requests</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("CVRequest", "Dashboard")"><i class="fa fa-circle-o"></i>CV Request</a>
+                            </li>
+                        </ul>
+                    </li>
+						 <li class="treeview">
+                        <a href="#">
+                            <i class="fa  fa-trello"></i> <span>SUL Fest</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("CreateEventLayout", "SULFest")"><i class="fa fa-circle-o"></i>Create Event</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("EventsDashboard", "SULFest")"><i class="fa fa-circle-o"></i>Events Dashboard </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("add_seminar", "SeminarDashboard")"><i class="fa fa-circle-o"></i>Create Seminar</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("seminar_dashboard", "SeminarDashboard")"><i class="fa fa-circle-o"></i>Seminar Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("add_higher_education", "HigherEducation")"><i class="fa fa-circle-o"></i>Create Higher Education</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("higher_education_dashboard", "HigherEducation")"><i class="fa fa-circle-o"></i>Higher Education Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("sul_event_mapping", "SulEventMapping")"><i class="fa fa-circle-o"></i>Sul Event Mapping</a>
+                            </li>
+                            
+                        </ul>
+                        
+                    </li>
+					
+					 <li class="treeview">
+                        <a href="#">
+                            <i class="fa  fa-trello"></i> <span>Email Template</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("add_email_feedback", "EmailFeedback")"><i class="fa fa-circle-o"></i>Create Feedback User</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("add_email_template", "EmailFeedback")"><i class="fa fa-circle-o"></i>Create Email Template </a>
+                            </li>
+							 <li>
+                                <a href="@Url.Action("email_template", "EmailFeedback")"><i class="fa fa-circle-o"></i>Template Dashboard</a>
+                            </li>
+							 <li>
+                                <a href="@Url.Action("Index", "EmailFeedback")"><i class="fa fa-circle-o"></i>Feedback User Dashboard</a>
+                            </li>
+							
+                        </ul>
+                    </li>
+					 <li class="treeview">
+                            <a href="#">
+                                <i class="fa  fa-trello"></i> <span>M2ost Mapping</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+
+                                <li>
+                                    <a href="@Url.Action("M2ost_category_mapping", "M2ostCategoryMapping")"><i class="fa fa-circle-o"></i>Category Mapping</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("M2ost_category_mapping_dashbord", "M2ostCategoryMapping")"><i class="fa fa-circle-o"></i>Mapping Dashboard</a>
+                                </li>
+                            </ul>
+                        </li>
+					}
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+
+    </div>
+</body>
+<script src="~/Content/dist/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="~/Content/dist/js/adminlte.min.js"></script>
+<script src="~/Content/dist/js/pages/dashboard.js"></script>
+<script src="~/Content/dist/js/demo.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="~/Content/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- Morris Charts JavaScript -->
+<!-- Custom Theme JavaScript -->
+<script src="~/Content/dist/js/sb-admin-2.js"></script>
+<script type="text/javascript" src="~/Content/js_validation/js/jquery.validationEngine.js"></script>
+<script type="text/javascript" src="~/Content/js_validation/js/jquery.validationEngine-en.js"></script>
+<script src="~/Content/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Content/jquery-ui/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="~/Content/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<script src="~/Content/bootstrap-switch.min.js"></script>
+<script src="~/Content/js/jquery.uilock.js"></script>
+<script>
+    //function to show the countdown in seconds until the web page is unfrozen (active) again
+    function do_countdown(duration) {
+        //10 seconds fix
+        start_num = duration;
+        var countdown_output = document.getElementById('countdown_div');
+        if (start_num > 0) {
+            countdown_output.innerHTML = format_as_time(start_num);
+            var t = setTimeout("update_clock(\"countdown_div\", " + start_num + ")", 1000);
+        }
+        return false;
+    }
+
+    //helper function to update the timer on the web page this is frozen
+    function update_clock(countdown_div, new_value) {
+        var countdown_output = document.getElementById(countdown_div);
+        var new_value = new_value - 1;
+
+        if (new_value > 0) {
+            new_formatted_value = format_as_time(new_value);
+            countdown_output.innerHTML = new_formatted_value;
+
+            var t = setTimeout("update_clock(\"countdown_div\", " + new_value + ")", 1000);
+        } else {
+            //finish!
+            countdown_output.innerHTML = "Loading......";
+
+            //perform anything here after the web page is unfrozen
+        }
+    }
+
+    //helper function to calculate the time (seconds) remaining as minutes and seconds
+    function format_as_time(seconds) {
+        var minutes = parseInt(seconds / 60);
+        var seconds = seconds - (minutes * 60);
+
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+
+        var return_var = minutes + ':' + seconds;
+
+        return return_var;
+    }
+</script>
+
+<script>
+    //main function to load the new website and start the countdown
+    function view_blog_countdown(duration) {
+
+        $('#countdown_box').show(); //countdown
+        $.uiLock('');
+        //alert(duration);
+        //performs countdown then unlocks
+    }
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        //setInterval('updateClock()', 1000);
+    });
+
+    setInterval(function () {
+        /**/
+        var url = '@Url.Action("getSessionStatus", "Login")';
+        /**/
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: null,
+            success: function (data) {
+                if (data == "0") {
+                    var uname = $.cookie("username");
+                    var password = $.cookie("password");
+                    if (uname && password) {
+                        setSessionCookie(uname, password);
+                    }
+                }
+            }
+        });
+    }, 60000);
+
+
+    function setSessionCookie(u, p) {
+        /**/
+        var url = '@Url.Action("setSessionStatus", "Login")';
+        /**/
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { uname: u, password: p },
+            success: function (data) {
+                if (data == "0") {
+                    /**/
+                    var url = '@Url.Action("Index", "Home")';
+                    /**/
+                    window.location.href = url;
+                }
+            }
+        });
+    }
+
+    function loading_on() {
+        updateClock();
+        $('#m2ost-lock').modal('show');
+    }
+    function loading_off() {
+        $('#m2ost-lock').modal('hide');
+    }
+
+    function updateClock() {
+        var currentTime = new Date();
+        var currentHours = currentTime.getHours();
+        var currentMinutes = currentTime.getMinutes();
+        var currentSeconds = currentTime.getSeconds();
+
+        // Pad the minutes and seconds with leading zeros, if required
+        currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+        currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
+        // Choose either "AM" or "PM" as appropriate
+        var timeOfDay = (currentHours < 12) ? "AM" : "PM";
+
+        // Convert the hours component to 12-hour format if needed
+        currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
+
+        // Convert an hours component of "0" to "12"
+        currentHours = (currentHours == 0) ? 12 : currentHours;
+
+        // Compose the string for display
+        var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+
+
+        $("#countdown_div").html(currentTimeString);
+
+    }
+
+
+    function fancybody(cntrl, act, id) {
+        /**/
+        var link = '@Url.Action("action", "control", new { id = "-1" })';
+        /**/
+
+        link = link.replace("action", act);
+        link = link.replace("control", cntrl);
+        link = link.replace("-1", id);
+
+        $("#_iframe").attr('src', link);
+        $.fancybox.open([{
+            href: '#form_popup_map',
+            helpers: {
+                overlay: { closeClick: false } // prevents closing when clicking OUTSIDE fancybox
+            }
+        }]);
+
+    }
+
+
+    function popup_message(msg) {
+        $("#message_display").val(msg);
+        $.fancybox.open([{
+            href: '#form_popup_map'
+        }]);
+    }
+
+</script>
+</html>
+

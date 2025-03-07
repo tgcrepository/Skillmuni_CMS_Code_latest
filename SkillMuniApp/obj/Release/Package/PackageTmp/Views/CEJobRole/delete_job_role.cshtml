@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "delete job";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+@{
+
+    m2ostnext.Models.IndustryRole role = (m2ostnext.Models.IndustryRole)ViewData["role"];
+
+}
+<div id="pagecontent_dashboard" class="container">
+    <div class="panel panel-default ">
+        <div class="panel-heading">
+            <h4 class="panel-title">Are you realy want to delete this..?</h4>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>
+                    Industry Role
+                </dt>
+
+                <dd>
+                    @role.ce_industry_role
+                </dd>
+
+                <dt>
+                    Industry Code
+                </dt>
+
+                <dd>
+                    @role.ce_role_code
+                </dd>
+
+                <dt>
+                    Description
+                </dt>
+
+                <dd>
+                    @role.description
+                </dd>
+
+                <dt>
+                    Updated Time
+                </dt>
+
+                <dd>
+                    @role.updated_date_time
+                </dd>
+            </dl>
+            @using (Html.BeginForm("delete_job_role_action", "CEJobRole", FormMethod.Post, new { id = "form_delete_category" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="id_evalution_job" value="@role.id_ce_evaluation_jobrole" />
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-default" /> |
+                    @Html.ActionLink("Back To List", "jobRoleDetail", "CEJobRole")
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

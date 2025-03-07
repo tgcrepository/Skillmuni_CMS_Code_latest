@@ -1,0 +1,351 @@
+﻿
+@{
+    ViewBag.Title = "contentCreationRichText";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+<link href="~/Content/RichText/dist/summernote.css" rel="stylesheet" />
+<script src="~/Content/RichText/dist/summernote.js"></script>
+<script src="~/Content/jquery.serializeToJSON.js"></script>
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(function () {
+        $("#datetimepicker3").datetimepicker({
+            minDate: 0,
+            dateFormat: "dd-mm-yy",
+            minDate: new Date(),
+            onSelect: function (selected) {
+                var date = $(this).datetimepicker('getDate');
+            }
+        });
+        $("#datetimepicker4").datetimepicker({
+            minDate: 0,
+            dateFormat: "dd-mm-yy",
+            minDate: new Date(),
+            onSelect: function (selected) {
+                var date = $(this).datetimepicker('getDate');
+            }
+        });
+    });
+    function showPublishOption(ids) {
+
+        if ($(allPages).find('input[type="checkbox"]').is(':checked')) {
+            if (ids == 1) {
+                $("#brief-schedule").show();
+                $("#brief-publish").hide();
+            } else {
+                $("#brief-schedule").hide();
+                $("#brief-publish").show();
+            }
+        }
+        else {
+            $("#div-error-user").show();
+            setTimeout(function () { $("#div-error-user").hide(); }, 5000);
+        }
+    }
+
+    function searchBrief() {
+        $("#div_brief_display_data").empty();
+        $("#div_user_dispaly_data").empty();
+        $("#body-wrapper").hide();
+        $("#brief-publish").hide();
+        $("#brief-schedule").hide();
+
+
+        var id = $("#search-category").val();
+        var sid = $("#search-sub-category").val();
+        var url = '@Url.Action("getBriefUserAssignmentData", "Brief")';
+        var pattern = $("#search-metadata").val().trim();
+
+        if (sid == null) {
+            sid = 0;
+        }
+        if (id == null) {
+            id = 0;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { cid: id, scid: sid, search: pattern },
+
+            success: function (data) {
+                $("#div_brief_display_data").empty().append(data);
+                $("#brief-table").dataTable({ "bSort": false, "pageLength": 10 });
+
+            }
+        });
+    }
+
+    function getCategoryHeading(val) {
+
+        var url = '@Url.Action("getSubcategoryList", "Brief")';
+        if (val != "0") {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { cid: val },
+                success: function (data) {
+                    $("#search-sub-category").empty().append(data);
+
+                }
+            });
+        }
+    }
+
+    function _setPartialBriefBody(brf) {
+
+        var act = "partialUserAssignment";
+        var cntrl = "Brief";
+
+        var link = '@Url.Action("action", "control", new { brf="-1"})';
+        link = link.replace("action", act);
+        link = link.replace("control", cntrl);
+        link = link.replace("-1", brf);
+
+        $.get(link, null, function (data) {
+            $("#div_user_dispaly_data").empty().append(data);
+            $("#body-wrapper").show();
+        });
+
+    }
+
+    function submitBriefPublish() {
+        var ids = $("#brief_master").val();
+        if (ids == null || ids == 0) {
+            return false;
+        }
+        var selected = [];
+        if ($(allPages).find('input[type="checkbox"]').is(':checked')) {
+            $(allPages).find('input[type="checkbox"]:checked').each(function () {
+                selected.push(parseInt($(this).val()));
+            });
+            if (selected.length > 0) {
+                $("#btn-publish").prop("disabled", true);
+                var url = '@Url.Action("finishUserBriefPublishAction", "Brief")';
+                var jsonForm = selected.toString();
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { udata: jsonForm, ids: ids},
+                    success: function (msg) {
+                        location.href = '@Url.Action("userAssignment", "Brief")';//redirection
+                    }
+                });
+            }
+        }
+        else {
+            $("#div-error-user").show();
+            setTimeout(function () { $("#div-error-user").hide(); }, 5000);
+        }
+    }
+
+
+    function submitBriefSchedule() {
+        var ids = $("#brief_master").val();
+        var dts = $("#datetimepicker4").val();
+        if (dts == null) {
+            return false;
+        }
+        if (ids == null||ids==0) {
+            return false;
+        }      
+        var selected = [];
+        if ($(allPages).find('input[type="checkbox"]').is(':checked')) {            
+            $(allPages).find('input[type="checkbox"]:checked').each(function () {
+                selected.push(parseInt($(this).val()));
+            });
+            if (selected.length > 0) {
+
+                $("#btn-schedule").prop("disabled", true);
+
+                var url = '@Url.Action("finishUserBriefSchedulingAction", "Brief")';
+                var jsonForm = selected.toString();
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { udata: jsonForm, ids: ids,sdt:dts },
+                    success: function (msg) {
+                        location.href = '@Url.Action("userAssignment", "Brief")';//redirection
+                    }
+                });
+            }
+        }
+        else {
+            $("#div-error-user").show();
+            setTimeout(function () { $("#div-error-user").hide(); }, 5000);
+        }
+    }
+   
+
+</script>
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .table-anchor {
+        padding: 5px;
+    }
+
+    #body-wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-users {
+        margin: 10px 15px;
+        padding: 1px 15px 3px 2px;
+        border-radius: 50px;
+        width: 200px;
+        align-content: center;
+        text-align: center;
+    }
+</style>
+
+
+
+@{
+    List<tbl_brief_category> category = (List<tbl_brief_category>)ViewData["category"];
+}
+
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">view brief </div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">category</label>
+                                    <select id="search-category" name="search-category" class="form-control selectpicker" data-live-search="true" onchange="getCategoryHeading(this.value)">
+                                        <option data-tokens="" disabled selected value="">select cateogry</option>
+                                        @foreach (var pro in category)
+                                        {
+                                            <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">sub-category</label>
+                                    <select id="search-sub-category" name="search-sub-category" class="form-control "></select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label pull-right">metadata</label>
+                                    <div id="theme-1-header" class="form-group">
+                                        <input type="text" class="form-control" value="" placeholder="" id="search-metadata" name="search-metadata" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <br />
+                                    <input id="" type="button" class="btn btn-default btn-info" name="" value="search" onclick="searchBrief()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row" id="">
+                        <div class="col-md-12">
+                            <div id="div_brief_display_data">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="">
+                        <div class="col-md-12">
+                            <div id="div_brief_display_data">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="">
+                        <div class="col-md-12">
+                            <div id="div_user_dispaly_data">
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <br />
+                    <div class="row" id="brief-schedule" style="display:none;">
+                        <div class="col-md-12">
+                            <div class="alert alert-info alert-dismissable">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="control-label pull-left">select date and time to schedule the brief</label>
+                                        <div class='input-group date pull-left'>
+                                            <input type='text' class="form-control validate[required]" id='datetimepicker4' name="brief-schedule" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="pull-right">
+                                            <input id="btn-schedule" type="button" class="btn btn-success  btn-users" name="" value="confirm" onclick="submitBriefSchedule()" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="brief-publish" style="display:none;">
+                        <div class="col-md-12">
+                            <div class="alert alert-info alert-dismissable">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label class="control-label pull-left">Do You want to publish selected brief immediately....?</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="pull-right">
+                                            <input id="btn-publish" type="button" class="btn btn-success  btn-users" name="" value="Confirm" onclick="submitBriefPublish()" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="div-error-user" class="form-group" style="text-align:center;display:none;">
+                        <label class="control-label" style="color:red;">you have not selected any user to assign for this brief</label>
+                    </div>
+                    <br />
+                    <div class="row" id="body-wrapper" style="display:none;">
+                        <div class="col-md-12">
+                            <input id="" type="button" class="btn btn-danger  btn-users" name="" value="Schedule" onclick="showPublishOption(1)" />
+                            @*<input id="" type="button" class="btn btn-danger  btn-users" name="" value="Publish" onclick="showPublishOption(2)" />*@                            
+                            <input id="" type="button" class="btn btn-danger  btn-users" name="" value="Publish" onclick="PublishAllUser()" />                            
+                            <input id="" type="button" class="btn btn-danger  btn-users pull-right" name="" value="Add Notification" onclick="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+

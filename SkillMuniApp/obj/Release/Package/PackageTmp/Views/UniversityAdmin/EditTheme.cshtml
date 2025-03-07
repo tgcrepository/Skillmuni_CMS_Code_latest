@@ -1,0 +1,473 @@
+﻿
+@{
+    ViewBag.Title = "EditTheme";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    m2ostnext.Models.tbl_theme_master theme = (m2ostnext.Models.tbl_theme_master)ViewData["theme"];
+    List<m2ostnext.Models.tbl_theme_metric> metric = (List<m2ostnext.Models.tbl_theme_metric>)ViewData["metric"];
+    List<m2ostnext.Models.tbl_theme_leagues> league = (List<m2ostnext.Models.tbl_theme_leagues>)ViewData["league"];
+    List<m2ostnext.Models.tbl_badge_master> badge = (List<m2ostnext.Models.tbl_badge_master>)ViewData["badge"];
+    List<m2ostnext.Models.tbl_crrency_points> currency = (List<m2ostnext.Models.tbl_crrency_points>)ViewData["currency"];
+   
+    int m = 1;
+    int l = 1;
+    int b = 1;
+    int c = 1;
+}
+
+
+
+<style>
+    .switch {
+        position: relative;
+        height: 26px;
+        width: 120px;
+        /*margin: 20px auto;*/
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .switch-label {
+        position: relative;
+        z-index: 2;
+        float: left;
+        width: 58px;
+        line-height: 26px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+    }
+
+        .switch-label:active {
+            font-weight: bold;
+        }
+
+    .switch-label-off {
+        padding-left: 2px;
+    }
+
+    .switch-label-on {
+        padding-right: 2px;
+    }
+
+
+    .switch-input {
+        display: none;
+    }
+
+        .switch-input:checked + .switch-label {
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.65);
+            text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+            -webkit-transition: 0.15s ease-out;
+            -moz-transition: 0.15s ease-out;
+            -ms-transition: 0.15s ease-out;
+            -o-transition: 0.15s ease-out;
+            transition: 0.15s ease-out;
+            -webkit-transition-property: color, text-shadow;
+            -moz-transition-property: color, text-shadow;
+            -ms-transition-property: color, text-shadow;
+            -o-transition-property: color, text-shadow;
+            transition-property: color, text-shadow;
+        }
+
+        .switch-input:checked + .switch-label-on ~ .switch-selection {
+            left: 60px;
+            /* Note: left: 50%; doesn't transition in WebKit */
+        }
+
+    .switch-selection {
+        position: absolute;
+        z-index: 1;
+        top: 2px;
+        left: 2px;
+        display: block;
+        width: 58px;
+        height: 22px;
+        border-radius: 3px;
+        background-color: #65bd63;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+        background-image: -webkit-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -moz-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -ms-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -o-linear-gradient(top, #9dd993, #65bd63);
+        background-image: linear-gradient(top, #9dd993, #65bd63);
+        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        -webkit-transition: left 0.15s ease-out;
+        -moz-transition: left 0.15s ease-out;
+        -ms-transition: left 0.15s ease-out;
+        -o-transition: left 0.15s ease-out;
+        transition: left 0.15s ease-out;
+    }
+
+    .switch-blue .switch-selection {
+        background-color: #3aa2d0;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4fc9ee), color-stop(100%, #3aa2d0));
+        background-image: -webkit-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -moz-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -ms-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: -o-linear-gradient(top, #4fc9ee, #3aa2d0);
+        background-image: linear-gradient(top, #4fc9ee, #3aa2d0);
+    }
+
+    .switch-yellow .switch-selection {
+        background-color: #c4bb61;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e0dd94), color-stop(100%, #c4bb61));
+        background-image: -webkit-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -moz-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -ms-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: -o-linear-gradient(top, #e0dd94, #c4bb61);
+        background-image: linear-gradient(top, #e0dd94, #c4bb61);
+    }
+
+
+    .avatar-upload .avatar-edit input {
+        display: none;
+    }
+
+    .avatar-upload .avatar-edit {
+        position: absolute;
+        right: 12px;
+        z-index: 1;
+    }
+
+
+
+    .avatar-upload {
+        position: relative;
+        max-width: 205px;
+        margin: 10px auto;
+    }
+
+        .avatar-upload .avatar-preview {
+            width: 192px;
+            height: 192px;
+            position: relative;
+            /*border-radius: 100%;*/
+            border: 6px solid #F8F8F8;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        }
+</style>
+<script>
+    function addmetric(cur) {
+
+        var cur_updated = cur + 1;
+        $("#met_add_btn_div_" + cur).hide();
+        var str = "<div class='form-group'><div class='col-md-2'><label class='control-label'></label></div> <div class='col-md-4'> <input type='text' class='form-control validate[required]' value='' placeholder='Type a Metric Value here' id='organisation-name' name='theme-metric" + cur_updated + "' /> </div> <div class='col-md-2' id='met_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addmetric(" + cur_updated + ")' >Add Metric</a> </label></div> <div class='col-md-4'> </div> </div>";
+
+        $("#metricdiv").append(str);
+        $("#metriccnt").html("");
+        $("#metriccnt").append("<input type='hidden' value='" + cur_updated + "' name='metriccount' />");
+
+    }
+    //---------------11/12/18--PR----------------------------------
+
+    function addleague(cur) {
+
+        var cur_updated = cur + 1;
+        $("#league_add_btn_div_" + cur).hide();
+        var str = "<div class='form-group'><div class='col-md-2'><label class='control-label'></label></div> <div class='col-md-4'> <input type='text' class='form-control validate[required]' value='' placeholder='Type a League Value here' id='organisation-name' name='theme-league" + cur_updated + "' /> </div><div class='col-md-2'> <label class='control-label'>Level " + cur_updated + "</label> </div><div class='col-md-2' id='league_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addleague(" + cur_updated + ")' >Add League</a> </label></div> </div> ";
+
+        $("#leaguediv").append(str);
+        $("#leaguecnt").html("");
+        $("#leaguecnt").append("<input type='hidden' value='" + cur_updated + "' name='leaguecount' />");
+
+    }
+    //---------------11/12/18--PR----------------------------------
+
+
+    function addbadge(cur) {
+
+        var cur_updated = cur + 1;
+        $("#badge_add_btn_div_" + cur).hide();
+        var str = "<div class='form-group'><div class='col-md-2'><label class='control-label'></label></div> <div class='col-md-4'> <input type='text' class='form-control validate[required]' value='' placeholder='Type a Badge Value here' id='organisation-name' name='theme-badge" + cur_updated + "' /> </div><div class='col-md-2' id='badge_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addbadge(" + cur_updated + ")' >Add Badge</a> </label></div> </div>";
+
+        $("#badgediv").append(str);
+        $("#badgecnt").html("");
+        $("#badgecnt").append("<input type='hidden' value='" + cur_updated + "' name='badgecount' />");
+
+    }
+
+    //---------------11/12/18--PR----------------------------------
+
+    function addcurrency(cur) {
+
+        var cur_updated = cur + 1;
+        $("#currency_add_btn_div_" + cur).hide();
+        var str = "<div class='form-group'><div class='col-md-2'><label class='control-label'></label></div> <div class='col-md-4'> <input type='text' class='form-control validate[required]' value='' placeholder='Type a Currency Value here' id='organisation-name' name='theme-currency" + cur_updated + "' /> </div><div class='col-md-2' id='currency_add_btn_div_" + cur_updated + "'><label class='control-label'><a onclick='addcurrency(" + cur_updated + ")' >Add Currency</a> </label></div> </div>";
+
+        $("#currencydiv").append(str);
+        $("#currencycnt").html("");
+        $("#currencycnt").append("<input type='hidden' value='" + cur_updated + "' name='currencycount' />");
+
+    }
+
+    //---------------11/12/18--PR----------------------------------
+
+    function select_file(btn, imgf, ban) {
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        } else {
+        }
+        $("#" + imgf + "").val(filename);
+    }
+
+
+</script>
+
+
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Edit Theme</h4>
+            </div>
+            <div class="panel-body">
+
+
+                @using (Html.BeginForm("EditThemeAction", "UniversityAdmin", FormMethod.Post, new { id = "form-add-organisation", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" value="@theme.id_theme" name="themeId" />
+                    <div class="form-horizontal">
+
+
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Theme Name</label></div>
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="@theme.name" placeholder="" id="organisation-name" name="theme-name" />
+                            </div>
+
+                            <div class="col-md-2"><label class="control-label">Description</label></div>
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="@theme.description" placeholder="" id="organisation-desc" name="theme-desc" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Theme Logo</label></div>
+
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" readonly value="" placeholder="Theme Logo" id="Theme-Logo" name="Theme-Logo" />
+
+                            </div>
+                            <div class="col-md-2">
+                                <div class="fileUpload btn btn-primary">
+                                    <span>Browse Image</span>
+                                    <input id="Theme-Logo-btn" name="Theme-Logo-btn" class="upload" type="file" accept="img/*" onchange="select_file('Theme-Logo-btn', 'Theme-Logo', 'welcome-text')" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2">
+                            </div>
+                            <div class="col-md-10">
+                                <a href="http://localhost:54544/Content/SKILLMUNI_DATA/Theme_Logo/@theme.theme_logo" target="_blank"><i class="glyphicon glyphicon-text-background"></i>&nbsp;Current Theme Logo</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                        </div>
+                        <hr />
+
+                        @foreach (var itm in metric)
+    {
+                    <div class="form-group">
+                        <div class="col-md-2">
+                            @if (m == 1)
+        {
+                    <label class="control-label">Theme Metric</label>
+}
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control validate[required]" value="@itm.metric_value" placeholder="Type a Metric Value here" id="organisation-name" name="theme-metric@(m)" />
+                            <input type="hidden" class="form-control validate[required]" value="@itm.id_metric" name="theme-metric-id@(m)" />
+
+                        </div>
+
+                        @if (m != metric.Count)
+    {
+                    <div class="col-md-2" style="display:none" id="met_add_btn_div_@m"><label class="control-label"><a onclick="addmetric(@m)">Add Metric</a> </label></div>
+
+
+}
+else
+
+{
+                    <div class="col-md-2" style="" id="met_add_btn_div_@m"><label class="control-label"><a onclick="addmetric(@m)">Add Metric</a> </label></div>
+
+}
+
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+m++;
+
+}
+
+
+                        <div id="metricdiv"></div>
+                        <input type="hidden" value="@metric.Count" name="oldmetriccount" />
+                        <div id="metriccnt">
+                            <input type="hidden" value="@metric.Count" name="metriccount" />
+                        </div>
+
+                        <hr />
+                        @foreach (var itm in league)
+    {
+                    <div class="form-group">
+                        <div class="col-md-2">
+                            @if (l == 1)
+        {
+                    <label class="control-label">Theme League</label>
+}
+
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control validate[required]" value="@itm.league_name" placeholder="Type a League Value here" id="organisation-name" name="theme-league@(l)" />
+                            <input type="hidden" class="form-control validate[required]" value="@itm.id_league" name="theme-league-Id@(l)" />
+
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Level @l</label>
+                        </div>
+                        @if (l != league.Count)
+    {
+                    <div class="col-md-2" style="display:none" id="league_add_btn_div_@l"><label class="control-label"><a onclick="addleague(@l)">Add League</a> </label></div>
+
+}
+else
+{
+                    <div class="col-md-2" id="league_add_btn_div_@l"><label class="control-label"><a onclick="addleague(@l)">Add League</a> </label></div>
+
+}
+
+
+                    </div>
+l++;
+}
+
+                        <div id="leaguediv"></div>
+                        <input type="hidden" value="@league.Count" name="oldleaguecount" />
+                        <div id="leaguecnt">
+                            <input type="hidden" value="@league.Count" name="leaguecount" />
+                        </div>
+                        <hr />
+
+                        @foreach (var itm in badge)
+
+    {
+                    <div class="form-group">
+                        <div class="col-md-2">
+                            @if (b == 1)
+        {
+                    <label class="control-label">Theme Badge</label>
+}
+
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control validate[required]" value="@itm.badge_name" placeholder="Type a Badge Value here" id="organisation-name" name="theme-badge@(b)" />
+                            <input type="hidden" class="form-control validate[required]" value="@itm.id_badge" name="theme-badge-Id@(b)" />
+
+                        </div>
+
+
+                        @if (b != badge.Count)
+    {
+                    <div class="col-md-2" style="display:none" id="badge_add_btn_div_@b"><label class="control-label"><a onclick="addbadge(@b)">Add Badge</a> </label></div>
+
+}
+else
+{
+                    <div class="col-md-2" id="badge_add_btn_div_@b"><label class="control-label"><a onclick="addbadge(@b)">Add Badge</a> </label></div>
+
+}
+
+
+                    </div>
+b++;
+}
+
+                        <div id="badgediv"></div>
+                        <input type="hidden" value="@badge.Count" name="oldbadgecount" />
+                        <div id="badgecnt">
+                            <input type="hidden" value="@badge.Count" name="badgecount" />
+                        </div>
+                        <hr />
+                        @foreach (var itm in currency)
+    {
+                    <div class="form-group">
+                        <div class="col-md-2">
+                            @if (c == 1)
+        {
+                    <label class="control-label">Theme Currency</label>
+}
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control validate[required]" value="@itm.currency_value" placeholder="Type a Currency Value here" id="organisation-name" name="theme-currency@(c)" />
+                            <input type="hidden" class="form-control validate[required]" value="@itm.id_currency" name="theme-currency-Id@(c)" />
+
+                        </div>
+                        @if (c != currency.Count)
+    {
+                    <div class="col-md-2" style="display:none" id="currency_add_btn_div_@c"><label class="control-label"><a onclick="addcurrency(@c)">Add Currency</a> </label></div>
+
+}
+else
+{
+                    <div class="col-md-2" id="currency_add_btn_div_@c"><label class="control-label"><a onclick="addcurrency(@c)">Add Currency</a> </label></div>
+
+
+}
+
+
+                    </div>
+c++;
+}
+
+                        <div id="currencydiv"></div>
+                        <input type="hidden" value="@currency.Count" name="oldcurrencycount" />
+                        <div id="currencycnt">
+                            <input type="hidden" value="@currency.Count" name="currencycount" />
+                        </div>
+
+                        <hr />
+                        <div class="form-group">
+                            <div class="col-md-5"></div>
+
+                            <div class="col-md-2">
+                                <input type="submit" class="form-control validate[required]" value="Update" style="background: #3c8dbc; color: white; border-radius: 9px;" />
+                            </div>
+
+                            <div class="col-md-5">
+                            </div>
+
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+

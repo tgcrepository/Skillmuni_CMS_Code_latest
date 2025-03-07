@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "League_Configuration";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>League Configuration</span>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("university_kpi_add", "UniversityKPI", FormMethod.Post, new { id = "form-add-kpi" }))
+                {
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">League Name</label></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="kpi-title" name="kpi-title" />
+                            </div>
+                            <div class="col-md-2"><label class="control-label">League Description</label></div>
+                            <div class="col-md-4">
+                                <textarea name="kpi-desc" class="form-control validate[required]" placeholder="KPI Description" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-2"><label class="control-label">Select Theme</label></div>
+                            <div class="col-md-4">
+                                <select id="acad" onchange="themeSelect()" name="acad" class="form-control">
+                                    <option value="">select</option>
+                                    <option value="1">theme1</option>
+                                    <option value="2">theme2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="div-kpi-data-grid">
+                            <table class="table" style="height:80px;width: 100%;">
+                                <thead>
+                                    <tr style="background-color:#367fa9;color:white">
+                                        <th>Leagues</th>
+                                        <th>Min Eligiblity Scores</th>
+                                        <th>Method of Evaluation</th>
+                                        <th style="width: 20%;">Value of Movement </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="prog-table">
+                                    <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td> <td> <select name="score1" class="form-control"><option value="percentile">Percentile</option><option value="Rank">Rank</option></select> </td> <td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="compari" class="form-control"><option value="">=</option><option value=""><</option><option value=""><</option><option value=""><=</option><option value="">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="opValue" type="text" /></div></td></tr>
+                                    <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td> <td> <select name="score1" class="form-control"><option value="percentile">Percentile</option><option value="Rank">Rank</option></select> </td> <td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="compari" class="form-control"><option value="">=</option><option value=""><</option><option value=""><</option><option value=""><=</option><option value="">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="opValue" type="text" /></div></td></tr>
+                                    <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td> <td> <select name="score1" class="form-control"><option value="percentile">Percentile</option><option value="Rank">Rank</option></select> </td> <td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="compari" class="form-control"><option value="">=</option><option value=""><</option><option value=""><</option><option value=""><=</option><option value="">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="opValue" type="text" /></div></td></tr>
+                                    <tr class="drg4" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-4" name="kpi-text-4" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-4" onchange="kpi_start(4)" name="kpi-start-4" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-4" onchange="kpi_end(4)" name="kpi-end-4" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-4" /> </td></tr>
+                                    <tr class="drg5" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-5" name="kpi-text-5" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-5" onchange="kpi_start(5)" name="kpi-start-5" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-5" onchange="kpi_end(5)" name="kpi-end-5" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-5" /> </td></tr>
+                                    <tr class="drg6" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-6" name="kpi-text-6" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-6" onchange="kpi_start(6)" name="kpi-start-6" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-6" onchange="kpi_end(6)" name="kpi-end-6" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-6" /> </td></tr>
+                                    <tr class="drg7" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-7" name="kpi-text-7" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-7" onchange="kpi_start(7)" name="kpi-start-7" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-7" onchange="kpi_end(7)" name="kpi-end-7" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-7" /> </td></tr>
+                                    <tr class="drg8" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-8" name="kpi-text-8" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-8" onchange="kpi_start(8)" name="kpi-start-8" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-8" onchange="kpi_end(8)" name="kpi-end-8" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-8" /> </td></tr>
+                                    <tr class="drg9" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-9" name="kpi-text-9" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-9" onchange="kpi_start(9)" name="kpi-start-9" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-9" onchange="kpi_end(9)" name="kpi-end-9" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-9" /> </td></tr>
+                                    <tr class="drg10" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-10" name="kpi-text-10" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-10" onchange="kpi_start(10)" name="kpi-start-10" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-10" onchange="kpi_end(10)" name="kpi-end-10" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" name="Kpi-value-10" /> </td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function themeSelect()
+    {
+        alert();
+        var theme = $("#acad").val();
+       $.ajax({
+                type: "GET",
+           url: '@Url.Action("ThemeValueGet", "UniversityKPI")',
+           data: { "id_theme": theme },
+                success: function (data)
+                {
+                    console.log(data);
+                }
+            });
+    }
+</script>
+

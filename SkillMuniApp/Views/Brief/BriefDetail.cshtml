@@ -1,0 +1,375 @@
+﻿@{
+    ViewBag.Title = "contentCreationRichText";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+}
+<link rel="stylesheet" href="~/Content/modal/reset.css" />
+<link rel="stylesheet" href="~/Content/modal/style.css" />
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .left-space {
+        padding-left: 20px;
+        font-weight: 800;
+    }
+</style>
+
+@{
+    tbl_brief_master brief = (tbl_brief_master)ViewData["briefmaster"];
+    tbl_brief_category category = (tbl_brief_category)ViewData["category"];
+    tbl_brief_subcategory subcategory = (tbl_brief_subcategory)ViewData["subcategory"];
+    List<tbl_brief_question> questions = (List<tbl_brief_question>)ViewData["questions"];
+    List<tbl_brief_metadata> metadata = (List<tbl_brief_metadata>)ViewData["metadata"];
+    bool flag = (bool)ViewData["accessFlag"];
+    tbl_brief_master_template bTemplate = (tbl_brief_master_template)ViewData["bTemplate"];
+    List<tbl_brief_master_body> mBody = (List<tbl_brief_master_body>)ViewData["mBody"];
+    var request = HttpContext.Current.Request;
+
+
+    var baseUrl = request.Url.Scheme + "://" + request.Url.Authority + "/" + request.ApplicationPath;
+}
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">skillmuni brief</div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a style="margin-left:5px;" href="@Url.Action("Index", "dashboard")" class="btn btn-default  pull-right">Close&nbsp;<i class="glyphicon glyphicon-folder-close"></i></a>
+                            <a style="margin-left:5px;" href="@Url.Action("modifyBrief", "Brief" , new { brf=brief.brief_code })" class="btn btn-default  pull-right">Edit Brief&nbsp;<i class="glyphicon glyphicon-edit"></i></a>
+                            <a style="margin-left:5px;" href="@Url.Action("cleanBrief", "Brief" , new { brf=brief.brief_code })" class="btn btn-danger  pull-left"><i class="glyphicon glyphicon-trash"></i>&nbsp; Remove Brief&nbsp;</a>
+                            @if (flag)
+                            {
+                                <a style="margin-left:5px;" href="@Url.Action("approveBriefAction", "Brief" , new { brf=brief.brief_code })" class="btn btn-default  pull-right">Approve Brief&nbsp;<i class="glyphicon glyphicon-folder-close"></i></a>
+                            }
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <span class="">category</span><br />
+                                            <span class="control-label left-space"> @category.brief_category</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="control-label">sub-category</span><br />
+                                            <span class="control-label left-space">@subcategory.brief_subcategory</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="control-label ">Expiry Date</span><br />
+                                            <strong> <span class="control-label left-space">@brief.scheduled_timestamp.Value.ToString("dd-MM-yyyy HH:mm")</span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="">brief title</span><br />
+                                        <label class="left-space">@brief.brief_title</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="">brief content</span>
+                                        <div class="row" style="width:auto;">
+                                            <div class="col-md-12">
+                                                @foreach (tbl_brief_master_body row in mBody)
+                                                {
+                                                    if (row.resource_type == 1)
+                                                    {
+                                                        @Html.Raw(WebUtility.HtmlDecode(row.resouce_data))
+                                                    }
+                                                    if (row.resource_type == 2)
+                                                    {
+                                                        if (row.media_type == 1)
+                                                        {
+                                                            <div class="resp-container">
+                                                                <iframe class="resp-iframe" src="@(baseUrl+row.brief_destination+row.resouce_data)" gesture="media" allow="encrypted-media"></iframe>
+                                                            </div>
+                                                        }
+                                                        else if (row.media_type == 2)
+                                                        {
+                                                            <div class="resp-container">
+                                                                <iframe class="resp-iframe" src="@row.resouce_data" allow="encrypted-media"></iframe>
+                                                            </div>
+                                                        }
+
+                                                    }
+
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">metadata</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label class="left-space">
+                                            @{
+                                                foreach (tbl_brief_metadata item in metadata)
+                                                {
+                                                    @(item.brief_metadata + "  ")
+                                                }
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Overide DND ...?</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="left-space">
+                                            @if (brief.override_dnd == 0)
+                                            {
+                                                @("No")
+                                            }
+                                            @if (brief.override_dnd == 1)
+                                            {
+                                                @("Yes")
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Distribution method</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="left-space">
+                                            @if (brief.brief_type == 0)
+                                            {
+                                                @("Normal Distribution of Briefs")
+                                            }
+                                            @if (brief.brief_type == 1)
+                                            {
+                                                @("Leitner Distribution of Briefs")
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="col-md-12">
+                        <div class="panel panel-default custom-panel">
+                            <div class="panel-heading custom-panel-heading">
+                                <div class="panel-title">questions associated to brief </div>
+                            </div>
+
+                            <div class="panel-body custom-panel-body">
+                                @foreach (tbl_brief_question item in questions)
+                                {
+                                    <div class="brief-panel brief-note"> <p style="padding:6px;">@item.brief_question  <a style="margin-left:5px;" href="@Url.Action("DeleteQuestionContent","Brief",new {id_qtn = item.id_brief_question})" class="btn btn-default  pull-right"><i class="fa fa-trash"></i></a> <a style="margin-left:5px;" href="@Url.Action("EditQuestionContent","Brief",new {idQue = item.id_brief_question})" class="btn btn-default  pull-right"><i class="glyphicon glyphicon-edit"></i></a><a href='#modal-1' onclick="question_prev(@item.id_brief_question)"><i class='fa fa-eye' aria-hidden='true' style="float: right; margin-right: 0.5%; margin-top: 0.5%; margin-top: 5px;"></i></a> </p></div>
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <hr />
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+    <div class="diamond-transition">
+        <div class="cd-modal" id="modal-1" style="position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;z-index: 9999;">
+            <div class="modal-content" style="background: #2e253f;">
+                <div class="form-group">
+                    <div class="col-md-12" id="quesPart">
+
+                    </div>
+                </div>
+                <div class="form-group" id="answerForm" style="margin-top:15%;">
+                    <div class="col-md-12" id="answPart">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12" id="metaPart" style="margin-top:2%;">
+
+                    </div>
+                </div>
+            </div>
+            <a href="#0" class="modal-close">Close</a>
+        </div>
+
+
+        <div class="cd-transition-layer" id="transLay" data-frame="20">
+            <div class="bg-layer"></div>
+        </div>
+    </div>
+
+}
+
+<script>
+    if (!window.jQuery) document.write('<script src="js/jquery-2.2.1-min.js"><\/script>');
+    function question_prev(e) {
+        //alert(e);
+        $("#transLay").removeClass("closing");
+        $("#modal-1").addClass("visible");
+        $("#transLay").addClass("visible opening");
+        var id = e;
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("question_preview", "Brief")',
+                //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            data: { "Qid": id},
+                success: function (data)
+                {
+                   //console.log(data);
+                     if (data[0].question_theme_type == 2) {
+                        if (data[0].question_choice_type == 1)
+                        {
+                            var str = "<div class='row'><div class='col-md-2'><label>Question :</label></div><div class='col-md-8'><label>" + data[0].brief_question + "</label></div><div class='col-md-2'></div></div>";
+                            $("#quesPart").html(str);
+                        }
+                        else if (data[0].question_choice_type == 2)
+                        {
+                            //var urlimg = "https://www.skillmuni.in/SkillmuniUniversityCMSbeta/Content/SKILLMUNI_DATA/briefQuesion/";
+                            var urlimg = "http://180.149.241.40/sulcmsproduction/Content/SKILLMUNI_DATA/briefQuesion/";
+                            var str = "<div class='row'><div class='col-md-2'><label>Question :</label></div><div class='col-md-8'><img src='" + urlimg + "" + data[0].id_organization + "/question/" + data[0].question_image + "' style='width: 140px; height: 100px;'></div><div class='col-md-2'></div></div>";
+                            $("#quesPart").html(str);
+                        }
+                        else if (data[0].question_choice_type == 3)
+                        {
+                            var urlimg = "http://180.149.241.40/sulcmsproduction/Content/SKILLMUNI_DATA/briefQuesion/";
+                            var str = "<div class='row'><div class='col-md-2'><label>Question :</label></div><div class='col-md-4'><label>" + data[0].brief_question + "</label></div><div class='col-md-4'><img src='" + urlimg + "" + data[0].id_organization + "/question/" + data[0].question_image + "' style='width: 140px; height: 100px;'></div><div class='col-md-2'></div></div>";
+                            $("#quesPart").html(str);
+                            //$("#quesPart").html(str2);
+                        }
+
+                    }
+                    else
+                    {
+                        var str = "<div class='row'><div class='col-md-2'><label>Question :</label></div><div class='col-md-8'><label>" + data[0].brief_question + "</label></div><div class='col-md-2'></div></div>";
+                        $("#quesPart").html(str);
+                    }
+
+                    choiceView(e, data[0].id_organization, data[0].question_theme_type);
+                    $("#transLay").removeClass("opening");
+                }
+        });
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("briefMetadaQues", "Brief")',
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+            data: { "Qid": id},
+            success: function (data)
+            {
+                //console.log(data);
+                var Metastr = '';
+                for (var i = 0; i < data.length; i++)
+                {
+                    Metastr += '<div class="row"><div class="col-md-2"><label>Metadata :</label></div><div class="col-md-8"><span>' + data[i].brief_question_metadata + '</span></div></div>';
+                }
+                $("#metaPart").html(Metastr);
+            }
+            });
+    }
+
+    function choiceView(Qid, org, qThemTyp)
+    {
+        //console.log(Qid);console.log(org);console.log(qThemTyp);
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("briefAnsChoic", "Brief")',
+                //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            data: { "Qid": Qid},
+                success: function (data)
+                {
+                    //console.log(data);
+                    if (qThemTyp == 2) {
+                        var str = "";
+                        var urlimg = "http://180.149.241.40/sulcmsproduction/Content/SKILLMUNI_DATA/briefQuesion/";
+                        for (var i = 0; i < data.length; i++)
+                        {
+                            var iInc = i + 1;
+                            var colorSt = "";
+                            if (data[i].is_correct_answer == 0) {
+                                colorSt = "#FFFFCC";
+                            }
+                            else if (data[i].is_correct_answer == 1)
+                            {
+                                colorSt = "#028482";
+                            }
+
+                            if (data[i].choice_type == 1) {
+                                $('#answerForm').css('margin-top', "5%");
+                                str = str + '<div class="row" style="padding: 1%;border: 2px solid '+colorSt+';margin-top: 1%;"><div class="col-md-2"><label>Choice ' + iInc + '</label></div><div class="col-md-8"><span>' + data[i].brief_answer + '</span></div><div class="col-md-2"></div></div>';
+                            }
+                            else if (data[i].choice_type == 2) {
+                                str = str + '<div class="row" style="padding: 1%;border: 2px solid ' + colorSt +';margin-top: 1%;"><div class="col-md-2"><label>Choice ' + iInc + '</label></div><div class="col-md-8"><img src="' + urlimg + '' + data[i].id_organization + '/choice/' + data[i].choice_image + '" style="width:100px;height:80px;"></div><div class="col-md-2"></div></div>';
+                            }
+                            else if (data[i].choice_type == 3) {
+                                str = str + '<div class="row" style="padding: 1%;border: 2px solid ' + colorSt + ';margin-top: 1%;"><div class="col-md-2"><label>Choice ' + iInc + '</label></div><div class="col-md-4"><span>' + data[i].brief_answer + '</span></div><div class="col-md-4"><img src="' + urlimg + '' + data[i].id_organization + '/choice/' + data[i].choice_image + '" style="width:100px;height:80px;"></div><div class="col-md-2"></div></div>';
+                            }
+                        }
+                        $("#answPart").html(str);
+                    }
+                    else
+                    {
+                        var str = "";
+                        $('#answerForm').css('margin-top', "5%");
+                        for (var i = 0; i < data.length; i++) {
+                            var iInc = i + 1;
+                            var colorSt = "";
+                            if (data[i].is_correct_answer == 0) {
+                                colorSt = "#FFFFCC";
+                            }
+                            else if (data[i].is_correct_answer == 1) {
+                                colorSt = "#028482";
+                            }
+                            str = str + '<div class="row" style="padding: 1%;border: 2px solid ' + colorSt +';margin-top: 1%;"><div class="col-md-2"><label>Choice ' + iInc + '</label></div><div class="col-md-8"><span>' + data[i].brief_answer + '</span></div><div class="col-md-2"></div></div>';
+                        }
+                        $("#answPart").html(str);
+                    }
+
+                }
+        });
+    }
+</script>
+
+<script type="text/javascript" src="~/Content/modal/modernizr.js"></script>
+<script type="text/javascript" src="~/Content/modal/main.js"></script>

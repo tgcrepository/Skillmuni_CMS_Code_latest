@@ -1,0 +1,222 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+}
+<script>
+    function select_file(btn, imgf, ban) {
+
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        } else {
+        }
+
+        $("#" + imgf + "").val(filename);
+    }
+
+     function hide_main_div() {
+         //alert($("#month").val());
+         $("#themeUrl-2").show();
+        $("#main_gif").hide();
+    }
+    function show_main_div() {
+        //alert($("#week").val());  
+        $("#themeUrl-2").hide();
+        $("#main_gif").show();
+    }
+</script>
+<style>
+    .switch {
+        position: relative;
+        height: 26px;
+        width: 120px;
+        /*margin: 20px auto;*/
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .switch-label {
+        position: relative;
+        z-index: 2;
+        float: left;
+        width: 58px;
+        line-height: 26px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+    }
+
+        .switch-label:active {
+            font-weight: bold;
+        }
+
+    .switch-label-off {
+        padding-left: 2px;
+    }
+
+    .switch-label-on {
+        padding-right: 2px;
+    }
+
+
+    .switch-input {
+        display: none;
+    }
+
+        .switch-input:checked + .switch-label {
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.65);
+            text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+            -webkit-transition: 0.15s ease-out;
+            -moz-transition: 0.15s ease-out;
+            -ms-transition: 0.15s ease-out;
+            -o-transition: 0.15s ease-out;
+            transition: 0.15s ease-out;
+            -webkit-transition-property: color, text-shadow;
+            -moz-transition-property: color, text-shadow;
+            -ms-transition-property: color, text-shadow;
+            -o-transition-property: color, text-shadow;
+            transition-property: color, text-shadow;
+        }
+
+        .switch-input:checked + .switch-label-on ~ .switch-selection {
+            left: 60px;
+            /* Note: left: 50%; doesn't transition in WebKit */
+        }
+
+    .switch-selection {
+        position: absolute;
+        z-index: 1;
+        top: 2px;
+        left: 2px;
+        display: block;
+        width: 58px;
+        height: 22px;
+        border-radius: 3px;
+        background-color: #65bd63;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+        background-image: -webkit-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -moz-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -ms-linear-gradient(top, #9dd993, #65bd63);
+        background-image: -o-linear-gradient(top, #9dd993, #65bd63);
+        background-image: linear-gradient(top, #9dd993, #65bd63);
+        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        -webkit-transition: left 0.15s ease-out;
+        -moz-transition: left 0.15s ease-out;
+        -ms-transition: left 0.15s ease-out;
+        -o-transition: left 0.15s ease-out;
+        transition: left 0.15s ease-out;
+    }
+</style>
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Create Academic Tile</h4>
+            </div>
+            <div class="panel-body">
+
+
+                @using (Html.BeginForm("CreateGameTileAction", "RoadMap", FormMethod.Post, new { id = "form-add-organisation", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Tile Name</label></div>
+
+                        <div class="col-md-10">
+                            <input type="text" class="form-control validate[required]" value="" placeholder="" id="Tile_Name" name="Tile_Name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Description</label></div>
+
+                        <div class="col-md-10">
+                            <input type="text" class="form-control validate[required]" value="" placeholder="" id="Description" name="Description" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Select Theme</label></div>
+                        <div class="col-md-4">
+                            @*<select id="acad-tile-theme" name="acad-tile-theme" onchange="themeSelection()" class="form-control" required>
+                                <option value="" selected>select</option>
+                                <option value="1">Theme 1</option>
+                                <option value="2">Theme 2</option>
+                            </select>*@
+                            <div class="switch">
+                                <input type="radio" class="switch-input" value="1" onclick="show_main_div()" name="acad-tile-theme" id="week" checked>
+                                <label for="week" class="switch-label switch-label-off">Theme 1</label>
+                                <input type="radio" class="switch-input" value="2" onclick="hide_main_div()" name="acad-tile-theme" id="month">
+                                <label for="month" class="switch-label switch-label-on">Theme 2</label>
+                                <span class="switch-selection"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="themeUrl-2" style="display:none">
+                        <div class="col-md-2"><label class="control-label">URL Details</label></div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control validate[required]" value="" placeholder="" id="url_value" name="url_value" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Tile Position</label></div>
+                        <div class="col-md-10">
+                            <input type="number" min="1" class="form-control validate[required]" value="" placeholder="" id="Position" name="Position" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2"><label class="control-label">Tile Image</label></div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control validate[required]" readonly value="" placeholder="Logo Image" id="logo-image" name="logo-image" />
+                                    <div class="fileUpload btn btn-primary">
+                                        <span>Browse Image</span>
+                                        <input id="logo-btn" name="logo-btn" class="upload" type="file" accept="image/*" onchange="select_file('logo-btn', 'logo-image', 'logo-text')" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    function themeSelection() {
+        var idthem = $("#acad-tile-theme").val();
+        if (idthem == 1) {
+            $("#themeUrl-2").hide();
+        }
+        else if (idthem == 2) {
+            $("#themeUrl-2").show();
+        }
+
+    }
+</script>

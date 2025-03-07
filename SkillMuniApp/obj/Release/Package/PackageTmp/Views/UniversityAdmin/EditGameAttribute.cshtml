@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "EditGameAttribute";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+    int id_game = (int)ViewData["id_game"];
+    int id_theme = (int)ViewData["id_theme"];
+    List<m2ostnext.Models.tbl_theme_metric> metThem = (List<m2ostnext.Models.tbl_theme_metric>)ViewData["metThem"];
+}
+
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Edit Game attribute</h4>
+            </div>
+            <div class="panel-body">
+                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Metrics name
+                            </th>
+                            <th>
+                                Metrics Edit Action
+                            </th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in metThem)
+                        {
+                        <tr>
+                            <td> @item.metric_value </td>                                
+                            <td><a href="@Url.Action("editGameAttributeAction", "UniversityAdmin", new { id_game= id_game,id_theme = id_theme,idMet = item.id_metric})"><i class="glyphicon glyphicon-edit"></i>Edit Game Atrribute &nbsp; &nbsp;</a></td>
+                        </tr>
+                        }
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>

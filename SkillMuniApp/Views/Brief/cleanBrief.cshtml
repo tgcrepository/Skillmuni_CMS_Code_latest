@@ -1,0 +1,293 @@
+﻿@{
+    ViewBag.Title = "contentCreationRichText";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .left-space {
+        padding-left: 20px;
+        font-weight: 800;
+    }
+</style>
+
+<script>
+        function removeAssignmentFromUser(brf, ids) {
+          var url = '@Url.Action("getRemoveAssignment", "Brief")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { brf: brf,ids:ids },
+            success: function (data) {
+                if (data == "1") {
+                    $("#urb-" + ids).hide("slow");
+                }
+            }
+        });
+    }
+
+    function cleanBriefConfirm(ids) {
+        if (ids == 1) {
+            $("#div-brief-clean").show("slow");
+            $("#btn-confirm-clean").hide("slow");
+        } else {
+            $("#div-brief-clean").hide("slow");
+            $("#btn-confirm-clean").show("slow");
+        }
+    }
+</script>
+
+@{
+    tbl_brief_master brief = (tbl_brief_master)ViewData["briefmaster"];
+    tbl_brief_category category = (tbl_brief_category)ViewData["category"];
+    tbl_brief_subcategory subcategory = (tbl_brief_subcategory)ViewData["subcategory"];
+    List<tbl_brief_question> questions = (List<tbl_brief_question>)ViewData["questions"];
+    List<tbl_brief_metadata> metadata = (List<tbl_brief_metadata>)ViewData["metadata"];
+    bool flag = (bool)ViewData["accessFlag"];
+    tbl_brief_master_template bTemplate = (tbl_brief_master_template)ViewData["bTemplate"];
+    List<tbl_brief_master_body> mBody = (List<tbl_brief_master_body>)ViewData["mBody"];
+    var request = HttpContext.Current.Request;
+
+        var baseUrl = request.Url.Scheme + "://" + request.Url.Host+"/"+request.ApplicationPath;
+    List<m2ostnext.Models.BriefResultSummery> sList = (List<m2ostnext.Models.BriefResultSummery>)ViewData["summeryList"];
+    List<m2ostnext.Models.UserAssignmentList> uList = (List<m2ostnext.Models.UserAssignmentList>)ViewData["unreadList"];
+}
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">skillmuni brief</div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a style="margin-left:5px;" href="@Url.Action("Index", "dashboard")" class="btn btn-default  pull-right">Close&nbsp;<i class="glyphicon glyphicon-folder-close"></i></a>
+                            <a id="btn-confirm-clean" style="margin-left:5px;" href="javascrip:void(0)" onclick="cleanBriefConfirm(1)" class="btn btn-danger  pull-left"><i class="glyphicon glyphicon-trash"></i>&nbsp; Remove Brief from circulation&nbsp;</a>
+                        </div>
+                    </div>
+
+                    <div class="row" id="div-brief-clean" style="display:none;">
+                        <div class="col-md-12">
+                            <br />
+                            <div class="alert alert-info alert-dismissable">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label class="control-label pull-left">Do you really want to remove this brief from circulation immediately....?</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="pull-right">
+                                            <a style="margin-left:5px;" href="@Url.Action("cleanBriefApprove", "Brief" , new { brf=brief.brief_code })" class="btn btn-danger  pull-left"><i class="glyphicon glyphicon-check"></i>&nbsp; confirm&nbsp;</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                        </div>
+                    </div>
+                    <br />
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <span class="">category</span><br />
+                                            <span class="control-label left-space"> @category.brief_category</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="control-label">sub-category</span><br />
+                                            <span class="control-label left-space">@subcategory.brief_subcategory</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="control-label ">Expiry Date</span><br />
+                                            <strong> <span class="control-label left-space">@brief.scheduled_timestamp.Value.ToString("dd-MM-yyyy HH:mm")</span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="div-theme-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="">brief title</span><br />
+                                        <label class="left-space">@brief.brief_title</label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">metadata</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label class="left-space">
+                                            @{
+                                                foreach (tbl_brief_metadata item in metadata)
+                                                {
+                                                    @(item.brief_metadata + "  ")
+                                                }
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Overide DND ...?</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="left-space">
+                                            @if (brief.override_dnd == 0)
+                                            {
+                                                @("No")
+                                            }
+                                            @if (brief.override_dnd == 1)
+                                            {
+                                                @("Yes")
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Distribution method</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="left-space">
+                                            @if (brief.brief_type == 0)
+                                            {
+                                                @("Normal Distribution of Briefs")
+                                            }
+                                            @if (brief.brief_type == 1)
+                                            {
+                                                @("Leitner Distribution of Briefs")
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="col-md-12">
+                        <div class="panel panel-default custom-panel">
+                            <div class="panel-heading custom-panel-heading">
+                                <div class="panel-title">questions associated to brief </div>
+                            </div>
+                            <div class="panel-body custom-panel-body">
+                                @foreach (tbl_brief_question item in questions)
+                                {
+                                    <div class="brief-panel brief-note"> <p style="padding:6px;">@item.brief_question   </p></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br />
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="panel panel-default custom-panel">
+                            <div class="panel-heading custom-panel-heading">
+                                <div class="panel-title">user assigned to brief (pending)</div>
+                            </div>
+                            <div class="panel-body custom-panel-body">
+                                <table id="report-table-unassinged" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="35%">user name </th>
+                                            <th width="35%">reporting manager</th>
+                                            <th width="20%">assigned date</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (m2ostnext.Models.UserAssignmentList item in uList)
+                                        {
+                                            <tr id="urb-@item.id_brief_user_assignment">
+                                                <td>@(item.prname) </td>
+                                                <td>@(item.rmname) </td>
+                                                <td>@item.assignedtime</td>
+                                                <td>
+                                                    <a class="btn btn-default btn-info" href="javascript:void(0)" onclick="removeAssignmentFromUser(@("'"+item.brief_code+"'"),@item.id_brief_user_assignment)">
+                                                        <i class="glyphicon glyphicon-remove"></i> &nbsp; remove
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="panel panel-default custom-panel">
+                            <div class="panel-heading custom-panel-heading">
+                                <div class="panel-title">user assigned to brief (completed)</div>
+                            </div>
+                            <div class="panel-body custom-panel-body">
+                                <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="50%">user name / reporting manager</th>
+                                            <th width="20%">completed date</th>
+                                            <th width="20%">score</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (m2ostnext.Models.BriefResultSummery item in sList)
+                                        {
+                                            <tr>
+                                                <td>@(item.prname + " ( " + item.rmname + " )")</td>
+                                                <td>@item.completedtime</td>
+                                                <td>@(item.brief_result + " %")</td>
+                                                <td>
+                                                    <a class="btn btn-default btn-info btn-users" href="@Url.Action("BriefEvaluation", "Brief", new { brf = brief.brief_code,uid=item.id_user,atm=item.attempt_no })" target="_blank">
+                                                        Result Detail
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

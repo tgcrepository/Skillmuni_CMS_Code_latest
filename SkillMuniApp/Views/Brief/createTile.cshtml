@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "Add Category Tiles";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+<script>
+    $(function () {
+        $("#form_add_category").validationEngine();
+    });
+
+    function select_file() {
+        var file = $("#uploadBtn")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        }
+        $("#ImageFile").val(filename);
+    }
+</script>
+
+@{
+    List<tbl_category_tiles> cat_list = (List<tbl_category_tiles>)ViewData["category-list"];
+}
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Add Landing Page Tiles</h4>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("addBriefCategoryTile", "Brief", FormMethod.Post, new { id = "form_add_category", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel">Brief Tile Name :</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control validate[required]" value="" placeholder="Brief Tile Name" id="category-tile" name="category-tile" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel">Description:</label>
+                                <div class="col-md-9">
+                                    <textarea class="form-control validate[required]" placeholder="Description" id="Description" name="tile-description" rows="6"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel">Brief Tile  Type :</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="select-tile-type" name="select-tile-type">
+                                        <option value="1">Values</option>
+                                        <option value="2">OD Program </option>
+                                        <option value="3">Learning Journey </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel">Proceed w/o Brief Completion  :</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="select-tile-completion" name="select-tile-completion">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>                                        
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel">Image :</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control validate[required]" readonly value="" placeholder="Choose Image" id="ImageFile" name="tileFile" />
+                                    <div class="fileUpload btn btn-primary">
+                                        <span>Browse Image</span>
+                                        <input id="uploadBtn" name="uploadBtn" class="upload" type="file" accept="image/*" onchange="select_file()" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel">Tile Order No :</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control validate[required]" value="" placeholder="Order" id="category-order" name="category-order" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="FirstName" class="control-label col-md-2 regLabel">Brief Access Limit :</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control validate[required]" value="" placeholder="Access Limit" id="category-limit" name="category-limit" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="control-label ">Tile Type :</label>
+                        </div>
+                        <div class="col-md-7">
+                            @*<label class="control-label">Yes : </label>
+                            <input type="radio" name="non-learn-type" value="2" />
+                            <label class="control-label">No : </label>
+                            <input type="radio" name="non-learn-type" value="1" />*@
+                            <select class="form-control" id="non-learn-type" name="non-learn-type">
+                                <option value="1">Academy</option>
+                                <option value="2">Study Abroad</option>
+                                <option value="3">Entrepreneur</option>
+                            </select>
+                        </div>
+                    </div>
+					<br />
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+                }
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>

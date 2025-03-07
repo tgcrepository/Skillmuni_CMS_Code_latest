@@ -1,0 +1,141 @@
+﻿@model m2ostnext.Models.Email_feedback_user
+@{
+    ViewBag.Title = "editEmailFeedback";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    //List<m2ostnext.Models.tbl_feedback_role> FeedbackRole = (List<m2ostnext.Models.tbl_feedback_role>)ViewData["FeedbackRole"];
+      m2ostnext.Models.Email_feedback_user map = (m2ostnext.Models.Email_feedback_user)ViewData["map"];
+      List<m2ostnext.Models.tbl_feedback_role> map1 = (List<m2ostnext.Models.tbl_feedback_role>)ViewData["employeeRoleList"];
+   
+}
+
+<script>
+    $(function () {
+        $("#form_edit_category").validationEngine();
+
+    });
+    function add_category() {
+        var cid = $("#rolename").val();
+        var cText = $("#rolename option:selected").text();
+        if (cText.length > 20) cText = cText.substring(0, 20) + '..';
+
+        cText = cText + " ";
+        var i = $("#hid-category").val();
+        i++;
+        $("#hid-category").val(i);
+        var item = '<div class="data-tab col-md-2" id="div-dyn-category-' + i + '" style="background-color: #23c6c8;"><span class="tag label label-info"><span>' + cText + '</span><input type="hidden" value="' + cid + '" id="add-con-category-' + i + '" name="add-con-category-' + i + '" /><a class="pull-right" onclick="delete_content_category(' + i + ',0)"><i class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a></span></div>';
+        $("#div_category").append(item);
+        $("#hid-category").val(i);
+    }
+    function delete_content_category(i) {
+        $("#div-dyn-category-" + i + "").remove();
+    }
+
+</script>
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Edit Email Feedback</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm("editEmailFeedbackAction", "EmailFeedback", FormMethod.Post, new { id = "form_edit_category", enctype = "multipart/form-data" }))
+                {
+
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="emp_id" value="@Model.emp_id" />
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label col-md-2 regLabel" > Role </label>
+                                    <div class="col-md-10">
+                                        <select  id="rolename" name="rolename" style="width: 388px;height: 33px;">
+                                           
+                                            <option value="0" disabled selected>select role</option>
+                                            @foreach (var item in (List<m2ostnext.Models.tbl_feedback_role>)ViewData["FeedbackRole"])
+                                            {
+                                                <option value="@item.id_role">@item.role_name</option>
+
+                                            }
+
+                                        </select>
+                                        <input class="btn btn-default btn-primary" type="button" id="btn_categort" style="background-color: #018ccf;" value="Add Role" onclick="add_category()" />
+                                    </div>
+             
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-11">
+                                    <div class="form-group" id="div_category">
+                                        @{
+                                            int i = 1;
+                                        }
+                                        @foreach (m2ostnext.Models.tbl_feedback_role item in map1)
+                                        {
+                                            
+
+                                                <div class="data-tab col-md-2" id="div-dyn-category-@item.id_role" style="background-color: #23c6c8;">
+                                                    <span class="tag label label-info">
+                                                       @item.role_name
+                                                        <input type="hidden" value="@item.id_role" id="add-con-category-@i" name="add-con-category-@i" />
+                                                        <a class="pull-right" onclick="delete_content_category('@item.id_role','@Model.emp_id')"><i class="remove glyphicon glyphicon-remove-sign glyphicon-white "></i></a>
+                                                    </span>
+                                                </div>
+                                                i++; 
+
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" value="@i" id="hid-category" name="hid-category" />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label col-md-2 regLabel">Email Id</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control validate[required]" readonly value="@Model.emp_emailID" placeholder="Email Id" id="emailid" name="emailid" rows="6">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="LastName" class="control-label col-md-2 regLabel">Employee Name</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control validate[required]" readonly value="@Model.emp_name" placeholder="Employee Name" id="employeename" name="employeename" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label col-md-2 regLabel">Employee ID</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control validate[required]" readonly value="@Model.emp_id" placeholder="Employee ID" id="employeeid" name="employeeid" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Update" class="btn btn-default" style="background-color: #018ccf; color: white; width: 58px; height: 29px;" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>

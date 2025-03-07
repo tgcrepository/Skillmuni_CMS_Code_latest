@@ -1,0 +1,439 @@
+﻿
+@{
+    ViewBag.Title = "EditKPI";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_brief_category> dropName = (List<tbl_brief_category>)ViewData["detail"];
+    List<m2ostnext.Models.tbl_academic_tiles> academic = (List<m2ostnext.Models.tbl_academic_tiles>)ViewData["academi"];
+    List<m2ostnext.Models.tbl_university_kpi_master> editKpiMas = (List<m2ostnext.Models.tbl_university_kpi_master>)ViewData["editKpiMaster"];
+    List<m2ostnext.Models.tbl_university_kpi_grid> editKpiGrid = (List<m2ostnext.Models.tbl_university_kpi_grid>)ViewData["editKpiGrid"];
+    int idKpi = Convert.ToInt32(ViewData["id_kpi"]);
+    bool academi = Convert.ToBoolean(ViewData["academd"]);
+    int kpiTyp = Convert.ToInt32(ViewData["kpiTyp"]);
+    int gridCount = editKpiGrid.Count;
+    double oncorc = 0;
+    foreach(var item in editKpiGrid)
+    {
+        oncorc = item.start_range;
+    }
+    string text = "";
+    double kpiStart = 0;
+    double kpiEnd = 0;
+    int kpiVale = 0;
+    foreach (var grid in editKpiGrid)
+    {
+        text = grid.kpi_text;
+        kpiStart = grid.start_range;
+        kpiEnd = grid.end_range;
+        kpiVale = grid.kpi_value;
+    }
+}
+<style>
+    .col-md-12 strong {
+        width: 200px;
+        display: inline-block;
+    }
+
+    .select-control {
+        background-color: #FFFFFF;
+        background-image: none;
+        border: 1px solid #e5e6e7;
+        border-radius: 1px;
+        color: #000000;
+        display: block;
+        padding: 2px 4px;
+        height: 28px;
+        margin: 1px 1px;
+        transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+        width: 100%;
+        font-size: 14px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var kpitype = @kpiTyp;
+        var gridCount =  @gridCount;
+        $("#KPI-mode").val(@kpiTyp);
+        
+        if (kpitype == 1)
+        {            
+            $("#rightanswerdiv").show();
+            $("#rangediv").hide();
+            
+            $("#oneCorct").val(@oncorc);
+            var ite = @Html.Raw(Json.Encode(ViewData["editKpiGrid"]));
+            for (var i = 1; i <= gridCount; i++) {                
+                $("#idkpiMasOne").val(ite[i - 1].id_kpi_grid);
+                $("#kpi-start-" + i).attr("disabled", false);
+                $("#kpi-end-" + i).attr("disabled", false);
+            }
+
+        }
+        else if (kpitype == 2)
+        {
+            $("#rightanswerdiv").hide();
+            $("#rangediv").show();
+            $("#grid-value").val(@gridCount);
+            changeKpiGrid(@gridCount);
+            var ite = @Html.Raw(Json.Encode(ViewData["editKpiGrid"]));
+            @*var ite = @editKpiGrid.ToList();*@
+            console.log(ite);
+            for (var i = 1; i <= gridCount; i++)
+            {
+                //console.log(); 
+                $("#idKpiGri-" + i).val(ite[i - 1].id_kpi_grid);
+                $("#kpi-text-" + i).val(ite[i - 1].kpi_text);
+                $("#kpi-start-" + i).val(ite[i - 1].start_range);
+                $("#kpi-end-" + i).val(ite[i - 1].end_range);
+                $("#Kpi-value-" + i).val(ite[i - 1].kpi_value);
+            }
+            
+            }
+
+    });
+   
+
+
+    $(function () {
+        $('a[title]').tooltip();
+        //var kpiMod = 2;
+        ////KPI - mode
+
+            function changeElementItem(ids) {
+                if (ids == 1) {
+                $("#div-ass-1").hide();
+                $("#div-pro-1").show();
+                } else if (ids == 2) {
+                $("#div-ass-1").show();
+                $("#div-pro-1").hide();
+                }
+            }
+        });
+
+    function getProgramGrid(ids) {
+
+        $("#div-element-program").show(); $("#div-element-assessment").hide();
+        var sVal = $("#element-program-data option:selected").text();
+        $("#program-name").text(sVal);
+    }
+
+    function getAssessmentGrid(ids) {
+        $("#div-element-program").hide(); $("#div-element-assessment").show();
+        var sVal = $("#element-assessment-data option:selected").text();
+        $("#assessment-name").text(sVal);
+    }
+    function GridValue(id)
+    {
+        if (id == 2) {
+            $("#rangediv").show();
+            $("#rightanswerdiv").hide();
+
+        }
+        else if(id==1)
+        {
+            $("#rightanswerdiv").show();
+
+            $("#rangediv").hide();
+
+        }
+        else if (id == 3) {
+            $("#rightanswerdiv").hide();
+
+            $("#rangediv").hide();
+
+        }
+        else if (id == 4) {
+            $("#rightanswerdiv").hide   ();
+
+            $("#rangediv").hide();
+
+        }
+    }
+
+    function changeKpiGrid(id) {
+        if (id >= 1) { $('.drg1').show(); } else { $('.drg1').hide(); }
+        if (id >= 2) { $('.drg2').show(); } else { $('.drg2').hide(); }
+        if (id >= 3) { $('.drg3').show(); } else { $('.drg3').hide(); }
+        if (id >= 4) { $('.drg4').show(); } else { $('.drg4').hide(); }
+        if (id >= 5) { $('.drg5').show(); } else { $('.drg5').hide(); }
+        if (id >= 6) { $('.drg6').show(); } else { $('.drg6').hide(); }
+        if (id >= 7) { $('.drg7').show(); } else { $('.drg7').hide(); }
+        if (id >= 8) { $('.drg8').show(); } else { $('.drg8').hide(); }
+        if (id >= 9) { $('.drg9').show(); } else { $('.drg9').hide(); }
+        if (id == 10) { $('.drg10').show(); } else { $('.drg10').hide(); }
+    }
+
+</script>
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>Edit KPI</span>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("university_kpi_edit", "UniversityKPI", FormMethod.Post, new { id = "form-add-kpi" }))
+                {
+                    <div class="form-horizontal">
+                        <input type="hidden" name="idKpiMs" value="@idKpi" />
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">KPI Title</label></div>
+                            <div class="col-md-9">
+                                @foreach (var item in editKpiMas)
+                                {
+                                    <input type="text" class="form-control validate[required]" value="@item.kpi_name" placeholder="" id="kpi-title" name="kpi-title" />
+                                    <input type="hidden" name="idKpiMa" value="@item.id_kpi_master" />
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">KPI Description</label></div>
+                            <div class="col-md-9">
+                                @foreach (var item in editKpiMas)
+                                {
+                                    <textarea name="kpi-desc" class="form-control validate[required]" placeholder="KPI Description" rows="3">@item.kpi_description</textarea>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Select KPI Type</label></div>
+                            <div class="col-md-5">
+                                <select id="KPI-mode" name="kpi-type" class="form-control" onchange="GridValue(this.value)">
+                                    <option value="1" selected>Right Answer KPI</option>
+                                    <option value="2">Assessment Score KPI</option>
+                                    @*<option value="3">Right Answer With Complexity KPI</option>
+                                    <option value="4">Read Brief KPI</option>*@
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                        @*<div class="row" id="rightanswerdiv">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-3"><label class="control-label">For 1 correct answer KPI value is</label></div>
+                                    <div class="col-md-5">
+                                        <input type="hidden" id="idkpiMasOne" name="idkpiMasOne" value="" />
+                                        <input style="color:black;" type="number" min="0.1" class="form-control select-control validate[required,custom[number]]" id="oneCorct" name="OneCorrect" value="" placeholder="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                        @*<div id="rangediv" style="display:none">
+                            <div id="kpi-grid" class="form-group">
+                                <div class="col-md-3"><label class="control-label">Select No of Grid</label></div>
+                                <div class="col-md-5">
+                                    <select id="grid-value" name="grid-value" class="form-control" onchange="changeKpiGrid(this.value)">
+                                        <option value="0">Select No. of Grid</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="div-kpi-data-grid">
+                                <table class="table" style="height:80px;width: 100%;">
+                                    <thead>
+                                        <tr style="background-color:#367fa9;color:white">
+                                            <th>KPI Text </th>
+                                            <th>Start Range</th>
+                                            <th>End Range</th>
+                                            <th style="width: 10%;">KPI Value </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="prog-table">
+                                        <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-1" name="idKpiGri-1" value="" /><input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-1" name="kpi-text-1" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-1" onchange="kpi_end(1)" name="kpi-end-1" /></td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-1" name="Kpi-value-1" /> </td></tr>
+                                        <tr class="drg2" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-2" name="idKpiGri-2" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-2" name="kpi-text-2" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-2" onchange="kpi_start(2)" name="kpi-start-2" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-2" onchange="kpi_end(2)" name="kpi-end-2" /> </td><td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-2" name="Kpi-value-2" /> </td></tr>
+                                        <tr class="drg3" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-3" name="idKpiGri-3" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-3" name="kpi-text-3" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-3" onchange="kpi_start(3)" name="kpi-start-3" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-3" onchange="kpi_end(3)" name="kpi-end-3" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-3" name="Kpi-value-3" /> </td></tr>
+                                        <tr class="drg4" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-4" name="idKpiGri-4" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-4" name="kpi-text-4" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-4" onchange="kpi_start(4)" name="kpi-start-4" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-4" onchange="kpi_end(4)" name="kpi-end-4" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-4" name="Kpi-value-4" /> </td></tr>
+                                        <tr class="drg5" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-5" name="idKpiGri-5" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-5" name="kpi-text-5" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-5" onchange="kpi_start(5)" name="kpi-start-5" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-5" onchange="kpi_end(5)" name="kpi-end-5" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-5" name="Kpi-value-5" /> </td></tr>
+                                        <tr class="drg6" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-6" name="idKpiGri-6" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-6" name="kpi-text-6" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-6" onchange="kpi_start(6)" name="kpi-start-6" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-6" onchange="kpi_end(6)" name="kpi-end-6" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-6" name="Kpi-value-6" /> </td></tr>
+                                        <tr class="drg7" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-7" name="idKpiGri-7" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-7" name="kpi-text-7" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-7" onchange="kpi_start(7)" name="kpi-start-7" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-7" onchange="kpi_end(7)" name="kpi-end-7" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-7" name="Kpi-value-7" /> </td></tr>
+                                        <tr class="drg8" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-8" name="idKpiGri-8" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-8" name="kpi-text-8" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-8" onchange="kpi_start(8)" name="kpi-start-8" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-8" onchange="kpi_end(8)" name="kpi-end-8" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-8" name="Kpi-value-8" /> </td></tr>
+                                        <tr class="drg9" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-9" name="idKpiGri-9" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-9" name="kpi-text-9" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-9" onchange="kpi_start(9)" name="kpi-start-9" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-9" onchange="kpi_end(9)" name="kpi-end-9" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-9" name="Kpi-value-9" /> </td></tr>
+                                        <tr class="drg10" style="background-color:rgb(41, 148, 211);color:white;display:none;"><td><input type="hidden" id="idKpiGri-10" name="idKpiGri-10" value="" /> <input style="color:black;" type="text" class="form-control select-control " value="" placeholder="(optional)" id="kpi-text-10" name="kpi-text-10" />  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-10" onchange="kpi_start(10)" name="kpi-start-10" /> </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-end-10" onchange="kpi_end(10)" name="kpi-end-10" /> </td> <td> <input style="color:black;" type="number" min="1" max="10" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="Kpi-value-10" name="Kpi-value-10" /> </td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>*@
+                        <div class="form-group">
+                            <div class="col-md-offset-9 col-md-2">
+                                <input type="submit" value="Update" name="btn_submit" class="btn btn-primary btn-lg" />
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+                <div class="col-md-12">
+                    <hr />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#Category").change(function () {
+            var acad  = $("#acad").val();
+            var categ = $("#Category").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("CategValidation", "UniversityKPI")',
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                data: { "acad": acad, "categ": categ },
+                success: function (data)
+                {
+                    if (data == "True") {
+                        alert("this category and academic tile is already inserted");
+                        $('#Category').prop('selectedIndex', 0);
+                    }
+                    //else
+                    //{
+                    //    console.log(data);
+                    //}
+                }
+            });
+        });
+
+        $("#grid-value").change(function () {
+            var gVal = $("#grid-value").val();
+
+            for (var i = 1; i < gVal; i++)
+            {
+                if (i == 1)
+                {
+
+                }
+                else
+                {
+                    $("#kpi-start-" + i).attr("disabled", true);
+                    $("#kpi-end-" + i).attr("disabled", true);
+                }
+                $("#kpi-start-" + gVal).attr("disabled", true);
+                $("#kpi-end-" + gVal).attr("disabled", true);
+            }
+
+        });
+
+    });
+
+    function kpi_start(e) {
+        var cur = e;
+        var startval = parseInt($("#kpi-start-" + e).val());
+        var endval = parseInt($("#kpi-end-" + e).val());
+        var inputbox = e + 1;
+        var gVal = $("#grid-value").val();
+        //if (startval) {
+        for (var z = 1; z <= gVal; z++) {
+            if (z != e) {
+                if ($("#kpi-start-" + z).val() != '' || $("#kpi-end-" + z).val() != '') { //|| isNaN($("#kpi-start-" + z).val()) || isNaN($("#kpi-end-" + z).val())
+                    if (startval >= parseInt($("#kpi-start-" + z).val()) && startval <= parseInt($("#kpi-end-" + z).val())) {
+                        alert('value available');
+                        $("#kpi-end-" + cur).attr("disabled", true);
+                        //for (var x = e + 1; x <= gVal; x++) {
+                        //    $("#kpi-start-" + x).attr("disabled", true);
+                        //    $("#kpi-end-" + x).attr("disabled", true);
+                    }
+                    else
+                    {
+                        $("#kpi-end-" + cur).attr("disabled", false);
+                    }
+                }
+            }
+            else {
+                if (startval == '' || endval == '' || isNaN(startval) || isNaN(endval)) {
+                    for (var i = e + 1; i <= gVal; i++) {
+                        $("#kpi-start-" + i).attr("disabled", true);
+                        $("#kpi-end-" + i).attr("disabled", true);
+                    }
+                }
+                else if (startval > endval) {
+                    for (var j = e + 1; j <= gVal; j++) {
+                        $("#kpi-start-" + j).attr("disabled", true);
+                        $("#kpi-end-" + j).attr("disabled", true);
+                    }
+                }
+                else if (startval < endval) {
+                    $("#kpi-end-" + e).attr("disabled", false);
+                    $("#kpi-start-" + inputbox).attr("disabled", false);
+                    $("#kpi-end-" + inputbox).attr("disabled", false);
+                    }
+                }
+            }
+        }
+        //}
+
+
+
+
+
+
+    function kpi_end(e) {
+        var cur = e;
+        var startval = parseInt($("#kpi-start-" + e).val());
+        var endval = parseInt($("#kpi-end-" + e).val());
+        var inputbox = e + 1;
+        var gVal = $("#grid-value").val();
+        //if (endval) {
+        for (var z = 1; z <= gVal; z++) {
+            if (z != e) {
+                if ($("#kpi-start-" + z).val() != '' || $("#kpi-end-" + z).val() != '') {
+                    if (endval >= parseInt($("#kpi-start-" + z).val()) && endval <= parseInt($("#kpi-end-" + z).val())) {
+                        alert('value available');
+                        $("#kpi-start-" + cur).attr("disabled", true);
+                        //for (var x = e + 1; x <= gVal; x++) {
+                        //    $("#kpi-start-" + x).attr("disabled", true);
+                        //    $("#kpi-end-" + x).attr("disabled", true);
+                    }
+                    else {
+                        $("#kpi-start-" + cur).attr("disabled", false);
+                    }
+                }
+
+             }
+                else {
+                    if (startval == '' || endval == '' || isNaN(startval) || isNaN(endval)) {
+                        for (var i = e + 1; i <= gVal; i++) {
+                            $("#kpi-start-" + i).attr("disabled", true);
+                            $("#kpi-end-" + i).attr("disabled", true);
+                        }
+                    }
+                    else if (startval > endval) {
+                        for (var j = e + 1; j <= gVal; j++) {
+                            $("#kpi-start-" + j).attr("disabled", true);
+                            $("#kpi-end-" + j).attr("disabled", true);
+                        }
+                    }
+                    else if (startval < endval) {
+                       /// $("#kpi-start-" + cur).attr("disabled", false);
+                        $("#kpi-start-" + inputbox).attr("disabled", false);
+                        $("#kpi-end-" + inputbox).attr("disabled", false);
+                    }
+                }
+            }
+
+        }
+        //}
+
+
+
+
+    function between(x, min, max) {
+        return x >= min && x <= max;
+    }
+
+</script>

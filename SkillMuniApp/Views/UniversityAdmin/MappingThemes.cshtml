@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewBag.Title = "MappingThemes";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+<script>
+    function getthemes() {
+
+                var id = $("#org").val();
+                var url = '@Url.Action("GetThemesforOrg", "UniversityAdmin")';
+                var pattern = "";
+
+if (id > 0) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { orgid: id },
+
+                success: function (data) {
+                    $("#apnd_tbl").empty().append(data);
+                    $("#report-table").dataTable({ "pageLength": 25 });
+                }
+            });
+        } else {
+           
+        }
+
+    }
+
+
+    function addThemeToOrg(value) {
+        var id_org = $("#org").val();
+        if (id_org > 0) {
+            var url = '@Url.Action("addThemesToOrg", "UniversityAdmin")';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { id_theme: value, id_org: id_org },
+                success: function (data) {
+                    if (data == "1") {
+                        alert("Theme added successfully");
+                        location.reload();
+                    } 
+                }
+            });
+        } else {
+            alert("Please select organisation from dropdown")
+        }
+    }
+
+
+    function removeThemeFromOrg(value) {
+      
+        var id_org = $("#org").val();
+        if (id_org > 0) {
+            var url = '@Url.Action("removeThemeFromOrg", "UniversityAdmin")';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { id_theme: value, id_org: id_org },
+                success: function (data) {
+                    if (data == "1") {
+                        alert("Theme removed successfully");
+                        location.reload();
+                    }
+                }
+            });
+        }
+        else { alert("Please select organisation from dropdown")}
+    }
+</script>
+
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Assigning themes to organisation</h4>
+            </div>
+
+
+            <div class="panel-body">
+                <div class="form-group">
+
+
+                    <div class='col-md-3'>
+                        <label>Select Organisation</label>
+                    </div>
+                    <div class='col-md-4'>
+                        <select id="org" name="org" class="form-control" onchange="getthemes()">
+                            <option value="0">Select Organisation</option>
+                            @foreach (tbl_organization org in (List<tbl_organization>)ViewData["org"])
+                {
+                    <option value="@org.ID_ORGANIZATION">@org.ORGANIZATION_NAME</option>
+    }
+                        </select>
+
+                    </div>
+                    <div class='col-md-5'>
+
+                    </div>
+
+
+                </div>
+                <br />
+                <br />
+                <div id="apnd_tbl"></div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+

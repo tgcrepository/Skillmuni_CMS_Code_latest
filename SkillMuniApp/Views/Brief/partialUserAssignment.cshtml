@@ -1,0 +1,268 @@
+﻿<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<style>
+    #user-wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-users {
+        margin: 10px 15px;
+        padding: 1px 15px 3px 2px;
+        border-radius: 50px;
+        width: 200px;
+        align-content: center;
+        text-align: center;
+    }
+</style>
+<script>
+    var allPages = null;
+
+    $(function () {
+
+    });
+
+    function RoleType(val) {
+        $("#role-type").val(val);
+        $("#user_display_table").empty();
+        if (val == 1) {
+            $("#div-row-role").show();
+            $("#div-row-user").hide();
+            //$("#div-row-all").hide();
+            $("#temp-all-user").hide();
+            $("#div-row-location").hide();
+        } else if (val == 2) {
+            $("#div-row-role").hide();
+            $("#div-row-user").hide();
+            //$("#div-row-all").hide();
+            $("#temp-all-user").hide();
+            $("#div-row-location").show();
+        } else if (val == 3) {
+            $("#div-row-role").hide();
+            $("#div-row-user").show();
+            //$("#div-row-all").hide();
+            $("#temp-all-user").hide();
+            $("#div-row-location").hide();
+        } else if (val == 4) {
+            $("#div-row-role").hide();
+            $("#div-row-user").hide();
+            //$("#div-row-all").show();
+            $("#temp-all-user").show();
+            $("#div-row-location").hide();
+            //getAllUserList();
+        }
+    }
+
+    function getAllUserList() {
+       var bid=$("#brief_master").val();
+        $("#user_display_table").empty();
+        var url = '@Url.Action("getAllUserList", "Brief")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { bid: bid },
+            success: function (data) {
+                $("#user_display_table").empty().append(data);
+                var dtData = $("#report-user-table").dataTable({
+                    "bSort": false,
+                    "pageLength": 75,
+                    stateSave: true
+                });
+                allPages = dtData.fnGetNodes();
+            }
+        });
+    }
+
+    function getAllUserListByLocation() {
+        $("#user_display_table").empty();
+        var loc = $("#location-select").val();
+        var lbox = $("#search-lbox").val();
+        var bid = $("#brief_master").val();
+        var url = '@Url.Action("getAllUserListByLocation", "Brief")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { bid:bid,location: loc, search: lbox },
+            success: function (data) {
+                $("#user_display_table").empty().append(data);
+                var dtData = $("#report-user-table").dataTable({
+                    "bSort": false,
+                    "pageLength": 75,
+                    stateSave: true
+                });
+                allPages = dtData.fnGetNodes();
+            }
+        });
+    }
+
+    function getAllUserListByRole() {
+        $("#user_display_table").empty();
+        var loc = $("#role-select").val();
+        var lbox = $("#search-rbox").val();
+        var bid = $("#brief_master").val();
+        var url = '@Url.Action("getAllUserListByRole", "Brief")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { bid:bid,id: loc, search: lbox },
+            success: function (data) {
+                $("#user_display_table").empty().append(data);
+                var dtData = $("#report-user-table").dataTable({
+                    "bSort": false,
+                    "pageLength": 75,
+                    stateSave: true
+                });
+                allPages = dtData.fnGetNodes();
+            }
+        });
+    }
+
+    function getAllUserListByName() {
+        $("#user_display_table").empty();
+        var lbox = $("#search-ubox").val();
+        var bid = $("#brief_master").val();
+        var url = '@Url.Action("getAllUserListByUname", "Brief")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {bid:bid, search: lbox },
+            success: function (data) {
+                $("#user_display_table").empty().append(data);
+                var dtData = $("#report-user-table").dataTable({
+                    "bSort": false,
+                    "pageLength": 75,
+                    stateSave: true
+                });
+                allPages = dtData.fnGetNodes();
+            }
+        });
+    }
+
+    function check_all() {
+        if ($("#checkAll").hasClass('allChecked')) {
+            $(allPages).find('input[type="checkbox"]').prop('checked', false);
+        } else {
+            $(allPages).find('input[type="checkbox"]').prop('checked', true);
+        }
+        $("#checkAll").toggleClass('allChecked');
+
+    }
+
+    function PublishAllUser() {        
+        var ids = $("#brief_master").val();
+        var url = '@Url.Action("finishPublishtoAllUser", "Brief")';
+        
+                //var jsonForm = selected.toString();
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {ids: ids},
+                    success: function (msg) {
+                        location.href = '@Url.Action("userAssignment", "Brief")';//redirection
+                    }
+                });
+    }
+</script>
+@{
+
+    List<string> location = (List<string>)ViewData["location"];
+    tbl_brief_master brief = (tbl_brief_master)ViewData["briefmaster"];
+
+}
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <div class="panel panel-default custom-panel">
+            <div class="panel-heading custom-panel-heading">
+                <div class="panel-title">publish detail </div>
+            </div>
+            <div class="panel-body custom-panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <h6 class="panel-title">brief title</h6>
+                            <label class="control-label">@brief.brief_title   @("(" + brief.id_brief_master + ")")</label>
+                            <input type="hidden" value="@brief.id_brief_master" name="brief_master" id="brief_master" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12" id="user-wrapper">
+                                <h4>Press "PUBLISH / SCHEDULE" Brief assign to all the unassigned users</h4>
+                                @*<input id="" type="button" class="btn btn-default btn-info btn-users" name="" value="All Users" onclick="RoleType(4)" />
+        <input id="" type="button" class="btn btn-default btn-info btn-users" name="" value="Location" onclick="RoleType(2)" />
+        <input id="" type="button" class="btn btn-default btn-info btn-users" name="" value="Role" onclick="RoleType(1)" />
+        <input id="" type="button" class="btn btn-default btn-info btn-users" name="" value="Users" onclick="RoleType(3)" />*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row" id="div-row-role" style="display:none;">
+                    <div class="col-md-12">
+                        <h6 class="panel-title">Select User Role to filter</h6>
+                        <select class="form-control" id="role-select">
+                            <option value="0" disabled selected>Select Role</option>
+                            @foreach (tbl_csst_role item in (List<tbl_csst_role>)ViewData["RoleList"])
+                            {
+                                <option value="@item.id_csst_role">@item.csst_role</option>
+                            }
+                        </select>
+                        <input type="text" class="form-control" placeholder="Search by User Name (minimum 3 character)" id="search-rbox" />
+                        <br />
+                        <input type="button" class="btn btn-primary btn-sm " value="Search" onclick="getAllUserListByRole()" />
+                    </div>
+                    <div class="row" id="div-alert">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="div-row-location" style="display:none;">
+                    <div class="col-md-12">
+                        <h6 class="panel-title">Select User Location to filter</h6>
+                        <select class="form-control" id="location-select">
+                            <option value="0" disabled selected>Select Location</option>
+                            @foreach (string item in location)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                        <input type="text" class="form-control" placeholder="Search by User Name (minimum 3 character)" id="search-lbox" />
+                        <br />
+                        <input type="button" class="btn btn-primary btn-sm " value="Search" onclick="getAllUserListByLocation()" />
+                    </div>
+                </div>
+                <div class="row" id="div-row-user" style="display:none;">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <h6 class="panel-title">Search by User </h6>
+                            <input type="text" class="form-control" placeholder="Search by User Name (minimum 3 character)" id="search-ubox" />
+                            <br />
+                            <input type="button" class="btn btn-primary btn-sm " value="Search" onclick="getAllUserListByName()" />
+                            <input type="button" class="btn btn-primary btn-sm" value="Reset" onclick="reset_user()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="">
+                    <div class="col-md-12">
+                        <div id="user_display_table">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="temp-all-user" style="display:none;">
+                    <div class="col-md-12">
+                        <h3>Brief assign to all the unassigned users</h3>
+                        @*<input id="" type="button" class="btn btn-danger  btn-users" name="" value="Publish to All Users" onclick="PublishAllUser()" />*@
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>

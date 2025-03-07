@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "add_email_template";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_feedback_role> role = (List<tbl_feedback_role>)ViewData["role"];
+
+}
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<script>
+    $(function () {
+        $("#form_add_category").validationEngine();
+    });
+    function addImgClk(e) {
+        //alert($('#rolename option:selected').attr("name"));
+        var str = $('#rolename option:selected').attr("name");
+        var count = 10;
+        if (str=="study Abroad") {
+            count = 4;
+        }
+        var clkCons = parseInt(e);
+        var nextClk = clkCons + 1;
+        if (clkCons < count) {
+            $("#plusImg-" + e).hide();
+            $("#minusImg-" + e).hide();
+            var str = '<div class="form-group" id="imagBindP-' + nextClk + '"> <div class="col-md-2"> <label class="control-label">Message' + nextClk + '</label> </div> <div class="col-md-6"><input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-url-' + nextClk + '" name="banner-url-' + nextClk + '" /> </div> <div class=col-md-2> <div class="addClass"> <i class="fa fa-plus-circle fa-2x" id="plusImg-' + nextClk + '" onclick="addImgClk(' + nextClk + ')" aria-hidden="true"></i> <i class="fa fa-minus-circle fa-2x" id="minusImg-' + nextClk + '" onclick="minusImgClk(' + nextClk + ')" aria-hidden="true"></i> </div> </div> </div>';
+            $("#imgPart").append(str);
+            $("#countBanr").val(nextClk);
+        }
+        else {
+            //alert("exced maximum length");
+          //  var str1 = '<span style="color:red">exced limit</span>';
+            //  $("#imgPart").append(str1);
+            //document.getElementById("errormsg").innerHTML = "exced limit";
+            $('#errormsg').html("Exced Limit");
+        }
+    }
+    function minusImgClk(e) {
+        var clkCons = parseInt(e);
+        var nextClk = clkCons - 1;
+        $("#imagBindP-" + e).remove();
+        $("#plusImg-" + nextClk).show();
+        $("#minusImg-" + nextClk).show();
+        $("#countBanr").val(nextClk);
+    }
+    function addImgClk1(f) {
+        var clkCons = parseInt(f);
+        var nextClk = clkCons + 1;
+        if (clkCons < 10) {
+            $("#plusImgincharge-" + f).hide();
+            $("#minusImgincharge-" + f).hide();
+         
+            var str = '<div class="form-group" id="imagBindR-' + nextClk + '"> <div class="col-md-2"> <label class="control-label">Message' + nextClk + '</label> </div> <div class="col-md-6"><input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-urlR-' + nextClk + '" name="banner-urlR-' + nextClk + '" /> </div> <div class=col-md-2> <div class="addClass"> <i class="fa fa-plus-circle fa-2x" id="plusImgincharge-' + nextClk + '" onclick="addImgClk1(' + nextClk + ')" aria-hidden="true"></i> <i class="fa fa-minus-circle fa-2x" id="minusImgincharge-' + nextClk + '" onclick="minusImgClk1(' + nextClk + ')" aria-hidden="true"></i> </div> </div> </div>';
+          
+            $("#imgPart1").append(str);
+          
+            $("#countBanr1").val(nextClk);
+        }
+    }
+    function minusImgClk1(f) {
+        var clkCons = parseInt(f);
+        var nextClk = clkCons - 1;
+        $("#imagBindR-" + f).remove();
+        $("#plusImgincharge-" + nextClk).show();
+        $("#minusImgincharge-" + nextClk).show();
+        $("#countBanr1").val(nextClk);
+    }
+</script>
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Add Email Template</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm("add_email_template_action", "EmailFeedback", FormMethod.Post, new { id = "form_add_category", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label regLabel">Select Role </label>
+
+                                    <select class="form-control" id="rolename" name="rolename">
+                                        <option value="0" disabled selected>select</option>
+                                        @foreach (var item in (List<tbl_feedback_role>)ViewData["role"])
+                                        {
+                                            <option name="@item.role_name" value="@item.id_role">@item.role_name</option>
+
+                                        }
+
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="hidden" name="countBanr" id="countBanr" value="1" />
+                                    <div class="col-md-12" id="imgPart">
+                                    
+                                        <label for="FirstName" class="control-label regLabel">Edit User Email Template</label>
+                                        <div class="form-group">
+                                            <br />
+                                            <div class="col-md-2"><label class="control-label">Message1</label></div>
+                                            <div class="col-md-6">
+
+                                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-url-1" name="banner-url-1" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="addClass"><i class="fa fa-plus-circle fa-2x" id="plusImg-1" onclick="addImgClk(1)" aria-hidden="true"></i></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <span id="errormsg"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="hidden" name="countBanr1" id="countBanr1" value="1" />
+                                    <div class="col-md-12" id="imgPart1">
+                                    
+                                        <label for="FirstName" class="control-label regLabel">Edit Person In charge Email Template</label><br />
+                                        <div class="form-group">
+                                            <br />
+                                            <div class="col-md-2"><label class="control-label">Message1</label></div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-urlR-1" name="banner-urlR-1" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="addClass"><i class="fa fa-plus-circle fa-2x" id="plusImgincharge-1" onclick="addImgClk1(1)" aria-hidden="true"></i></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <center><input type="submit" value="SAVE"  class="btn btn-default" style="background: #018ccf; color: white; width: 58px; height: 29px;margin-left: -353px;" /></center>
+                        </div>
+                    </div>
+
+                </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+

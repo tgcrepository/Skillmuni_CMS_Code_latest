@@ -1,0 +1,448 @@
+﻿
+@{
+    ViewBag.Title = "Game_creation";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_university_kpi_master> kpiNamDrop = (List<tbl_university_kpi_master>)ViewData["kpiName"];
+    List<tbl_theme_master> ThemeOrg = (List<tbl_theme_master>)ViewData["themeOrg"];
+    List<tbl_special_metric_master> specMet = (List<tbl_special_metric_master>)ViewData["specialMet"];
+    //List<tbl_profile> user = (List<tbl_profile>)ViewData["users"];
+}
+
+
+
+<style>
+    .m2ost_info_hat #minus {
+        display: none;
+    }
+
+    /*.m2ost_info_hat .*/
+</style>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>Game Creation</span>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("CreateGameAction", "UniversityAdmin", FormMethod.Post, new { id = "form-add-kpi" }))
+                {
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Game Name</label></div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control validate[required]" value="" placeholder="" id="kpi-title" name="game_name" />
+                        </div>
+                        <div class="col-md-2"><label class="control-label">Game Description</label></div>
+                        <div class="col-md-4">
+                            <input type="text" name="game_description" class="form-control validate[required]" placeholder="Game Description" rows="3" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Start Date</label></div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control validate[required]" id="datetimepicker1" name="start_date" autocomplete="off" />
+                        </div>
+                        <div class="col-md-2"><label class="control-label">End Date</label></div>
+                        <div class="col-md-4">
+                            <input type="text" id="datetimepicker2" name="end_date" class="form-control validate[required]" autocomplete="off" />
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+        <div class="col-md-2"><label class="control-label">Select KPI</label></div>
+        <div class="col-md-4">
+            <select id="acad" name="idkpi" class="form-control">
+                <option value="">select</option>
+                @foreach (var item in kpiNamDrop)
+                {
+                    <option value="@item.id_kpi_master">@item.kpi_name</option>
+                }
+                @*<option value="1">theme1</option>
+                    <option value="2">theme2</option>*@
+                    @*</select>
+            </div>
+        </div>*@
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Select Theme</label></div>
+                        <div class="col-md-4">
+                            <select id="themVal" onchange="themeSelect()" name="themeid" class="form-control">
+                                <option value="">select</option>
+                                @foreach (var item in ThemeOrg)
+                                {
+                                    <option value="@item.id_theme">@item.name</option>
+                                }
+                                @*<option value="1">theme1</option>
+                    <option value="2">theme2</option>*@
+                            </select>
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+            <div class="col-md-2"><label class="control-label">Select Metric</label></div>
+            <div class="col-md-4">
+                <select id="metricBind" onchange="metricChange()" name="metricid" class="form-control">
+
+                </select>
+            </div>
+        </div>*@
+                    @*<div id="div-kpi-data-grid" style="margin-bottom: 1%;">
+            <div class="panel-heading m2ost_info_hat" data-toggle="collapse" href="#collapse1" style="background: #222d32;color: white;">
+                <label class="control-label">Leagues</label>
+                <label id="plus" style="float:right;">+</label>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <table class="table" style="height:80px;width: 100%;">
+                    <thead>
+                        <tr style="background-color:#367fa9;color:white">
+                            <th>Leagues</th>
+                            <th>Min Eligiblity Scores</th>
+                            <th>Method of Evaluation</th>
+                            <th style="width: 20%;">Value of Movement</th>
+                        </tr>
+                    </thead>
+                    <tbody class="prog-table" id="leagueGrid">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2"><label class="control-label">Relegation Between<br />Leagues</label></div>
+            <div class="col-md-4">
+                <label>off </label><input value="0" name="relegationswitch" type="radio" id="relegatOff" checked />
+                <input value="1" name="relegationswitch" type="radio" id="relegatOn" /><label> on</label>
+            </div>
+        </div>
+        <div id="div-kpi-data-grid" class="relegatGrid" style="display:none;margin-bottom: 1%;">
+            <div class="panel-heading m2ost_info_hat" data-toggle="collapse" href="#collapse4" style="background: #222d32;color: white;">
+                <label class="control-label">Relegation</label>
+                <label id="plus" style="float:right;">+</label>
+            </div>
+            <div id="collapse4" class="panel-collapse collapse">
+                <table class="table" style="height:80px;width: 100%;">
+                    <thead>
+                        <tr style="background-color:#367fa9;color:white">
+                            <th>Leagues</th>
+                            <th>Relegation Frequency</th>
+                            <th>Method of Relegation</th>
+                            <th style="width: 20%;">Relegation of Movement</th>
+                        </tr>
+                    </thead>
+                    <tbody class="prog-table" id="RelegationGrid"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="div-kpi-data-grid" style="margin-bottom: 1%;">
+            <div class="panel-heading m2ost_info_hat" data-toggle="collapse" href="#collapse2" style="background: #222d32;color: white;">
+                <label class="control-label">Badges</label>
+                <label id="plus" style="float:right;">+</label>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse">
+                <table class="table" style="height:80px;width: 100%;">
+                    <thead>
+                        <tr style="background-color:#367fa9;color:white">
+                            <th>Badge Name</th>
+                            <th>Badge Value</th>
+                        </tr>
+                    </thead>
+                    <tbody class="prog-table" id="badgeBind">
+                        @*<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>
+                            <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>
+                            <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>*@
+                    @*</tbody>
+                </table>
+            </div>
+        </div>
+        <div id="div-kpi-data-grid" style="margin-bottom: 1%;">
+            <div class="panel-heading m2ost_info_hat" data-toggle="collapse" href="#collapse3" style="background: #222d32;color: white;">
+                <label class="control-label">Currency Points</label>
+                <label id="plus" style="float:right;">+</label>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse">
+                <table class="table" style="height:80px;width: 100%;">
+                    <thead>
+                        <tr style="background-color:#367fa9;color:white">
+                            <th>Badge Name</th>
+                            <th>Currency Value</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="prog-table" id="currencyBind">*@
+                    @*<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>
+        <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>
+        <tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> Basic  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" onchange="kpi_start(1)" name="kpi-start-1" /> </td></tr>*@
+                    @*</tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2"><label class="control-label">Special Metric</label></div>
+            <div class="col-md-4">
+                <label>off </label><input name="specialMetricflag" type="radio" value="0" id="metricOff" />
+                <input name="specialMetricflag" type="radio" id="metricOn" value="1" /><label> on</label>
+            </div>
+        </div>
+        <div class="form-group" id="dropMetricShow" style="display:none;">
+            <div class="col-md-2"><label class="control-label">Select Special Metric</label></div>
+            <div class="col-md-4">
+                <select id="" name="spl_metricid" class="form-control">
+                    @foreach (var item in specMet)
+                    {
+                        <option value="@item.id_special_metric">@item.name</option>
+                    }
+                </select>
+            </div>
+        </div>*@
+
+                    @*<div class="form-group">
+            <div class="col-md-2"><label class="control-label">Special Metric</label></div>
+            <div class="col-md-4">
+                <label>off </label><input name="specialMetricflag" type="radio" value="0" id="metricOff" />
+                <input name="specialMetricflag" type="radio" id="metricOn" value="1" /><label> on</label>
+            </div>
+        </div>*@
+                    <div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Special Metric</label></div>
+                        <div class="col-md-4">
+                            <label>off </label><input name="specialMetricflag" type="radio" value="0" id="metricOff" />
+                            <input name="specialMetricflag" type="radio" id="metricOn" value="1" /><label> on</label>
+                        </div>
+                    </div>
+					                    <input type="hidden" name="userassign" value="A" />
+
+                    @*<div class="form-group">
+                        <div class="col-md-2"><label class="control-label">Game Assignment</label></div>
+                        <div class="col-md-4">
+                            <label>All Users </label><input name="userassign" type="radio" value="A" id="assignAll" />
+                            <input name="userassign" type="radio" id="assignUser" value="U" /><label> Selected users</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" id="uassign" style="display:none">
+
+
+                        <table id="report-table" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="80%">
+                                        User Name
+                                    </th>
+
+                                    <th width="20%"></th>
+                                </tr>
+                            </thead>
+                            @{
+                                int i = 0;
+                            }
+                            <tbody>
+                                @foreach (var item in user)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.FIRSTNAME @item.LASTNAME
+                                        </td>
+
+
+                                        <td>
+                                            <input type="checkbox" name="chk_user" value="@item.ID_USER">
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>*@
+
+                    <div class="form-group">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4"><button type="submit" class="btn btn-primary">Create</button> </div>
+                        <div class="col-md-4"> </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#relegatOn").click(function () {
+            var themVal = $("#themVal").val();
+            $(".relegatGrid").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("LeagueName", "UniversityKPI")',
+            data: { "themId": themVal},
+                success: function (data)
+                    {
+                    //console.log(data);
+                    var z = 0;
+                    //var badge = currencyValGet(themVal);
+                    //console.log(badge);
+                    $("#RelegationGrid").html("");
+                    for (var i = 0; i < data.length; i++) {
+                        $("#RelegationGrid").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td>' + data[i].league_name + '</td><td><div class="moveRow" style="width:50%;display:inline-block;padding-right:1%;"><input style="color:black;" type="number" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" name="freq_' + i + '" /></div><div class="moveRow" style="width:50%;display:inline-block;"><select name="freqType' + z + '" class="form-control"><option value="">select</option><option value="D">day</option><option value="W">week</option><option value="M">month</option></select></div></td><td><select name="relmethod' + i + '" class="form-control"><option value="1">Percentile</option><option value="2">Rank</option></select></td><td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="compari' + i + '" class="form-control"><option value="1">=</option><option value="2"><</option><option value="3"><</option><option value="4"><=</option><option value="5">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="minscore' + i + '" type="text" /></div><input type="hidden" value="' + data[i].id_league + '" name="rellegid_' + i + '" /></td></tr>');
+                        z++;
+                    }
+
+
+                }
+            });
+        });
+        $("#relegatOff").click(function () {
+            $(".relegatGrid").hide();
+        });
+
+        $("#metricOn").click(function () {
+            $("#dropMetricShow").show();
+        });
+
+        $("#metricOff").click(function () {
+            $("#dropMetricShow").hide();
+        });
+
+        $("#assignUser").click(function () {
+            $("#uassign").show();
+        });
+        $("#assignAll").click(function () {
+            $("#uassign").hide();
+        });
+
+
+        
+
+    });
+    function themeSelect()
+    {
+        $("#currencyBind").html("");
+        $("#RelegationGrid").html("");
+
+        var themVal = $("#themVal").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("metricValue", "UniversityKPI")',
+                data: { "themVal": themVal},
+                success: function (data)
+                {
+                    $("#metricBind").html("");
+                    $("#metricBind").append('<option value="">select</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#metricBind").append('<option value=' + data[i].id_metric + '>' + data[i].metric_value + '</option>');
+                    }
+                }
+        });
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("LeagueName", "UniversityKPI")',
+            data: { "themId": themVal},
+                success: function (data)
+                    {
+                    //console.log(data);
+                    var z = 0;
+                    //var badge = currencyValGet(themVal);
+                    //console.log(badge);
+                    $("#leagueGrid").html("");
+                    for (var i = 0; i < data.length; i++) {
+                        $("#leagueGrid").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].league_name + '  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" name="eligiblity_' + i + '" /> </td> <td> <select name="evaluation_type' + i + '" class="form-control"><option value="1">Percentile</option><option value="2">Rank</option></select></td><td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="comparileague' + i + '" class="form-control"><option value="1">=</option><option value="2"><</option><option value="3">></option><option value="4"><=</option><option value="5">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="movement_number_' + i + '" type="number" /></div><input type="hidden" name="leagueid_' + i + '"  value="' + data[i].id_league + '"/></td></tr>');
+                        //$("#currencyBind").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].league_name + ' <input type="hidden" name="currnId' + z + '" value="' + data[i].id_league + '"></td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="badgTxt' + z + '" name="CurrncyVal' + z + '" /> </td></tr>');
+                        //z++;
+                    }
+
+                    $("#leagueGrid").append("<input type='hidden' value='" + data.length + "' name='leaguecount' />");
+                }
+            });
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("BadgeName", "UniversityKPI")',
+                data: { "themVal": themVal},
+                success: function (data)
+                {
+                    //console.log(data);
+                    var z = 0;
+                    $("#badgeBind").html("");
+                    for (var i = 0; i < data.length; i++) {
+                        $("#badgeBind").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].badge_name + ' <input type="hidden" name="badgId' + z + '" value="' + data[i].id_badge + '"></td> <td> <input style="color:black;" type="number" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="badgTxt' + z + '" name="badgVal' + z +'" /> </td></tr>');
+                        z++;
+                    }
+
+                    $("#badgeBind").append(' <input type="hidden" name="badgecount" value="' + data.length+'" />');
+                }
+        });
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCurrency", "UniversityKPI")',
+                data: { "themVal": themVal },
+                success: function (data) {
+                    //dat = data;
+
+                   // console.log(data);
+                    $("#currencyBind").html(data);
+                    //var z = 1;
+                    //$("#currencyBind").html("");
+                    //for (var i = 0; i < data.length; i++) {
+                    //    $("#currencyBind").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].currency_value + ' <input type="hidden" name="currnId' + z + '" value="' + data[i].id_currency + '"></td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="badgTxt' + z + '" name="CurrncyVal'+z+'" /> </td></tr>');
+                    //    z++;
+                    //}
+                }
+            });
+    }
+
+
+
+
+
+    @*function metricChange()
+    {
+        var themVal = $("#themVal").val();
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("LeagueName", "UniversityKPI")',
+            data: { "themId": themVal},
+                success: function (data)
+                    {
+                    //console.log(data);
+                    $("#leagueGrid").html("");
+  //                  $("#metricBind").append('<option value="">select</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#leagueGrid").append('<tr class="drg1" style="background-color:rgb(41, 148, 211);color:white;"><td> ' + data[i].league_name +'  </td> <td> <input style="color:black;" type="text" class="form-control select-control validate[required,custom[number]]" value="" placeholder="" id="kpi-start-1" name="eligiblity-'+i+'" /> </td> <td> <select name="score'+i+'" class="form-control"><option value="percentile">Percentile</option><option value="Rank">Rank</option></select></td><td><div class="moveRow" style="width: 50%;display: inline-block;padding-right: 1%;"><select name="compari'+i+'" class="form-control"><option value="">=</option><option value=""><</option><option value=""><</option><option value=""><=</option><option value="">>=</option></select></div><div class="moveRow" style="width: 50%;display: inline-block;"> <input class="form-control" name="opValue'+i+'" type="text" /></div></td></tr>');
+                    }
+                }
+            });
+    }*@
+</script>
+<script>
+    $(function () {
+
+       
+        $("#datetimepicker1").datetimepicker({
+            minDate: 0,
+            dateFormat: "dd-mm-yy",
+            onSelect: function (selected) {
+                var date = $(this).datetimepicker('getDate');
+                date.setDate(date.getDate());
+                $("#datetimepicker2").datetimepicker("option", "minDate", date);
+                $('#datetimepicker2').val('');
+            }
+        });
+
+        $("#datetimepicker2").datetimepicker({
+            dateFormat: "dd-mm-yy",
+            onSelect: function (selected) {
+                var date = $(this).datepicker('getDate');
+                date.setDate(date.getDate());
+               
+            }
+        });
+
+
+       
+
+    });
+
+
+</script>

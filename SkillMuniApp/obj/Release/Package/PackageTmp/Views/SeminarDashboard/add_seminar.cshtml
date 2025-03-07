@@ -1,0 +1,441 @@
+﻿
+@{
+    ViewBag.Title = "add_seminar";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+
+}
+
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="~/Content/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link href="~/Content/css/mdtimepicker.css" rel="stylesheet" type="text/css">
+
+<script src="~/Content/js/jquery-1.12.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="~/Content/js/mdtimepicker.js"></script>
+
+<script>
+    var startDate, endDate;
+    var dateVal = new Date();
+    var seminar_duration = 0;
+    var seminarDateList = [];
+
+    function set() {
+        this.startDate = $('#datetimepicker1').datetimepicker('getDate');
+        this.endDate = $('#datetimepicker2').datetimepicker('getDate');
+        this.getDates(this.dateFormater(this.startDate), this.dateFormater(this.endDate));
+    }
+
+    function dateFormater(prm){
+        var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return prm.getDate() + '-' + month[prm.getMonth()] + '-' + prm.getFullYear()
+    }
+
+    function compareTime(valId, date, count) {
+        var time1 = Date.parse(this.seminarDateList[date - 1] + " " + $('#' + valId).val());
+
+        if (seminarDateList.length == 1) {
+            let time2 = Date.parse($('#datetimepicker2').datetimepicker('getDate'));
+            this.isMax(time1, time2, valId);
+            if (valId == 'start_time_hour11') {
+                time2 = Date.parse($('#datetimepicker1').datetimepicker('getDate'));
+                this.isMin(time1, time2, valId);
+            } else {
+                if (valId.substring(0, 13) == 'end_time_hour') {
+                    time2 = Date.parse(this.seminarDateList[date - 1] + " " + $('#start_time_hour' + valId.substring(13)).val());
+                    this.isMin(time1, time2, valId);
+                } else {
+                    time2 = Date.parse(this.seminarDateList[date - 1] + " " + $('#end_time_hour' + (valId.substring(15) - 1)).val());
+                    this.isMin(time1, time2, valId);
+                }
+            }
+        } else {
+            let time2;
+            if (valId == 'start_time_hour11') {
+                time2 = Date.parse($('#datetimepicker1').datetimepicker('getDate'));
+                this.isMin(time1, time2, valId);
+            } else if (date == this.seminarDateList.length) {
+                time2 = Date.parse($('#datetimepicker2').datetimepicker('getDate'));
+                this.isMax(time1, time2, valId);
+                if ((valId.substring(0, 15) == "start_time_hour") && (count == 1)) {
+                    time2 = Date.parse(this.seminarDateList[date - 1] + " 12:00 AM");
+                    this.isMin(time1, time2, valId);
+                } else if(valId.substring(0, 13) == 'end_time_hour') {
+                    time2 = Date.parse(this.seminarDateList[date - 1] + " " + $('#start_time_hour' + valId.substring(13)).val());
+                    this.isMin(time1, time2, valId);
+                } else {
+                    time2 = Date.parse(this.seminarDateList[date - 1] + " " + $('#end_time_hour' + (valId.substring(15) - 1)).val());
+                    this.isMin(time1, time2, valId);
+                }
+            } else {
+                if ((valId.substring(0, 15) == "start_time_hour") && (count == 1)) {
+                    time2 = Date.parse(this.seminarDateList[date - 1] + " 12:00 AM");
+                    this.isMin(time1, time2, valId);
+                } else if (valId.substring(0, 13) == 'end_time_hour') {
+                    time2 = Date.parse(this.seminarDateList[date - 1] + " " + $('#start_time_hour' + valId.substring(13)).val());
+                    this.isMin(time1, time2, valId);
+                } else {
+                    time2 = Date.parse(this.seminarDateList[date - 1] + " " + $('#end_time_hour' + (valId.substring(15) - 1)).val());
+                    this.isMin(time1, time2, valId);
+                }
+            }
+        }
+    }
+    
+    function isMin(e, m, id) {
+        if (e > m) {
+            return true;
+        } else {
+            alert("Invalid Input: Entered time is clashing with the previous slot.");
+            $('#' + id).val("")
+            return false;
+        }
+    }
+
+    function isMax(e, m, id) {
+        if (m > e) {
+            return true;
+        } else {
+            alert("Invalid Input: Entered time is clashing with the previous slot.");
+            $('#' + id).val("")
+            return false;
+        }
+    }
+
+    function getDates(sd, ed) {
+        this.seminarDateList = [];
+        var currentDate = moment(sd);
+        var stopDate = moment(ed);
+        while (currentDate <= stopDate) {
+            this.seminarDateList.push(moment(currentDate).format('YYYY-MM-DD'))
+            currentDate = moment(currentDate).add(1, 'days');
+        }
+        $('#seminar-duration').val(this.seminarDateList.length);
+        this.seminar_duration = this.seminarDateList.length;
+        return this.seminarDateList;
+    }
+
+    function emptyContent() {
+        $("#slotArg").html("");
+    }
+
+    function addImgClk(a) {
+        document.getElementById("error_msg1").style.display = "none";
+        var contVar = "days" + a;
+        var e = $("#" + contVar).val();
+        var nextClk1 = parseInt(e) + 1;
+        var nextClk = a + "" + nextClk1;
+        if (e < 20) {
+            if (e == 1) {
+                $("#minusImg-" + e).hide();
+            } else {
+                $("#plusImg-1").show();
+                $("#minusImg-1").show();
+            }
+            if (!(e == 0)) {
+                if ($("#start_time_hour" + a + "" + e).val() == '' && $("#end_time_hour" + a + "" + e).val() == '') {
+                    document.getElementById("error_msg1").style.display = "";
+                    return false;
+                }
+            }
+            var str = '';
+            str += '<div id="imagBindR-' + nextClk + '" class="row d-template"> <div class="col-md-12"> ';
+            str += '<div class="row"> <div class="form-group"> <div class="col-md-4"> <label class="control-label">Start Time Hour and Minute ' + nextClk1 + '</label></div> <div class="col-md-2"> <div class=""> <input onchange="compareTime(this.id,' + a + ',' + nextClk1+')" style="margin-bottom: 10px;margin-left: -62px;width: 106px;" type="text" class="form-control timepicker" id="start_time_hour' + nextClk + '" name="start_time_hour' + nextClk + '" /> </div> </div>';
+            str += ' <div class="col-md-4" style="margin-left: -74px;"> <label class="control-label">End Time Hour and Minute ' + nextClk1 + '</label></div> <div class="col-md-2"> <div class=""> <input onchange="compareTime(this.id,' + a + ',' + nextClk1 +')" style="margin-left: -72px;width: 115px;" type="text"  class="form-control timepicker" id="end_time_hour' + nextClk + '" name="end_time_hour' + nextClk + '" /> </div> </div></div></div>';
+            str += '<div class="row"> <div class="form-group"> <br /> <div class="col-md-4"> <label class="control-label">Speaker Name</label></div> <div class="col-md-7"> <input type="text" class="form-control validate[required]" style="margin-bottom: 9px;margin-left: -63px;" value="" placeholder="" id="mspeaker-name-' + nextClk + '" name="mspeaker-name' + nextClk + '" /> </div> <div class="col-md-3"> <label class="control-label">Count Restriction</label></div> <div class="col-md-6"> <input type="text" class="form-control validate[required]" style="width: 375px;" value="" placeholder="" id="mcount-restriction' + nextClk + '" name="mcount-restriction' + nextClk + '" /></div> <div class="col-md-1"><i class="fa fa-minus-circle fa-2x minusicon" id="minusImg-' + nextClk + '" onclick="minusImgClk(' + a + ',' + nextClk + ')"  aria-hidden="true"></i></div> </div> </div> </div></div>';
+            $("#imgPart" + a).append(str);
+            $("#" + contVar).val(nextClk1);
+            $('.timepicker').mdtimepicker();
+        }
+    }
+
+    function minusImgClk(contVar, e) {
+        var e1 = $("#days" + contVar).val();
+        var e2 = contVar + "" + e1;
+        var nextClk = parseInt(e1) - 1;
+        if (nextClk >= 0) {
+            $("#imagBindR-" + e2).remove();
+            $("#days" + contVar).val(nextClk);
+        }
+    }
+
+</script>
+
+
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Create Seminar</h4>
+            </div>
+
+            <div class="panel-body">
+
+
+
+                @using (Html.BeginForm("add_seminar_action", "SeminarDashboard", FormMethod.Post, new { id = "form-add-notification", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                        <div class="modal-dialog" role="document" style="width:850px;">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" style="text-align: center; font-size: 23px;" id="exampleModalLabel">Slot Update</h5>
+                                    <div id="error_msg1" class="alert alert-success" role="alert" style="display:none;">
+                                        Please fill the data
+                                    </div>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="emptyContent()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div id="slotArg">
+
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: #018ccf; color: white;">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* MODAL ENDED*@
+                    <div class="form-horizontal">
+
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Seminar Title</label></div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="seminar-title" name="seminar-title" autocomplete="off" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Seminar Objective</label></div>
+                            <div class="col-md-9">
+                                <textarea name="seminar-Objective" class="form-control" placeholder="seminar Objective" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Stream</label></div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control validate[required]" value="" placeholder="" id="stream" name="stream" autocomplete="off" />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="" id="semi_strt">
+                            <div class="col-md-3"><label class="control-label">Seminar Start Date</label></div>
+                            <div class="col-md-5">
+                                <div class='input-group date'>
+                                    <input type='text' class="form-control validate[required]" id='datetimepicker1' name="seminar-start" autocomplete="off"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="" id="semi_end">
+                            <div class="col-md-3"><label class="control-label">Seminar End Date</label></div>
+                            <div class="col-md-5">
+                                <div class='input-group date'>
+                                    <input type='text' class="form-control validate[required]" id='datetimepicker2' name="seminar-end" onchange="set()" autocomplete="off" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Seminar Duration</label></div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" value="" placeholder="" id="seminar-duration" name="seminar-duration" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="countBanr1" id="countBanr1" value="1" />
+                            <div class="col-md-12" id="timeArg">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button class="btn btn-primary" style="float:right;margin-bottom: 1%;box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);padding: 0.54rem 2.14rem;font-size: 1.1rem;background: #018ccf; color: white;" data-toggle="modal" data-target="#exampleModal" data-whatever="mdo" id="btn" onclick="genrate();">Generate</button>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Speaker Organisation</label></div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" value="" placeholder="" id="speaker-organisation" name="speaker-organisation" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Seminar Location</label></div>
+                            <div class="col-md-9">
+                                <textarea name="seminar-location" class="form-control" placeholder="seminar Location" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Seminar Mode</label></div>
+                            <div class="col-md-5">
+                                <select id="seminarmode" name="seminarmode" class="form-control validate[required]">
+                                    <option value="">Select Event Mode</option>
+                                    <option value="1">Draft</option>
+                                    <option value="2">Publish</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4">
+                                <input style="background: #018ccf; color: white;margin-left: -268px;
+    margin-top: 89px;" type="submit" value="Submit" name="btn_submit" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+
+
+    $(function () {
+
+        $("#form-add-notification").validationEngine();
+
+        $("#datetimepicker1").datetimepicker({
+
+            minDate: 0,
+            dateFormat: "dd-mm-yy",
+            onSelect: function (selected) {
+                var date = $(this).datetimepicker('getDate');
+                date.setDate(date.getDate());
+                $("#datetimepicker2").datetimepicker("option", "minDate", date);
+                $('#datetimepicker2').val('');
+            }
+
+        });
+        $("#datetimepicker2").datetimepicker({
+            dateFormat: "dd-mm-yy",
+            onSelect: function (selected) {
+                var date = $(this).datepicker('getDate');
+                date.setDate(date.getDate());
+
+            }
+
+        });
+
+
+
+    });
+
+    //$(".chosen-select").chosen({
+    //    no_results_text: "Oops, nothing found!"
+    //})
+
+    function seminarBlock(flg) {
+        if (flg == 1) {
+            $("#semi_strt").show();
+            $("#semi_end").show();
+
+
+        }
+        else {
+            $("#semi_strt").hide();
+            $("#semi_end").hide();
+
+        }
+
+    }
+    function prtneeded(flg) {
+        if (flg == 1) {
+            $("#prt_count").show();
+
+
+
+        }
+        else {
+            $("#prt_count").hide();
+
+
+        }
+
+    }
+
+
+
+   
+
+</script>
+
+
+<script>
+    function genrate() {
+        var str1 = "";
+        $("#slotArg").html("");
+        for (var i = 1; i <= seminar_duration; i++) {
+            var str = '<div class="row"> <div class="col-md-12"> <div class="col-md-12"> <div class="addClass"><input type="hidden" value="0" name="days' + i + '" id="days' + i + '"> <div class="dayheader">' + seminarDateList[i-1] +' Day' + i + ' <i class="fa fa-plus-circle fa-2x addicon" id="plusImg-1" onclick="addImgClk(' + i + ')" aria-hidden="true"></i> </div><div id="imgPart' + i + '" style="margin:10px"> </div> </div> </div> </div> </div>';
+            $("#slotArg").append(str);
+        }
+    }
+</script>
+
+
+<style>
+    .dayheader {
+        border: 1px solid;
+        background-color: aliceblue;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 5px;
+    }
+
+    .addicon {
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    .minusicon {
+        font-size: 20px;
+        margin: 8px 0px 0px 10px;
+    }
+
+    .d-template {
+        margin: 20px 0px;
+        padding: 15px 0px;
+        border: 1px solid #eee;
+        background-color: #f6f6f6;
+        border-radius: 3px;
+        box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+    }
+</style>

@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "contentCreationRichText";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+<link href="~/Content/RichText/dist/summernote.css" rel="stylesheet" />
+<script src="~/Content/RichText/dist/summernote.js"></script>
+<script src="~/Content/jquery.serializeToJSON.js"></script>
+
+<link rel="stylesheet" href="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Content/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+    function _setPartialBriefSummery(brf) {
+
+        var act = "partialBriefSummery";
+        var cntrl = "Brief";
+
+        var link = '@Url.Action("action", "control", new { brf="-1"})';
+        link = link.replace("action", act);
+        link = link.replace("control", cntrl);
+        link = link.replace("-1", brf);
+
+        $.get(link, null, function (data) {
+            $("#summery-table").empty().append(data);
+        });
+
+    }
+
+    function searchQuestion() {
+        var id = $("#search-category").val();
+        var sid = $("#search-sub-category").val();
+        var url = '@Url.Action("getBriefViewData", "Brief")';
+        var pattern = $("#search-metadata").val().trim();
+
+        if (sid==null) {
+            sid = 0;
+        }
+        if (id == null) {
+            id = 0;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { cid: id, scid: sid, search: pattern },
+
+            success: function (data) {
+                $("#display_table").empty().append(data);
+                $("#brief-table").dataTable({ "bSort": false, "pageLength": 10 });
+
+            }
+        });
+    }
+
+    function getCategoryHeading(val) {
+
+        var url = '@Url.Action("getSubcategoryList", "Brief")';
+        if (val != "0") {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { cid: val },
+
+                success: function (data) {
+                    $("#search-sub-category").empty().append(data);
+
+                }
+            });
+        }
+    }
+
+    function removeAssignmentFromUser(brf, ids) {
+          var url = '@Url.Action("getRemoveAssignment", "Brief")';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { brf: brf,ids:ids },
+            success: function (data) {
+                if (data == "1") {
+                    $("#urb-" + ids).hide("slow");
+                }
+            }
+        });
+    }
+</script>
+<style>
+    .brief-note {
+        background-color: #ddf2ff;
+        border-left: 6px solid #006ef7;
+    }
+
+    .brief-panel {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    #summary-tab .table-anchor {
+        padding: 5px;
+    }
+
+    #summary-tab .nav-tabs > li a {
+        width: 200px;
+        height: 30px;
+        margin: 0px auto;
+        border-radius: 0%;
+        padding: 0;
+    }
+
+    #summary-tab .nav-tabs > li.active > a,
+    #summary-tab .nav-tabs > li.active > a:hover,
+    #summary-tab .nav-tabs > li.active > a:focus {
+        border-color: #000000 #000000 rgba(0, 0, 0, 0);
+        padding: 5px;
+    }
+
+    #summary-tab li {
+        text-align: center;
+    }
+
+    #summary-tab .nav-tabs > li.active:after {
+        border-bottom-color: transparent;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    #summary-tab .tab-pane {
+        position: relative;
+        padding-top: 10px;
+    }
+
+    #summary-tab .nav-tabs > li > a:hover,
+    #summary-tab .nav-tabs > li > a:focus {
+        background-color: #1abc9c;
+        color: #ffffff;
+    }
+</style>
+
+@{
+    List<tbl_brief_category> category = (List<tbl_brief_category>)ViewData["category"];
+}
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">view brief </div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">category</label>
+                                    <select id="search-category" name="search-category" class="form-control selectpicker" data-live-search="true" onchange="getCategoryHeading(this.value)">
+                                        <option data-tokens="" disabled selected value="">select cateogry</option>
+                                        @foreach (var pro in category)
+                                        {
+                                            <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">sub-category</label>
+                                    <select id="search-sub-category" name="search-sub-category" class="form-control "></select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label pull-right">metadata</label>
+                                    <div id="theme-1-header" class="form-group">
+                                        <input type="text" class="form-control" value="" placeholder="" id="search-metadata" name="search-metadata" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <br />
+                                    <input id="" type="button" class="btn btn-default btn-info" name="" value="search" onclick="searchQuestion()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row" id="">
+                        <div class="col-md-12">
+                            <div id="display_table">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="row" id="">
+                        <div class="col-md-12">
+                            <div id="summery-table">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

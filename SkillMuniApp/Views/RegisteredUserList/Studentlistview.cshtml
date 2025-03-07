@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "Studentlistview";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.studentreport> feedback = (List<m2ostnext.Models.studentreport>)ViewData["feedback"];
+}
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.8/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="~/Content/studentreport/StyleSheet1.css">
+<script type="text/javascript" src="~/Content/studentreport/pagination.js"></script>
+
+<style>
+    #manja_wrapper {
+        overflow: scroll;
+    }
+
+    #manja_filter input {
+        border: 1px solid #ccc;
+    }
+</style>
+
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">Student Enquiry List</h6>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <table id="manja" class="table table-striped table-bordered dataTable sm" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Id_Enquiry
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Mobile
+                                </th>
+                                <th>
+                                    Brief_Title
+                                </th>
+                                <th>
+                                    Enquiry
+                                </th>
+                                <th>
+                                    Enquiry Date
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in feedback)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id_enquiry
+                                    </td>
+                                    <td>
+                                        @item.name
+                                    </td>
+                                    <td>
+                                        @item.mail
+                                    </td>
+                                    <td>
+                                        @item.phone
+                                    </td>
+                                    <td>
+                                        @item.brief_title
+                                    </td>
+                                    <td>
+                                        @item.enquiry
+                                    </td>
+                                    <td>
+                                        @item.update_date_time
+                                    </td>
+
+
+                                </tr>
+
+                            }
+                        </tbody>
+
+                    </table>
+                    <a href='@Url.Action("ExcelAllReport", "RegisteredUserList")' class="btn btn-primary">Report Download</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

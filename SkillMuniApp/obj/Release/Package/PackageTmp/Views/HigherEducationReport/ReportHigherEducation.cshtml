@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "ReportHigherEducation";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.Higher> high = (List<m2ostnext.Models.Higher>)ViewData["high"];
+}
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.8/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="~/Content/studentreport/StyleSheet1.css">
+<script type="text/javascript" src="~/Content/studentreport/pagination.js"></script>
+
+<style>
+    #manja_wrapper {
+        overflow: scroll;
+    }
+
+    #manja_filter input {
+        border: 1px solid #ccc;
+    }
+</style>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">Higher Education Report</h6>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <table id="manja" class="table table-striped table-bordered dataTable sm" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Id_User
+                                </th>
+                                <th>
+                                    User Name
+                                </th>
+                                <th>
+                                    Registration ID
+                                </th>
+
+                                <th>
+                                    Event ID
+                                </th>
+                                <th>
+                                    Event Name
+                                </th>
+
+                                <th>
+                                    H.E. Start Time
+                                </th>
+                                <th>
+                                    H.E. End Time
+                                </th>
+                                <th>
+                                    Time Slot
+                                </th>
+                                <th>
+                                    Updated Time
+                                </th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in high)
+                            {
+                                <tr>
+
+
+                                    <td>
+                                        @item.id_user
+                                    </td>
+
+                                    <td>
+                                        @item.FIRSTNAME
+                                    </td>
+
+                                    <td>
+                                        @item.id_register
+                                    </td>
+                                    <td>
+                                        @item.id_event
+                                    </td>
+                                    <td>
+                                        @item.event_title
+                                    </td>
+
+                                    <td>
+                                        @item.higher_education_start_time
+                                    </td>
+
+                                    <td>
+                                        @item.higher_education_end_time
+                                    </td>
+                                    <td>
+                                        @item.slot
+                                    </td>
+                                    <td>
+                                        @item.update_date_time
+                                    </td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+
+                    </table>
+                    <a href='@Url.Action("ExcelAllReport", "HigherEducationReport")' class="btn btn-primary">Report Download</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

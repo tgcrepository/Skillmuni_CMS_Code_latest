@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+}
+
+
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable();
+    });
+</script>
+@{
+
+    List<tbl_brief_category> category = (List<tbl_brief_category>)ViewData["category"];
+}
+
+<div class="content">
+    <div class="col-md-6 column">
+        @using (Html.BeginForm("AddCategory", "Brief", FormMethod.Post, new { id = "form-add-category", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h6 class="panel-title">Create Category </h6>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <label class="control-label">category</label>
+                            <input type="text" class="form-control validate[required]" value="" placeholder="category name" id="category-title" name="category-title" />
+                            <hr />
+                            <input id="" type="submit" class="btn btn-default btn-info" name="" value="add category" />
+                        </div>
+                        <div class="col-md-7">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-md-6 column">
+
+@using (Html.BeginForm("AddSubCategory", "Brief", FormMethod.Post, new { id = "form-add-sub-category", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">Add Sub Category </h6>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label class="control-label">select parent category</label>
+                        <select id="select-category" name="select-category" class="form-control selectpicker" data-live-search="true">
+                            @foreach (var pro in category)
+                            {
+                                <option data-tokens="@pro.brief_category" value="@pro.id_brief_category">@pro.brief_category</option>
+                            }
+                        </select>
+                        <label class="control-label">category</label>
+                        <input type="text" class="form-control validate[required]" value="" placeholder="sub-category name" id="sub-category-title" name="sub-category-title" />
+                        <hr />
+                        <input id="" type="submit" class="btn btn-default btn-info" name="" value="add sub-category" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+}
+    </div>
+</div>
+

@@ -1,0 +1,279 @@
+﻿
+@{
+    ViewBag.Title = "PsychoMetricQuestion";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_brief_question> tbl_Bque = (List<tbl_brief_question>)ViewData["tbl_Brief_que"];
+    List<m2ostnext.Models.tbl_ce_evalution_answer_key> tbl_ceak = (List<m2ostnext.Models.tbl_ce_evalution_answer_key>)ViewData["tbl_ceak"];
+    int q = 1;
+    int c = 1;
+}
+
+
+@using (Html.BeginForm("finishPsychometric", "career", FormMethod.Post, new { id = "form-add-brief", enctype = "multipart/form-data", onsubmit = "formSubmitRTCheck()" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default custom-panel">
+                <div class="panel-heading custom-panel-heading">
+                    <div class="panel-title">Psychometrice Question Keys</div>
+                </div>
+                <div class="panel-body custom-panel-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <label class="control-label">Question with Answers key Mapping</label>
+                        </div>
+                        <div class="col-md-1">
+                            
+                        </div>
+                    </div>
+                    <hr />
+                    <input type="hidden" name="questionCount" value="@tbl_Bque.Count" />
+                    <input type="hidden" name="career-evaluation-id" value="@tbl_ceak[0].id_ce_career_evaluation_master" />
+                    @foreach (var item in tbl_Bque)
+                    {
+                        <input type="hidden" name="questionId-@q" value="@item.id_brief_question" />
+                        <input type="hidden" name="anscount-@q" value="@item.answer.Count" />
+                       
+                        if (item.question_theme_type == 1)
+                        {
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label class="control-label"> <span>@q. </span>@item.brief_question</label>
+                                </div>
+                                <div class="col-md-2">                                    
+                                    <div class="form-group">
+                                        <label class="control-label">Order</label>
+                                        @*<input type="text" id="question-txt-@q" name="question-txt-@q" onchange="questionMap(@q)" required />*@
+                                        <select id="drop-order-@q" name="question-txt-@q" onchange="dropOrderChange(@q)" class="form-control" data-live-search="true" onchange="rulecCondition()" required>
+                                            <option value="" selected disabled>Select</option>
+                                            @for (int i = 1;i<=tbl_Bque.Count;i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            if (item.question_choice_type == 1)
+                            {
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <label class="control-label"><span>@q. </span>@item.brief_question</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Order</label>
+                                            @*<input type="text" id="question-txt-@q" name="question-txt-@q" onchange="questionMap(@q)" required />*@
+                                            <select id="drop-order-@q" name="question-txt-@q" onchange="dropOrderChange(@q)" class="form-control" data-live-search="true" onchange="rulecCondition()" required>
+                                                <option value="" selected disabled>Select</option>
+                                                @for (int i = 1; i <= tbl_Bque.Count; i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (item.question_choice_type == 2)
+                            {
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <span>@q. </span> <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@item.id_organization/question/@item.question_image" style="width:50px;height:auto;" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Order</label>
+                                            @*<input type="text" id="question-txt-@q" name="question-txt-@q" onchange="questionMap(@q)" required />*@
+                                            <select id="drop-order-@q" name="question-txt-@q" onchange="dropOrderChange(@q)" class="form-control" data-live-search="true" onchange="rulecCondition()" required>
+                                                <option value="" selected disabled>Select</option>
+                                                @for (int i = 1; i <= tbl_Bque.Count; i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (item.question_choice_type == 3)
+                            {
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <label class="control-label"><span>@q. </span>@item.brief_question</label>
+                                        <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@item.id_organization/question/@item.question_image" style="width:50px;height:auto;" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Order</label>
+                                            @*<input type="text" id="question-txt-@q" name="question-txt-@q" onchange="questionMap(@q)" required />*@
+                                            <select id="drop-order-@q" name="question-txt-@q" onchange="dropOrderChange(@q)" class="form-control" data-live-search="true" onchange="rulecCondition()" required>
+                                                <option value="" selected disabled>Select</option>
+                                                @for (int i = 1; i <= tbl_Bque.Count; i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                        if (item.question_theme_type == 1)
+                        {
+
+                            foreach (var itemAns in item.answer)
+                            {
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="control-label">@itemAns.brief_answer</label>
+                                            <input type="hidden" name="id-answer-@q-@c" value="@itemAns.id_brief_answer" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select id="career-evaluation-type" name="question-choice-@q-@c" class="form-control" data-live-search="true" onchange="rulecCondition()" required>
+                                            <option value="" selected disabled>Select</option>
+                                            @foreach (var itemCeak in tbl_ceak)
+                                            {
+                                                <option value="@itemCeak.id_ce_evalution_answer_key">@itemCeak.answer_key</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div>
+                                c++;
+                            }
+                        }
+                        else
+                        {
+                            foreach (var itemAns in item.answer)
+                            {
+                                if (itemAns.choice_type == 1)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="control-label">@itemAns.brief_answer</label>
+                                                <input type="hidden" name="id-answer-@q-@c" value="@itemAns.id_brief_answer" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select id="career-evaluation-type" name="question-choice-@q-@c" class="form-control" data-live-search="true" onchange="rulecCondition()" required>
+                                                <option value="" selected disabled>Select</option>
+                                                @foreach (var itemCeak in tbl_ceak)
+                                                {
+                                                    <option value="@itemCeak.id_ce_evalution_answer_key">@itemCeak.answer_key</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                }
+                                else if (itemAns.choice_type == 2)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <input type="hidden" name="id-answer-@q-@c" value="@itemAns.id_brief_answer" />
+                                                <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@item.id_organization/choice/@itemAns.choice_image" style="width:50px;height:auto;" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select id="career-evaluation-type" name="question-choice-@q-@c" class="form-control" data-live-search="true" onchange="rulecCondition()" required>
+                                                <option value="" selected disabled>Select</option>
+                                                @foreach (var itemCeak in tbl_ceak)
+                                                {
+                                                    <option value="@itemCeak.id_ce_evalution_answer_key">@itemCeak.answer_key</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                }
+                                else if (itemAns.choice_type == 3)
+                                {
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-8">
+                    <div class="form-group">
+                        <input type="hidden" name="id-answer-@q-@c" value="@itemAns.id_brief_answer" />
+                        <label class="control-label">@itemAns.brief_answer</label>
+                        <img src="~/Content/SKILLMUNI_DATA/briefQuesion/@item.id_organization/choice/@itemAns.choice_image" style="width:50px;height:auto;" />
+                    </div>
+                        </div>
+                    <div class="col-md-3">
+                        <select id="career-evaluation-type" name="question-choice-@q-@c" class="form-control" data-live-search="true" onchange="rulecCondition()" required>
+                            <option value="" selected disabled>Select</option>
+                            @foreach (var itemCeak in tbl_ceak)
+                            {
+                                <option value="@itemCeak.id_ce_evalution_answer_key">@itemCeak.answer_key</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                                }
+                                c++;
+                            }
+                        }
+                        <hr />
+                        q++;
+                        c = 1;
+                    }
+                    <input id="btn_question2" type="submit" class="btn btn-info" name="btn_submit" value="submit" style="float: right;color:white" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    var arr = [];
+    function questionMap(e) {
+        var questMap = parseInt(e);
+       // alert(questMap); 
+        var countarr = arr.length;
+        //alert(countarr);
+        console.log(arr);
+        if (countarr != 0) {
+            
+            for (i = 0; i < countarr; i++) {
+                console.log(arr[i]);
+                if (arr[i] == questMap) {
+                    //alert('value is already set');
+                    //$("#question-txt-" + e).val("");
+                }
+            }
+        }
+        var idVal = parseInt($("#question-txt-" + e).val());
+        arr.push(idVal);
+        //console.log(countarr);
+        }
+
+
+    function dropOrderChange(e) {
+        var selectedId = parseInt(e);
+        //alert(selectedId);
+        var questionCount = parseInt(@tbl_Bque.Count);
+        for (i = 1; i <= questionCount; i++)
+        {
+            var dropVal = parseInt($("#drop-order-" + i).val());
+            //alert(dropVal);
+            if (dropVal == NaN || selectedId != i) {                
+                var selectedDrop = parseInt($("#drop-order-" + e).val());
+                if (dropVal == selectedDrop) {
+                    alert('already set this number in order');
+                    $("#drop-order-" + e).val("");
+                }
+            }
+        }
+    }
+</script>

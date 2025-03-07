@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "badge_won_messgage";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_game_master> tblGame = (List<tbl_game_master>)ViewData["tblGame"];
+}
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>Badge Won Message</span>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("insert_badge_won_message", "UniversityKPI", FormMethod.Post, new { id = "form-add-kpi" }))
+                {
+                    <div class="form-horizontal">
+                        <div class="container">
+                            <div class="form-group">
+                                <div class="col-md-3"><label class="control-label">Select Game</label></div>
+                                <div class="col-md-5">
+                                    <select id="gameName" name="gameName" class="form-control" onchange="gameval(this.value)" required>
+                                        <option value="">Select</option>
+                                        @foreach (var item in tblGame)
+                                        {
+                                            <option value="@item.id_game">@item.name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <div class="form-group">
+                                <div class="col-md-3"><label class="control-label">Badge Name</label></div>
+                                <div class="col-md-5"> <label class="control-label">Badge Text</label></div>
+                            </div>
+                        </div>
+                        <div class="container" id="badgeBind">
+
+                        </div>                                                    
+
+                        <div class="form-group">
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary" type="submit">Publish</button>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function gameval(e) {
+            if (e != 0) {                
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("getBadgeMas", "UniversityKPI")',
+                    data: { "idGame": e },
+                    success: function (data) {
+                        console.log(data);
+                        $("#badgeBind").html(data);
+                    }
+                });
+            }
+        }
+
+    </script>

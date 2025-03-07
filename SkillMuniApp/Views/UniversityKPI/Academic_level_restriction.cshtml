@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "academic_level_restriction";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_academic_tiles> tblAca = (List<tbl_academic_tiles>)ViewData["tblAcaTiles"];
+}
+
+
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>Academic Level Restriction</span>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("academiclevelRes", "UniversityKPI", FormMethod.Post, new { id = "form-add-kpi" }))
+                {
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-3"><label class="control-label">Select Academic Tile</label></div>
+                            <div class="col-md-5">
+                                <select id="KPI-mode" name="academicDrop" class="form-control" onchange="academicTile(this.value)" required>
+                                    <option value="">Select</option>
+                                    @foreach (var item in tblAca)
+                                    {
+                                        <option value="@item.id_academic_tile">@item.tile_name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Restriction Level</label>
+                            </div>
+                            <div class="col-md-6">
+                                <span>Academy</span>
+                                <input type="checkbox" name="academCheck" id="academCheck" onchange="academyOnchange()" value="A" />
+                                <span>Brief Tile</span>
+                                <input type="checkbox" name="briefCheck" id="briefCheck" onchange="briefOnchange()" value="B" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Timestamp</label>
+                            </div>
+                            <div class="col-md-6">
+                                <span>Day</span>
+                                <input type="radio" id="dayRad" name="timeStam" value="1" required />
+                                <span>Hour</span>
+                                <input type="radio" id="hourRad" name="timeStam" value="2" required />
+                            </div>
+                        </div>
+
+                        <div class="row" id="restricTabl" style="display:none">
+                            <div class="form-group" id="academCountSh">
+                                <div class="row">
+                                    <h3 style="text-align:center;">Academy Level Restriction</h3>
+                                </div>
+                                @*<div class="col-md-2">
+            </div>*@
+                                <div class="col-md-8">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th width="50%">Academy</th>
+                                                <th width="50%">Brief Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="acadBind"></tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="briefCountSh">
+                                <div class="row">
+                                    <h3 style="text-align:center;">Brief Level Restriction</h3>
+                                </div>
+                                @*<div class="col-md-2">
+            </div>*@
+                                <div class="col-md-8">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th width="50%">Brief Tile</th>
+                                                <th width="50%">Brief Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="briefBind"></tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function academicTile(e)
+    {
+        if (e != 0) {
+            $('#academCheck').attr('checked', true);
+            $("#academCountSh").show();
+            $("#restricTabl").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("getacademicVal", "UniversityKPI")',
+                data: { "acadId": e },
+                success: function (data) {
+                    console.log(data);
+                    $("#acadBind").html(data);
+                    //$("#acadBind").html("");
+                    //var str = '<tr><td><input type="hidden" name="acadmHid" value="' + data[0].id_academic_tile + '"/>' + data[0].tile_name + '</td><td><input type="text" class="form-control validate[required]" name="acadTileCouV" required/></td></tr>';
+                    //$("#acadBind").html(str);  
+                    if ($("#dayres").val() == 1) {
+                        $("#dayRad").prop("checked", true);
+                    }
+                    else if ($("#dayres").val() == 2) {
+                        $("#hourRad").prop("checked", true);
+                    }
+                    else {
+                        $("#dayRad").prop("checked", false);
+                        $("#hourRad").prop("checked", false);
+                    }
+
+                }
+            });
+
+            $('#briefCheck').attr('checked', true);
+            $("#briefCountSh").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("getBriefTileVal", "UniversityKPI")',
+                data: { "acadId": e },
+                success: function (data) {
+                    var str = '';
+                    console.log(data);
+                    $("#briefBind").html(data);
+                }
+            });
+        }
+        else {
+            $("#restricTabl").hide();
+            $("#dayRad").prop("checked", false);
+            $("#hourRad").prop("checked", false);
+        }
+
+        }
+        
+
+    function academyOnchange()
+    {
+        var academ = $("#academCheck:checkbox:checked").length > 0;
+        if (academ == true) {
+            $("#academCountSh").show();
+        }
+        else
+        {
+            $("#academCountSh").hide();
+        }
+    }
+
+    function briefOnchange()
+    {
+        var briefch = $("#briefCheck:checkbox:checked").length > 0;
+        if (briefch == true) {
+            $("#briefCountSh").show();
+        }
+        else {
+            $("#briefCountSh").hide();
+        }
+    }
+    </script>

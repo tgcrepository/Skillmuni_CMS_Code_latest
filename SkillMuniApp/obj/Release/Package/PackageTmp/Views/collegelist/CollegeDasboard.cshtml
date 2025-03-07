@@ -1,0 +1,313 @@
+﻿
+@{
+    ViewBag.Title = "CollegeDasboard";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_college_list> tcd = (List<tbl_college_list>)ViewData["tcd"];
+    m2ostnext.Models.State stateList = (m2ostnext.Models.State)ViewData["stateList"];
+    m2ostnext.Models.collegeListmodel.CityModelNew cm = (m2ostnext.Models.collegeListmodel.CityModelNew)ViewData["Cm"];
+    int z = 1;
+}
+
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable();
+    });
+</script>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default m2ost_info">
+            <div class="panel-heading m2ost_info_hat">
+                <span>College Dashboard</span>
+            </div>
+            <div class="panel-body">
+                <button class="btn btn-primary" style="float:right;margin-bottom: 1%;background: #a6c !important;box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);padding: 0.54rem 2.14rem;font-size: 1.1rem;" data-toggle="modal" data-target="#exampleModal" data-whatever="mdo">Add College</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("add_new_college", "collegelist", FormMethod.Post, new { id = "form-add-kpi" }))
+                            {
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Add New College Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="recipien-name" class="col-form-label">College Name : </label>
+                                        <input type="text" class="form-control" name="c-name" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">State : </label>
+                                        @*<input type="text" class="form-control" name="c-state" required>*@
+                                        <select id="state" name="state" class="form-control validate[required]" onchange="getCityList()">
+                                            <option value="">Select</option>
+                                            @foreach (var itm in stateList.States)
+                                            {
+                                                <option Aid="@itm.id" value="@itm.name">@itm.name</option>
+
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">City : </label>
+                                        @*<input type="text" class="form-control" name="c-city" required>*@
+                                        <select id="city" name="city" class="form-control validate[required]"></select>
+                                        @*@foreach (var itm in cm.Cities)
+                                            {
+                                                <option value="@itm.id,@itm.name">@itm.name</option>
+                                            }*@
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Phone No : </label>
+                                        <input type="text" class="form-control" name="c-phone" onkeypress="return (event.charCode > 47 && event.charCode < 58)" maxlength="10" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="form-horizontal">
+                    <div id="div-kpi-data-grid" class="relegatGrid" style="margin-bottom: 1%;">
+                        <table id="report-table" class="table" style="height:80px;width: 100%;">
+                            <thead>
+                                <tr style="background-color:#367fa9;color:white">
+                                    <th>College Name</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Phone</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="prog-table" id="specMetricTbl">
+                                @foreach (var item in tcd)
+                                {
+                                    <tr>
+                                        <td id="clgName-@z">@item.college_name</td>
+                                        <td id="clgCity-@z">@item.clg_city</td>
+                                        <td id="clgState-@z">@item.clg_state</td>
+                                        <td id="clgPhone-@z">@item.clg_phone</td>
+                                        <td><input type="hidden" id="idClg-@z" value="@item.id_college" /><a class="btn btn-primary" onclick="editMet_modal(@z,@item.id_college)" data-toggle="modal" data-target="#editModal" data-whatever="mdo"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</a> <a class="btn btn-primary" onclick="delMet_modal(@z)" data-toggle="modal" data-target="#delModal" data-whatever="mdo"><i class="fa fa-trash" aria-hidden="true"></i>Delete</a></td>
+                                    </tr>
+                                    z++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @* Edit modal another one for the edit*@
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("Edit_colleg_details", "collegelist", FormMethod.Post, new { id = "form-add-kpi" }))
+                            {
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Update College Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="recipien-name" class="col-form-label">College Name:</label>
+                                        <input type="text" class="form-control" id="editClgName" name="editClgName">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">State :</label>
+                                        @*<input type="text" class="form-control" id="editClgState" name="editClgState" />*@
+                                        <select id="editClgState" name="editClgState" class="form-control validate[required]" onchange="getEditCityList()">
+                                            <option value="">Select</option>
+                                            @foreach (var itm in stateList.States)
+                                            {
+                                                <option Aid="@itm.id" value="@itm.name">@itm.name</option>
+
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">City :</label>
+                                        @*<input type="text" class="form-control" id="editClgCity" name="editClgCity" />*@
+                                        <select class="form-control" id="editClgCity" name="editClgCity">
+                                            @*@foreach (var itm in cm.Cities)
+                                                {
+                                                    <option value="@itm.id,@itm.name">@itm.name</option>
+                                                }*@
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Phone No :</label>
+                                        <input type="text" class="form-control" id="editClgPhone" name="editClgPhone" onkeypress="return (event.charCode > 47 && event.charCode < 58)" maxlength="10" />
+                                    </div>
+                                    <input type="hidden" id="ColgID" name="ColgID" value="" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">cancel</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                @*end of edit modal*@
+                @* Delete modal another one for the edit*@
+                <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("delete_collage_details", "collegelist", FormMethod.Post, new { id = "form-add-kpi" }))
+                            {
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete College Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="form-group">
+                                        <label for="recipien-name" class="col-form-label">College Name:</label>
+                                        <span id="delclgName"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">City :</label>
+                                        <span id="delclgCity"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipien-name" class="col-form-label">State :</label>
+                                        <span id="delclgState"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Phone No :</label>
+                                        <span id="delclgPhone"></span>
+                                    </div>
+                                    <input type="hidden" id="delclgID" name="DelMetricID" value="" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function getCityList() {
+        debugger;
+        //var idstate = $("#state").val();
+        var idstate = $("#state option:selected").attr('Aid');
+        $("#city").empty();
+        var URL = "https://www.skillmuni.in/sulapiproduction/api/getCities?stateId=" + idstate;
+        $.getJSON(URL, function (json_data) {
+            var apndstr = "";
+            debugger;
+            for (var i = 0; i <= json_data.Cities.length; i++) {
+                debugger;
+                var optVal = json_data.Cities[i].id + "," + json_data.Cities[i].name;
+                apndstr = " <option value='" + optVal + "'>" + json_data.Cities[i].name + "</option>";
+
+                $("#city").append(apndstr);
+                apndstr = "";
+            }
+        });
+    }
+
+    function getEditCityList() {
+        debugger;
+        //var idstate = $("#state").val();
+        var idstate = $("#editClgState option:selected").attr('Aid');
+        $("#editClgCity").empty();
+        var URL = "https://www.skillmuni.in/sulapiproduction/api/getCities?stateId=" + idstate;
+        ////$.getJSON(URL, function (json_data) {
+        ////    var apndstr = "";
+        ////    debugger;
+        ////    for (var i = 0; i < json_data.Cities.length; i++) {
+        ////        var optVal = json_data.Cities[i].id + "," + json_data.Cities[i].name;
+        ////        apndstr = " <option value='" + optVal + "'>" + json_data.Cities[i].name + "</option>";
+
+        ////        $("#editClgCity").append(apndstr);
+        ////        apndstr = "";
+        ////    }
+        ////});
+
+         $.ajax({
+            url: URL,
+             type: 'GET',
+             async:false,
+            //data: { cid: ce },
+             success: function (json_data) {
+                 var apndstr = "";
+                 debugger;
+                 for (var i = 0; i < json_data.Cities.length; i++) {
+                     var optVal = json_data.Cities[i].id + "," + json_data.Cities[i].name;
+                     apndstr = " <option value='" + optVal + "'>" + json_data.Cities[i].name + "</option>";
+
+                     $("#editClgCity").append(apndstr);
+                     apndstr = "";
+                 }
+            }
+        });
+    }
+
+
+    function editMet_modal(e,f) {
+        var ce = parseInt(f);
+        var cname = $("#clgName-" + e).html();
+        var ccity = $("#clgCity-" + e).html();
+        var cstate = $("#clgState-" + e).html();
+        var cphone = $("#clgPhone-" + e).html();
+        var id_colg = $("#idClg-" + e).val();
+        ////var StateID = $('#editClgState').find('option[text="' + cstate + '"]').val();
+        var StateID = $('#editClgState option:contains(' + cstate + ')').val();
+        $('#editClgName').val(cname);
+        debugger;
+        ////$('#editClgState').val(cstate);
+        $('#editClgState').val(StateID).change();
+
+                @*$.ajax({
+            url: '@Url.Action("collegeCityVal", "collegelist")',
+            type: 'GET',
+            data: { cid: ce },
+            success: function (data) {
+                console.log(data);
+                $('#editClgCity').val(data);
+            }
+        });*@
+
+        var CityID = $('#editClgCity option:contains(' + ccity + ')').val();
+        $('#editClgCity').val(CityID).change();
+
+        $('#editClgPhone').val(cphone);
+        $('#ColgID').val(id_colg);
+    }
+
+    function delMet_modal(e) {
+        var cname = $("#clgName-" + e).html();
+        var ccity = $("#clgCity-" + e).html();
+        var cstate = $("#clgState-" + e).html();
+        var cphone = $("#clgPhone-" + e).html();
+        var id_colg = $("#idClg-" + e).val();
+        $('#delclgName').text(cname);
+        $('#delclgCity').text(ccity);
+        $('#delclgState').text(cstate);
+        $('#delclgPhone').text(cphone);
+        $('#delclgID').val(id_colg);
+    }
+</script>

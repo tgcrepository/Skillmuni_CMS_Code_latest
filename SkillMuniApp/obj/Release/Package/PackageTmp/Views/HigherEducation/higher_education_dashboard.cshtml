@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "higher_education_dashboard";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.higher_education_dashboard> temp = (List<m2ostnext.Models.higher_education_dashboard>)ViewData["temp"];
+}
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.8/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="~/Content/registerreport/StyleSheet1.css">
+<script type="text/javascript" src="~/Content/registerreport/pagination.js"></script>
+
+<script>
+
+    function displayDeleteMessage() {
+
+        $("#success-delete").show();
+        setTimeout(function () {
+            $("#success-delete").hide();
+        }, 3000);
+    }
+
+    function deactivateSeminar(cid) {
+
+        var url = '@Url.Action("deactivateSeminar", "HigherEducation")';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { id_higher_education: cid },
+
+            success: function (data) {
+                displayActivatedMessage();
+
+            }
+        });
+
+        location.reload();
+    }
+    
+
+    function displayDeleteMessage() {
+
+        $("#success-delete").show();
+        setTimeout(function () {
+            $("#success-delete").hide();
+        }, 3000);
+    }
+    function displayActivatedMessage() {
+
+        $("#success-message").show();
+        setTimeout(function () {
+            $("#success-message").hide();
+        }, 3000);
+    }
+
+
+
+
+</script>
+
+
+
+<style>
+    #manja_wrapper {
+        overflow: scroll;
+    }
+
+    #manja_filter input {
+        border: 1px solid #ccc;
+    }
+
+    body {
+        counter-reset: Serial; /* Set the Serial counter to 0 */
+    }
+
+    table {
+        border-collapse: separate;
+    }
+
+    tr td:first-child:before {
+        counter-increment: Serial; /* Increment the Serial counter */
+        content: counter(Serial); /* Display the counter */
+    }
+</style>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div id="success-message" class="alert alert-success" role="alert" style="display:none;">
+            <strong>Success : </strong> Higher Education is Deactivated ...
+        </div>
+   
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Higher Education Dashboard</h4>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <a style="background: #018ccf; color: white;margin-top: 13px;margin-left: -177px;float: right;" href="@Url.Action("add_higher_education", "HigherEducation")" class="btn btn-default">Create New</a>
+                </div>
+            </div>
+            <hr />
+            <div class="panel-body">
+                @*<input type="hidden" id="id_seminar" name="id_seminar" value="" />*@
+                <table id="manja" class="table table-striped table-bordered dataTable small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="20%">
+                                Sr No
+                            </th>
+                            <th width="20%">
+                                Higher_Education_Id
+                            </th>
+                            <th width="20%">
+                                Message To Display
+                            </th>
+                            <th width="10%">
+                                Redirect URL
+                            </th>
+                            <th width="10%">
+                                Event_Name
+                            </th>
+                            <th width="10%">
+                                Location
+                            </th>
+                            <th width="10%">
+                                Average_Ratings
+                            </th>
+                            <th width="10%">
+                                Update_date_time
+                            </th>
+                            <th width="10%">
+                                Edit
+                            </th>
+                            <th width="10%">
+                                Deactivate
+                            </th>
+                        </tr>
+                    </thead>
+                    @{
+                        int i = 0;
+                    }
+                    <tbody>
+                        @foreach (var item in temp)
+                        {
+                        <tr>
+                            <td></td>
+                            <td>
+                                @item.id_higher_education
+                            </td>
+                            <td>
+                                @item.message_to_display
+                            </td>
+                            <td>
+                                @item.redirect_url
+                            </td>
+                            <td>
+                                @item.event_name
+                            </td>
+                            <td>
+                                @item.location
+                            </td>
+                            <td>
+                                @item.ratings
+                            </td>
+                            <td>
+                                @item.update_date_time
+                            </td>
+                            <td>
+                                
+                                    <a href="@Url.Action("edit_higher_education", "HigherEducation", new { id_higher_education = item.id_higher_education })"><i class="glyphicon glyphicon-edit"></i></a>
+
+                            </td>
+                    
+                            <td>
+                            <a href="#" onclick="deactivateSeminar('@item.id_higher_education')"><i class="glyphicon glyphicon-remove-circle"></i></a>
+                            </td>
+                            
+
+
+                        </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

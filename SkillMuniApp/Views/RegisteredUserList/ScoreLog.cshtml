@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "ScoreLog";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<tbl_academic_tiles> acad = (List<tbl_academic_tiles>)ViewData["acad"];
+    List<tbl_brief_category> category = (List<tbl_brief_category>)ViewData["category"];
+}
+
+<link href="~/Content/datatable/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="~/Content/datatable/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<script src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/datatable/js/dataTables.buttons.min.js"></script>
+<script src="~/Content/datatable/js/jszip.min.js"></script>
+<script src="~/Content/datatable/js/buttons.html5.min.js"></script>
+
+<script>
+    function getExportValue() {
+        var acid = $("#acid").val();
+        var bcid = $("#bcid").val();
+         var url = '@Url.Action("getExportDataList", "RegisteredUserList")';
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { acid:acid,bcid:bcid },
+        success: function (data) {
+            $("#div-dist-category").empty().append(data);
+
+            $('#report-table').DataTable({
+                "bSort": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    'excelHtml5',
+                ]
+            });
+        }
+    });
+    }
+
+</script>
+<div class="content">
+<label>Academic Tile Name</label>
+<select id="acid" name="acid">
+    @foreach (var itm in acad)
+    {
+        <option value="@itm.id_academic_tile">@itm.tile_name</option>
+    }
+</select>
+<label>Brief Category</label>
+<select id="bcid" name="bcid">
+    @foreach (var itm1 in category)
+    {
+        <option value="@itm1.id_brief_category">@itm1.brief_category</option>
+    }
+</select>
+
+<button onclick="getExportValue()">Submit</button>
+
+
+<hr />
+
+
+<div id="div-dist-category">
+
+</div>
+
+</div>

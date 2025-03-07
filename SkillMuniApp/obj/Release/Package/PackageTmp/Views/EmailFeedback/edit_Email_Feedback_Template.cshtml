@@ -1,0 +1,186 @@
+﻿@{
+
+    ViewBag.Title = "edit_Email_Feedback_Template";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml"; 
+    List<m2ostnext.Models.tbl_feedback_role> role = (List<m2ostnext.Models.tbl_feedback_role>)ViewData["role"];
+    m2ostnext.Models.tbl_email_template template = (m2ostnext.Models.tbl_email_template)ViewData["template"];
+    // List<m2ostnext.Models.tbl_email_template_body> template1 = (List<m2ostnext.Models.tbl_email_template_body>)ViewData["template1"];
+    List<m2ostnext.Models.tbl_email_template_body> templateincharge = (List<m2ostnext.Models.tbl_email_template_body>)ViewData["templateincharge"];
+    List<m2ostnext.Models.tbl_email_template_body> templateuser = (List<m2ostnext.Models.tbl_email_template_body>)ViewData["templateuser"];
+    int n = 1;
+    int r = 1;
+}
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+    $(function () {
+        $("#form_edit_category").validationEngine();
+
+    });
+    function addImgClk(e) {
+        var clkCons = parseInt(e);
+        var nextClk = clkCons + 1;
+        if (clkCons < 10) {
+            $("#plusImg-" + e).hide();
+            $("#minusImg-" + e).hide();
+            var str = '<div class="form-group" id="imagBindP-' + nextClk + '"> <div class="col-md-2"> <label class="control-label">Message' + nextClk + '</label> </div> <div class="col-md-6"><input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-url-' + nextClk + '" name="banner-url-' + nextClk + '" /> </div> <div class=col-md-2> <div class="addClass"> <i class="fa fa-plus-circle fa-2x" id="plusImg-' + nextClk + '" onclick="addImgClk(' + nextClk + ')" aria-hidden="true"></i> <i class="fa fa-minus-circle fa-2x" id="minusImg-' + nextClk + '" onclick="minusImgClk(' + nextClk + ')" aria-hidden="true"></i> </div> </div> </div>';
+            $("#imgPartUser1").append(str);
+            $("#countBanr").val(nextClk);
+        }
+    }
+    function minusImgClk(e) {
+        var clkCons = parseInt(e);
+        var nextClk = clkCons - 1;
+        $("#imagBindP-" + e).remove();
+        $("#plusImg-" + nextClk).show();
+        $("#minusImg-" + nextClk).show();
+        $("#countBanr").val(nextClk);
+    }
+    function addImgClk1(f) {
+        var clkCons = parseInt(f);
+        var nextClk = clkCons + 1;
+        if (clkCons < 10) {
+            $("#plusImgincharge-" + f).hide();
+            $("#minusImgincharge-" + f).hide();
+
+            var str = '<div class="form-group" id="imagBindR-' + nextClk + '"> <div class="col-md-2"> <label class="control-label">Message' + nextClk + '</label> </div> <div class="col-md-6"><input type="text" class="form-control validate[required]" value="" placeholder="" id="banner-urlR-' + nextClk + '" name="banner-urlR-' + nextClk + '" /> </div> <div class=col-md-2> <div class="addClass"> <i class="fa fa-plus-circle fa-2x" id="plusImgincharge-' + nextClk + '" onclick="addImgClk1(' + nextClk + ')" aria-hidden="true"></i> <i class="fa fa-minus-circle fa-2x" id="minusImgincharge-' + nextClk + '" onclick="minusImgClk1(' + nextClk + ')" aria-hidden="true"></i> </div> </div> </div>';
+
+            $("#imgPartIncharge1").append(str);
+
+            $("#countBanr1").val(nextClk);
+        }
+    }
+    function minusImgClk1(f) {
+        var clkCons = parseInt(f);
+        var nextClk = clkCons - 1;
+        $("#imagBindR-" + f).remove();
+        $("#plusImgincharge-" + nextClk).show();
+        $("#minusImgincharge-" + nextClk).show();
+        $("#countBanr1").val(nextClk);
+    }
+
+</script>
+
+<div class="row clearfix">
+    <div class="col-md-12 column">
+
+        <div class="panel panel-default ">
+            <div class="panel-heading">
+                <h4 class="panel-title">Edit Email Template</h4>
+            </div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm("edit_Email_Feedback_Template_Action", "EmailFeedback", FormMethod.Post, new { id = "form_edit_category", enctype = "multipart/form-data" }))
+                {
+
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id_email" value="@template.id_email_template" />
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label for="FirstName" class="control-label regLabel">Select Role </label>
+
+                                        <select class="form-control" id="rolename" name="rolename" >
+                                            @*<option value="0">select role name</option>*@
+
+                                            @foreach (var item in (List<m2ostnext.Models.tbl_feedback_role>)ViewData["role"])
+                                            {
+                                                <option value="@item.id_role" @if (template.id_role == item.id_role) { @("selected") } else{ @("disabled") } >
+                                                    @item.role_name
+                                                </option>
+
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="hidden" name="oldCountBanUrl" value="@templateuser.Count" />
+                                        <input type="hidden" name="countBanr" id="countBanr" value="@templateuser.Count" />
+                                        <label for="FirstName" class="control-label regLabel">Edit User Email Template</label>
+                                        @foreach (var itm in (List<m2ostnext.Models.tbl_email_template_body>)ViewData["templateuser"])
+                                        {
+                                            <div class="col-md-12" id="imgPartUser">
+
+
+                                                <div class="form-group">
+                                                    <br />
+                                                    <div class="col-md-2"><label class="control-label">Message&nbsp;@n</label></div>
+                                                    <div class="col-md-6">
+
+                                                        <input type="text" class="form-control validate[required]" value="@itm.body_content" placeholder="" id="banner-url-@n" name="banner-url-@n" />
+                                                    </div>
+                                                    @if (n == templateuser.Count)
+                                                    {
+                                                        <div class="col-md-2">
+                                                            <div class="addClass"><i class="fa fa-plus-circle fa-2x" id="plusImg-@n" onclick="addImgClk(@n)" aria-hidden="true"></i></div>
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                            </div>
+                                            n++;
+                                        }
+                                        <div class="col-md-12" id="imgPartUser1">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="hidden" name="oldCountBanUrl1" value="@templateincharge.Count" />
+                                        <input type="hidden" name="countBanr1" id="countBanr1" value="@templateincharge.Count" />
+                                        <label for="FirstName" class="control-label regLabel">Edit Person In charge Email Template</label><br />
+                                        @foreach (var itm in templateincharge)
+                                        {
+                                            <div class="col-md-12" id="imgPartIncharge">
+
+
+                                                <div class="form-group">
+                                                    <br />
+                                                    <div class="col-md-2"><label class="control-label">Message&nbsp;@r</label></div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control validate[required]" value="@itm.body_content" placeholder="" id="banner-urlR-@r" name="banner-urlR-@r" />
+                                                    </div>
+                                                    @if (r == templateincharge.Count)
+                                                    {
+                                                        <div class="col-md-2">
+                                                            <div class="addClass"><i class="fa fa-plus-circle fa-2x" id="plusImgincharge-@r" onclick="addImgClk1(@r)" aria-hidden="true"></i></div>
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                            </div>
+                                            r++;
+                                        }
+                                        <div class="col-md-12" id="imgPartIncharge1">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <center><input type="submit" value="Update" class="btn btn-default" style="background-color: #018ccf; color: white; width: 58px; height: 29px;margin-left: -342px;" /></center>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>

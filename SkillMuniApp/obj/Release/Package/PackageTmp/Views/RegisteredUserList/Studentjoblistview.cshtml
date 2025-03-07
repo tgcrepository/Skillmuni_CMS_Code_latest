@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "Studentjoblistview";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.studentappliedjob> feedback = (List<m2ostnext.Models.studentappliedjob>)ViewData["feedback"];
+}
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.8/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="~/Content/studentreport/StyleSheet1.css" />
+<script type="text/javascript" src="~/Content/studentreport/pagination.js"></script>
+
+<style>
+    #manja_wrapper {
+        overflow: scroll;
+    }
+
+    #manja_filter input {
+        border: 1px solid #ccc;
+    }
+</style>
+
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">Student Applied job List</h6>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <table id="manja" class="table table-striped table-bordered dataTable sm" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr style="background-color=blue">
+                                <th>
+                                    id_user
+                                </th>
+                                <th>
+                                    COMPANY_NAME
+                                </th>
+                                <th>
+                                    COMPANY_NO
+                                </th>
+                                <th>
+                                    jobtitle
+                                </th>
+                                <th>
+                                    minsalary
+                                </th>
+                                <th>
+                                    maxsalary
+                                </th>
+                                <th>
+                                    noofopen
+                                </th>
+                                <th>
+                                    gender
+                                </th>
+                                <th>
+                                    minquali
+                                </th>
+                                <th>
+                                    experience
+                                </th>
+                                <th>
+                                    name
+                                </th>
+                                <th>
+                                    mailid
+                                </th>
+                                <th>
+                                    expdate
+                                </th>
+                                <th>
+                                    EMAIL
+                                </th>
+                                <th>
+                                    MOBILE
+                                </th>
+                                <th>
+                                    GENDER
+                                </th>
+                                <th>
+                                    CITY
+                                </th>
+                                <th>
+                                    DATE_OF_BIRTH
+                                </th>
+                                <th>
+                                    COLLEGE
+                                </th>
+                                <th>
+                                    GRADUATIONYEAR
+                                </th>
+                                <th>
+                                    CV Upload Status
+                                </th>
+                                <th>
+                                    status
+                                </th>
+                                <th>
+                                    Applied Date
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in feedback)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id_user
+                                    </td>
+                                    <td>
+                                        @item.COMPANY_NAME
+                                    </td>
+                                    <td>
+                                        @item.COMPANY_NO
+                                    </td>
+                                    <td>
+                                        @item.jobtitle
+                                    </td>
+                                    <td>
+                                        @item.minsalary
+                                    </td>
+                                    <td>
+                                        @item.maxsalary
+                                    </td>
+                                    <td>
+                                        @item.noofopen
+                                    </td>
+                                    <td>
+                                        @item.gender
+                                    </td>
+                                    <td>
+                                        @item.minquali
+                                    </td>
+                                    <td>
+                                        @item.experience
+                                    </td>
+                                    <td>
+                                        @item.name
+                                    </td>
+                                    <td>
+                                        @item.mailid
+                                    </td>
+                                    <td>
+                                        @item.expdate
+                                    </td>
+                                    <td>
+                                        @item.EMAIL
+                                    </td>
+                                    <td>
+                                        @item.MOBILE
+                                    </td>
+                                    <td>
+                                        @item.A_GENDER
+                                    </td>
+                                    <td>
+                                        @item.CITY
+                                    </td>
+                                    <td>
+                                        @item.DATE_OF_BIRTH
+                                    </td>
+                                    <td>
+                                        @item.COLLEGE
+                                    </td>
+                                    <td>
+                                        @item.GRADUATIONYEAR
+                                    </td>
+                                    <td>
+                                        @item.CVUploadStatus
+                                    </td>
+                                    <td>
+                                        @item.status
+                                    </td>
+                                    <td>
+                                        @item.updated_date_time
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+
+                    <a href='@Url.Action("ExcelAllReportJob", "RegisteredUserList")' class="btn btn-primary">Report Download</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

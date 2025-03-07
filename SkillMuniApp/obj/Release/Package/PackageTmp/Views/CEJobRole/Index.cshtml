@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "RoleView";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.IndustryRole> jobrole = (List<m2ostnext.Models.IndustryRole>)ViewData["jobrole"];
+}
+
+
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable();
+    });
+</script>
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">Job Role View</h6>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-primary btn-default pull-right" href="@Url.Action("add_job_role", "CEJobRole")"> Add Job Role  </a>
+                        <br /><hr />
+
+
+                        <table id="report-table" class="table table-striped  table-bordered dataTable sm" width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Job Role
+                                    </th>
+                                    <th>
+                                        Description
+                                    </th>
+                                    <th>
+                                        Job Role Code
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in jobrole)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.ce_industry_role
+                                        </td>
+                                        <td>
+                                            @item.description
+                                        </td>
+                                        <td>
+                                            @item.ce_role_code
+                                        </td>
+
+                                        <td>
+                                            <a href="@Url.Action("jobRoleDetail", "CEJobRole", new { cij = item.ce_role_code })" target="_blank">
+                                                <i class="glyphicon glyphicon-list-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "edit_job_category";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    m2ostnext.Models.tbl_job_category tjc = (m2ostnext.Models.tbl_job_category)ViewData["tjc"];
+}
+
+<style>
+    .avatar-upload .avatar-edit input {
+        display: none;
+    }
+
+    .avatar-upload .avatar-edit {
+        position: absolute;
+        right: 12px;
+        z-index: 1;
+    }
+
+
+
+    .avatar-upload {
+        position: relative;
+        max-width: 205px;
+        /*margin: 10px auto;*/
+    }
+
+        .avatar-upload .avatar-preview {
+            width: 192px;
+            height: 192px;
+            position: relative;
+            /*border-radius: 100%;*/
+            border: 6px solid #F8F8F8;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        }
+</style>
+
+<div class="content">
+    <div class="col-md-12 column">
+        <div class="panel panel-default custom-panel">
+            <div class="panel-heading custom-panel-heading">
+                <div class="panel-title">Job Category Tile Dashboard</div>
+            </div>
+            <div class="panel-body custom-panel-body">
+            @using (Html.BeginForm("edit_action_job_category", "brief", FormMethod.Post, new { id = "id_form_job_edit", enctype = "multipart/form-data" }))
+            {            
+                <input type="hidden" name="idJC" value="@tjc.id_job_category" />
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label>Id Job category</label>
+                                </div>
+                                <div class="col-md-4">@tjc.id_job_category</div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label>Job category</label>
+                                </div>
+                                <div class="col-md-4"><input class="form-control" type="text" name="job-Cat" value="@tjc.job_category" /></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label>Updated Date & Time</label>
+                                </div>
+                                <div class="col-md-4">@tjc.updated_date_time</div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label>Job Category Tile Image</label>
+                                </div>
+                                <div class="col-md-4" id="imagesel">
+                                    <input type="text" class="form-control" readonly value="@tjc.tile_image" placeholder="Tile Image" id="league-image" name="league-image" />
+                                    <div class="fileUpload btn btn-primary" style="float:right;margin-top:-10%;">
+                                        <span>Browse</span>
+                                        <input id="league-btn" name="league-btn" class="upload" type="file" accept="image/*" onchange="imgeBrieQues(this, 'league-btn', 'league-image', 'logo-text')" />
+                                    </div>
+                                </div>
+                                <div class="col-md-1" id="imagePrev">
+                                    <div class="avatar-upload" style="margin:-10px auto;">
+                                        <div class="avatar-preview" style="width:50px;height:50px;margin-left:auto;margin-right:auto;">
+                                            <img id="briefImgQue" src="~/Content/SKILLMUNI_DATA/JobCategoryTile/@tjc.tile_image" style="width:40px;height:40px;padding:5%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function imgeBrieQues(el, btn, imgf, ban) {
+        var file = $("#" + btn + "")[0].files[0];
+        var filename = "";
+        if (file) {
+            filename = file.name;
+        } else {
+        }
+        $("#" + imgf + "").val(filename);
+        if (el.files && el.files[0]) {
+            var FR = new FileReader();
+            FR.onload = function (e) {
+                $("#briefImgQue").show();
+                $("#briefImgQue").attr("src", e.target.result);
+
+            };
+            FR.readAsDataURL(el.files[0]);
+        }
+    }
+</script>

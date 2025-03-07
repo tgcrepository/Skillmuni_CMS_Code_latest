@@ -1,0 +1,214 @@
+﻿
+@{
+    ViewBag.Title = "jObRoleView";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.IndustryCompanyTGC> orglist = (List<m2ostnext.Models.IndustryCompanyTGC>)ViewData["orglist"];
+    m2ostnext.Models.tbl_ce_evaluation_jobindustry industry = (m2ostnext.Models.tbl_ce_evaluation_jobindustry)ViewData["industry"];
+    List<m2ostnext.Models.jobOrganization> joblist = (List<m2ostnext.Models.jobOrganization>)ViewData["joblist"];
+
+}
+
+
+<link rel="stylesheet" href="~/Content/datatable/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/Content/datatable/css/dataTables.bootstrap.min.css" />
+<script type="text/javascript" src="~/Content/datatable/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#report-table").dataTable();
+    });
+</script>
+<script>
+    function getExportValue() {
+        var cid = $("#cname").val();
+        var bmark = $("#bmark").val();
+        var ids = $("#idsindustry").val();
+        var url = '@Url.Action("addIndustryBenchmarkAction", "industryjob")';
+
+        if (cid > 0 && bmark > 0 && bmark < 101) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { ids: ids, cid: cid, bmark: bmark },
+                success: function (data) {
+
+                    window.location.reload();
+                }
+            });
+        } else {
+            alert("please select valid input");
+        }
+    }
+
+</script>
+<script>
+
+
+    function deleteContentConfirm() {
+        var id = $("#hidden-val").val();
+
+        var url = '@Url.Action("delete_industry_benchmark_action", "industryjob")';
+      
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { ids: id },
+
+            success: function (data) {
+
+
+
+            }
+        });
+        $("#div-hidden-alert").hide();
+        window.location.reload();
+    }
+
+    function deleteCancle() {
+        $("#hidden-val").val("");
+        $("#div-hidden-alert").hide();
+    }
+
+    function deleteContent(id) {
+        $("#hidden-val").val(id);
+        $("#div-hidden-alert").show();
+    }
+</script>
+<div class="content">
+    <div class="col-md-12 column">
+
+        <div class="row" id="div-hidden-alert" style="display:none;">
+            <div class="col-md-12">
+                <input type="hidden" value="" id="hidden-val" />
+                <div class="alert alert-warning alert-dismissable">
+                    Do you really want to Delete This........?
+                    <input type="button" class="btn btn-primary btn-sm " value=" Yes " onclick="deleteContentConfirm()" />
+                    <input type="button" class="btn btn-primary btn-sm " value=" No " onclick="deleteCancle()" />
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">Job Industry View</h6>
+                @*|&nbsp;<a href="@Url.Action("edit_industry_job", "industryjob", new { cij = industry.ce_industry_code  })" target="_blank"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;|*@
+                <a style="margin-left:5px;margin-top: -21px" href="@Url.Action("delete_industry_job", "industryjob", new { cij = industry.ce_industry_code })" class="btn btn-default pull-right">Delete&nbsp;<i class="glyphicon glyphicon-remove"></i></a>
+                <a style="margin-left:5px;margin-top: -21px" href="@Url.Action("edit_industry_job", "industryjob", new { cij = industry.ce_industry_code  })" class="btn btn-default  pull-right">Edit&nbsp;<i class="glyphicon glyphicon-edit"></i></a>
+
+            </div>
+
+            <div class="panel-body">
+                <input type="hidden" value="@industry.id_ce_evaluation_jobindustry" name="idsindustry" id="idsindustry" />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <span class="">industry</span>
+                                        <br>
+                                        <span class="control-label left-space" style="padding-left: 20px;
+    font-weight: 800;">@industry.ce_job_industry</span>
+</div>
+<div class="col-md-4">
+    <span class="control-label">Description</span><br />
+    <span class="control-label left-space" style="padding-left: 20px;
+    font-weight: 800;">@industry.description</span>
+</div>
+<div class="col-md-4">
+    <span class="control-label ">industry code</span><br />
+    <strong>
+        <span class="control-label left-space" style="padding-left: 20px;
+    font-weight: 800;">@industry.ce_industry_code</span>
+</strong>
+</div>
+@*&nbsp;<a href="@Url.Action("edit_category", "csst_category", new { id = item.ID_CATEGORY })"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;|*@
+</div>
+</div>
+</div>
+<hr />
+</div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <span class="font-bold">add benchmark values</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="message-text" class="col-form-label">Company Name: </label>
+                        <select class="form-control" id="cname" name="cname">
+                            <option value="0" disabled selected>select comapny name</option>
+                            @foreach (var itm in joblist)
+                            {
+                                <option value="@itm.ID_ORGANIZATION">@itm.COMPANY_NAME</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="recipien-name" class="col-form-label">BenchMark: </label>
+                        <input type="number" min="1" max="100" class="form-control" id="bmark" name="bmark" required>
+
+                    </div>
+                    <div class="col-md-2" style="margin-left: 0;">
+                        <button class="btn btn-success" onclick="getExportValue()" style="background-color: #018ccf; color: white; width: 72px; height: 29px; margin-left: 15px; float: unset; padding-top: -7px; margin-top: 26px;">SAVE</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <table id="report-table" class="table table-striped  table-bordered dataTable sm" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+
+                <th width="50%">
+                    Company Name
+                </th>
+                <th width="50%">
+                    Company Benchmark
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in orglist)
+            {
+                <tr>
+                    <td>
+                        @item.COMPANY_NAME
+                    </td>
+                    <td>
+                        @item.benchmark_jobpoint
+                    </td>
+                    <td>
+                        <!--  <a style="margin-left:5px;" href="@Url.Action("delete_industry_benchmark", "industryjob", new { cij = item.id_ce_evaluation_jobindustry_tgc_setup })" class="btn btn-default pull-right"><i class="glyphicon glyphicon-remove"></i></a>-->
+                        <a style="margin-left:5px;" href="javascript:void(0)" onclick="deleteContent('@(item.id_ce_evaluation_jobindustry_tgc_setup)')" class="btn btn-default pull-right"><i class="glyphicon glyphicon-remove"></i></a>
+
+
+                    </td>
+                </tr>
+                }
+          
+        </tbody>
+
+    </table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="div-dist-category">
+
+</div>
+
+
+

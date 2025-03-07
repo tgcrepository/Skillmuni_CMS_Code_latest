@@ -1,0 +1,175 @@
+﻿
+@{
+    ViewBag.Title = "Registerdlistview";
+    Layout = "~/Views/Shared/_cms_Layout.cshtml";
+    List<m2ostnext.Models.Registerreport> feedback = (List<m2ostnext.Models.Registerreport>)ViewData["feedback"];
+}                   
+
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.8/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/registerreport/StyleSheet1.css">
+    <script type="text/javascript" src="~/Content/registerreport/pagination.js"></script>
+  
+<style>
+    #manja_wrapper {
+    overflow:scroll;
+    }
+    #manja_filter input {
+    border: 1px solid #ccc;
+}
+</style>
+
+
+    <div class="content">
+        <div class="col-md-12 column">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h6 class="panel-title">Register List Report</h6>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <table id="manja" class="table table-striped table-bordered dataTable sm" width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        slNo
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Mobile
+                                    </th>
+                                    <th>
+                                        Gender
+                                    </th>
+                                    <th>
+                                        City
+                                    </th>
+                                    <th>
+                                        College
+                                    </th>
+                                    <th>
+                                        Graduation_year
+                                    </th>
+                                    <th>
+                                        DATE_OF_BIRTH
+                                    </th>
+                                    <th>
+                                        Degree
+                                    </th>
+                                    <th>
+                                        Stream
+                                    </th>
+                                    <th>
+                                        OtherStream
+                                    </th>
+                                    <th>
+                                        ReferalCode
+                                    </th>
+                                    <th>
+                                        ReferalName
+                                    </th>
+                                    <th>
+                                        Type
+                                    </th>
+                                    <th>
+                                        Foundation
+                                    </th>
+                                    <th>
+                                        RegisterDate
+                                    </th>
+                                    <th>
+                                        SocialCode
+                                    </th>
+                                    <th>
+                                        RegisterMonth
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in feedback)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.id_user
+                                        </td>
+                                        <td>
+                                            @item.Name
+                                        </td>
+                                        <td>
+                                            @item.EMAIL
+                                        </td>
+                                        <td>
+                                            @item.MOBILE
+                                        </td>
+                                        <td>
+                                            @item.GENDER
+                                        </td>
+                                        <td>
+                                            @item.CITY
+                                        </td>
+                                        <td>
+                                            @item.COLLEGE
+                                        </td>
+                                        <td>
+                                            @item.GRADUATIONYEAR
+                                        </td>
+                                        <td>
+                                            @item.DATE_OF_BIRTH
+                                        </td>
+                                        <td>
+                                            @item.degree
+                                        </td>
+                                        <td>
+                                            @item.stream
+                                        </td>
+                                        <td>
+                                            @item.OTHERSTREAM
+                                        </td>
+
+                                        <td>
+                                            @item.referral_code
+                                        </td>
+
+                                        <td>
+                                            @item.referral_name
+                                        </td>
+                                        <td>
+                                            @item.Type
+                                        </td>
+                                        <td>
+                                            @item.foundation
+                                        </td>
+                                        <td>
+                                            @item.EXPIRY_DATE.ToString()
+                                        </td>
+                                        <td>
+                                            @item.social_code
+                                        </td>
+                                        <td>
+                                            @item.EXPIRY_MONTH.ToString()
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                        @*<a href="@Url.Action("ExportToExcel","Home")">Export Excel</a>*@
+
+                        <a href='@Url.Action("ExcelAllReportNew", "RegisteredUserList")' class="btn btn-primary">Report Download</a>
+
+                        @*<a href='@Url.Action("Index","DailyReport")' class="btn btn-primary" align="right">Daily Report List</a>*@
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                        
